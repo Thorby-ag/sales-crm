@@ -4,7 +4,7 @@
 
 An account-based CRM for B2B sales teams: a companies pipeline, a deals board with drag and drop, saved views and search. It runs entirely in the browser, in English and Spanish.
 
-<!-- Live demo: add the Vercel URL here once it's deployed. -->
+**Live demo:** [salescrm.thomalabs.com](https://salescrm.thomalabs.com)
 
 ![Companies view](docs/screenshot.png)
 
@@ -69,13 +69,15 @@ npm run dev        # http://localhost:3000
 | --- | --- |
 | `npm run build` / `npm start` | Production build, served like the Docker image |
 | `npm test` | Unit tests (Vitest) |
-| `npm run test:e2e` | End-to-end tests against a production build (Playwright). Run `npx playwright install chromium` once, or use an installed Chrome with `PW_CHANNEL=chrome`. |
+| `npm run test:e2e` | End-to-end tests against a production build (Playwright). Run `npx playwright install chromium` once, or use an installed Chrome with `PW_CHANNEL=chrome`. Set `E2E_BASE_URL` to test a deployed site instead. |
 | `npm run lint` / `npm run typecheck` | ESLint and TypeScript |
 | `npm run avatars` | Regenerates the avatar SVGs |
 
 GitHub Actions runs lint, typecheck, unit and end-to-end tests on every push, and builds and smoke-tests the Docker image.
 
 ## Deploying
+
+The live demo runs on a VPS with [Dokploy](https://dokploy.com), which rebuilds it on every push to `main`.
 
 - **Docker / Dokploy (self-hosted).** The multi-stage `Dockerfile` builds Next.js's standalone server and runs it as a non-root user with a health check. The container listens on port `3000`. Pass the public URL as a build argument, because the static pages embed it in their canonical, `hreflang` and Open Graph tags:
 

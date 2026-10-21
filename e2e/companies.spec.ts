@@ -70,6 +70,8 @@ test("bulk reassignment can be undone", async ({ page }) => {
 
 test("search finds companies by owner and opens them with the keyboard", async ({ page }) => {
   await page.goto("/en");
+  // Keyboard shortcuts are registered once the app is interactive.
+  await expect(rows(page).first()).toBeVisible();
   const input = page.getByRole("combobox");
   await page.keyboard.press("/");
   await expect(input).toBeFocused();

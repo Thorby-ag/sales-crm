@@ -4,7 +4,7 @@
 
 CRM de cuentas para equipos de ventas B2B: pipeline de empresas, tablero de deals con arrastrar y soltar, vistas guardadas y búsqueda. Funciona completo en el navegador, en inglés y español.
 
-<!-- Demo en vivo: agregar acá la URL de Vercel cuando esté publicada. -->
+**Demo en vivo:** [salescrm.thomalabs.com](https://salescrm.thomalabs.com)
 
 ![Vista de empresas](docs/screenshot.png)
 
@@ -69,13 +69,15 @@ npm run dev        # http://localhost:3000
 | --- | --- |
 | `npm run build` / `npm start` | Build de producción, servido igual que en la imagen de Docker |
 | `npm test` | Tests unitarios (Vitest) |
-| `npm run test:e2e` | Tests end-to-end contra el build de producción (Playwright). Ejecutar una vez `npx playwright install chromium`, o usar un Chrome instalado con `PW_CHANNEL=chrome`. |
+| `npm run test:e2e` | Tests end-to-end contra el build de producción (Playwright). Ejecutar una vez `npx playwright install chromium`, o usar un Chrome instalado con `PW_CHANNEL=chrome`. Con `E2E_BASE_URL` se testea un sitio desplegado. |
 | `npm run lint` / `npm run typecheck` | ESLint y TypeScript |
 | `npm run avatars` | Regenera los avatares SVG |
 
 GitHub Actions corre lint, typecheck y los tests unitarios y end-to-end en cada push, y además construye la imagen de Docker y la prueba.
 
 ## Despliegue
+
+La demo en vivo corre en un VPS con [Dokploy](https://dokploy.com), que la reconstruye en cada push a `main`.
 
 - **Docker / Dokploy (self-hosted).** El `Dockerfile` multi-etapa construye el servidor standalone de Next.js y lo corre con un usuario sin privilegios y con health check. El contenedor escucha en el puerto `3000`. La URL pública se pasa como argumento de build, porque las páginas estáticas la incluyen en sus etiquetas canonical, `hreflang` y Open Graph:
 
