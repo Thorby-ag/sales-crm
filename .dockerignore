@@ -1,0 +1,19 @@
+.git
+.github
+.next
+node_modules
+npm-debug.log*
+.env*
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+
+# Not needed to build or run the app
+reference
+docs
+e2e
+playwright.config.ts
+test-results
+playwright-report
+blob-report
+*.md

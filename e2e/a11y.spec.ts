@@ -1,0 +1,36 @@
+import AxeBuilder from "@axe-core/playwright";
+import { expect, test, type Page } from "@playwright/test";
+
+const WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "best-practice"];
+
+async function expectNoViolations(page: Page) {
+  // Let open/close animations settle so colors are measured at their final values.
+  await page.waitForTimeout(400);
+  const { violations } = await new AxeBuilder({ page }).withTags(WCAG).analyze();
+  expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`)).toEqual([]);
+}
+
+for (const locale of ["en", "es"]) {
+  test(`companies page has no WCAG violations (${locale})`, async ({ page }) => {
+    await page.goto(`/${locale}`);
+    await expect(page.locator("tbody tr").first()).toBeVisible();
+    await expectNoViolations(page);
+  });
+
+  test(`deals board has no WCAG violations (${locale})`, async ({ page }) => {
+    await page.goto(`/${locale}/deals`);
+    await expect(page.locator("article").first()).toBeVisible();
+    await expectNoViolations(page);
+  });
+}
+
+test("company sheet and new company dialog have no WCAG violations", async ({ page }) => {
+  await page.goto("/en?company=halcyon-air");
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await expectNoViolations(page);
+
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "New Company" }).click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await expectNoViolations(page);
+});

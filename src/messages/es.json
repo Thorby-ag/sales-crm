@@ -1,0 +1,383 @@
+{
+  "meta": {
+    "title": "Sales CRM",
+    "description": "CRM de pipeline por cuentas para equipos de ventas B2B: empresas, tablero de deals, filtros y búsqueda, en inglés y español."
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "undo": "Deshacer",
+    "reset": "Restablecer",
+    "soon": "Pronto",
+    "comingSoon": "Próximamente",
+    "remove": "Quitar",
+    "noValue": "—",
+    "skipToContent": "Saltar al contenido",
+    "loading": "Cargando la demo…"
+  },
+  "brand": {
+    "name": "Sales CRM",
+    "tagline": "Pipeline de empresas"
+  },
+  "nav": {
+    "label": "Principal",
+    "companies": "Empresas",
+    "dealsBoard": "Tablero de deals",
+    "forecast": "Forecast",
+    "activities": "Actividades",
+    "contacts": "Contactos",
+    "emailSequences": "Secuencias",
+    "team": "Equipo",
+    "reporting": "Reportes",
+    "pipelines": "Pipelines",
+    "quarterForecast": "Forecast Q{quarter}",
+    "slippingDeals": "Deals demorados",
+    "invite": "Invitar al equipo",
+    "help": "Ayuda",
+    "resetDemo": "Restablecer la demo",
+    "trialLeft": "{days} días",
+    "trialHint": "de prueba restantes",
+    "addBilling": "Agregar pago",
+    "openNavigation": "Abrir navegación",
+    "navigationTitle": "Navegación",
+    "navigationDescription": "Secciones y vistas guardadas de Sales CRM",
+    "resizeSidebar": "Cambiar el ancho de la barra lateral"
+  },
+  "teams": {
+    "strategic": "AEs estratégicos",
+    "mid-market": "Mid Market",
+    "sdr": "Equipo SDR"
+  },
+  "regions": {
+    "north-america": "Norteamérica",
+    "emea": "EMEA",
+    "apac": "APAC"
+  },
+  "header": {
+    "search": "Buscar",
+    "searchHint": "Buscar (⌘K)",
+    "notifications": "Notificaciones",
+    "notificationsUnread": "Notificaciones, {count} sin leer",
+    "openProfile": "Abrir el perfil de {name}",
+    "language": "Idioma: {name}"
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español"
+  },
+  "views": {
+    "label": "Vistas",
+    "companies": "Empresas",
+    "deals": "Deals",
+    "forecast": "Forecast",
+    "active": "Activo"
+  },
+  "sort": {
+    "pipelineValue": "Valor del pipeline",
+    "winProbability": "Probabilidad de cierre",
+    "openDeals": "Deals abiertos",
+    "lastInteraction": "Última interacción",
+    "name": "Nombre"
+  },
+  "filters": {
+    "sortBy": "Orden",
+    "filter": "Filtro",
+    "stage": "Etapa",
+    "lastActivity": "Actividad",
+    "closeDate": "Cierre",
+    "ownerTitle": "Responsable",
+    "tagTitle": "Segmento y etapa",
+    "activityTitle": "Última actividad",
+    "closeTitle": "Fecha de cierre",
+    "allOwners": "Todos",
+    "any": "Cualquiera",
+    "accountOwners": "Responsables",
+    "segment": "Segmento",
+    "stageGroup": "Etapa",
+    "days": "{count} días",
+    "closeQuarter": "Este trimestre",
+    "closeOverdue": "Vencidos",
+    "filters": "Filtros",
+    "filtersActive": "Filtros, {count} activos",
+    "filtersDescription": "Ordenar y filtrar la tabla",
+    "showCompanies": "Ver {count, plural, one {# empresa} other {# empresas}}",
+    "showDeals": "Ver {count, plural, one {# deal} other {# deals}}",
+    "team": "Equipo: {name}",
+    "region": "Región: {name}",
+    "removeFilter": "Quitar el filtro {name}"
+  },
+  "table": {
+    "caption": "Empresas en el pipeline",
+    "selectAll": "Seleccionar todas las empresas en vista",
+    "select": "Seleccionar {name}",
+    "companies": "Empresas",
+    "segmentStage": "Segmento y etapa",
+    "accountOwner": "Responsable",
+    "openDeals": "Deals",
+    "pipelineValue": "Pipeline",
+    "winProbability": "Prob. de cierre",
+    "activityTrend": "Tendencia",
+    "lastInteraction": "Última interacción",
+    "action": "Acción",
+    "openProfile": "Abrir el perfil de {name}",
+    "openDetails": "Abrir el detalle de {name}",
+    "empty": "Ninguna empresa coincide con estos filtros.",
+    "resetFilters": "Restablecer filtros"
+  },
+  "footer": {
+    "inView": "{count, plural, one {Empresa} other {Empresas}} en vista",
+    "sumPipeline": "Suma del pipeline",
+    "avgWin": "Prob. de cierre promedio",
+    "addCalculation": "Agregar cálculo",
+    "calculate": "Calcular",
+    "openDeals": "Deals abiertos",
+    "weighted": "Pipeline ponderado",
+    "average": "Pipeline promedio por empresa",
+    "removeCalculation": "Quitar cálculo"
+  },
+  "bulk": {
+    "label": "Acciones masivas",
+    "selected": "{count, plural, one {# seleccionada} other {# seleccionadas}}",
+    "assignOwner": "Asignar responsable",
+    "export": "Exportar",
+    "delete": "Eliminar",
+    "clear": "Quitar selección",
+    "assigned": "{count, plural, one {# empresa asignada} other {# empresas asignadas}} a {owner}",
+    "deleted": "{count, plural, one {# empresa eliminada} other {# empresas eliminadas}}"
+  },
+  "export": {
+    "button": "Exportar",
+    "done": "{count, plural, one {Se exportó # empresa} other {Se exportaron # empresas}}",
+    "nothing": "No hay nada para exportar con estos filtros.",
+    "filename": "empresas",
+    "headers": {
+      "company": "Empresa",
+      "segmentStage": "Segmento y etapa",
+      "owner": "Responsable",
+      "region": "Región",
+      "openDeals": "Deals abiertos",
+      "pipelineValue": "Valor del pipeline",
+      "winProbability": "Probabilidad de cierre (%)",
+      "lastInteractionDate": "Fecha de última interacción",
+      "lastInteraction": "Última interacción"
+    }
+  },
+  "interactions": {
+    "discovery": "Discovery",
+    "demo": "Demo",
+    "pricing": "Precios",
+    "security": "Seguridad",
+    "legal": "Legal",
+    "product": "Producto",
+    "pilot": "Piloto",
+    "exec": "Ejecutivos",
+    "qbr": "QBR",
+    "partner": "Partner",
+    "renewal": "Renovación",
+    "expansion": "Expansión"
+  },
+  "insights": {
+    "discovery": "Repunta después de las llamadas de discovery",
+    "demo": "Picos en torno a las demos de producto",
+    "pricing": "Picos en torno a las revisiones de precios",
+    "security": "Mucho intercambio por la revisión de seguridad",
+    "legal": "Actividad constante durante la revisión legal",
+    "product": "Picos en torno a las sesiones de producto",
+    "pilot": "Picos durante el arranque del piloto",
+    "exec": "Picos en torno a la alineación con ejecutivos",
+    "qbr": "Picos en torno a la preparación del QBR y la renovación",
+    "partner": "Impulsada por la venta con partners",
+    "renewal": "Picos en torno a la revisión de la renovación",
+    "expansion": "Picos en torno a la planificación de la expansión"
+  },
+  "dealStages": {
+    "discovery": "Descubrimiento",
+    "evaluation": "Evaluación",
+    "procurement": "Compras",
+    "won": "Ganado",
+    "lost": "Perdido"
+  },
+  "detail": {
+    "title": "Detalle de la empresa",
+    "description": "Resumen de la cuenta, salud del pipeline, deals, actividad y score cards",
+    "accountSummary": "Resumen de la cuenta",
+    "pipelineHealth": "Salud del pipeline",
+    "winAcross": "Probabilidad de cierre de los deals abiertos",
+    "noOpenDeals": "Sin deals abiertos",
+    "stageLine": "{count, plural, one {# deal} other {# deals}} · {amount}",
+    "stageMeter": "{stage}: {share}% del pipeline abierto",
+    "deals": "Deals",
+    "noDeals": "Esta empresa todavía no tiene deals.",
+    "activityTrend": "Tendencia de actividad",
+    "lastDays": "Últimos {days} días",
+    "activityWindow": "Período de actividad: últimos {days} días",
+    "totalTouches": "Contactos totales",
+    "emails": "Emails",
+    "meetings": "Reuniones",
+    "calls": "Llamadas y notas",
+    "scoreCard": "Score card",
+    "rating": "Calificación de {title}",
+    "starOf": "{value} de 5",
+    "ratingValue": "{title}: {value} de 5",
+    "updated": "Actualizado {time}",
+    "needHelp": "Ayuda y soporte",
+    "save": "Guardar cambios",
+    "saved": "Score card actualizado para {name}"
+  },
+  "scoreCards": {
+    "businessFit": {
+      "title": "Ajuste de negocio",
+      "description": "Qué tanto se alinea la empresa con nuestro cliente ideal."
+    },
+    "technicalFit": {
+      "title": "Ajuste técnico",
+      "description": "Compatibilidad técnica, preparación para integraciones y requisitos de datos."
+    },
+    "securityReview": {
+      "title": "Revisión de seguridad",
+      "description": "Cuestionario de seguridad, requisitos de cumplimiento y trabas de compras."
+    }
+  },
+  "verdicts": {
+    "high": "Alto potencial",
+    "promising": "Prometedor",
+    "attention": "Requiere atención"
+  },
+  "profile": {
+    "mine": "Mi perfil",
+    "owner": "Perfil del responsable",
+    "description": "Datos de contacto, resumen del pipeline y cuentas asignadas",
+    "contact": "Contacto",
+    "pipeline": "Pipeline",
+    "teamPipeline": "Pipeline del equipo",
+    "accounts": "Cuentas",
+    "teamAccounts": "Cuentas del equipo",
+    "statAccounts": "Cuentas",
+    "statOpenDeals": "Deals abiertos",
+    "statPipeline": "Pipeline",
+    "statAvgWin": "Prob. promedio",
+    "accountMeta": "{count, plural, one {# deal abierto} other {# deals abiertos}} · {tags}",
+    "noAccounts": "Todavía no tiene cuentas asignadas.",
+    "filterByOwner": "Filtrar la tabla por responsable",
+    "showAll": "Ver todas las cuentas"
+  },
+  "newCompany": {
+    "title": "Nueva empresa",
+    "description": "La empresa se agrega al pipeline y aparece en la lista al instante.",
+    "company": "Empresa",
+    "ownership": "Responsable y deals",
+    "lastInteraction": "Última interacción",
+    "uploadLogo": "Subir logo",
+    "replaceLogo": "Cambiar logo",
+    "removeLogo": "Quitar",
+    "logoHint": "PNG, JPG, WebP o SVG de hasta 2 MB. También se puede arrastrar un archivo.",
+    "logoErrors": {
+      "type": "El archivo tiene que ser PNG, JPG, WebP o SVG.",
+      "size": "El logo tiene que pesar 2 MB o menos.",
+      "read": "No se pudo leer el archivo. Conviene probar con otro."
+    },
+    "name": "Nombre de la empresa",
+    "namePlaceholder": "Acme S.A.",
+    "segment": "Segmento",
+    "stage": "Etapa",
+    "region": "Región",
+    "owner": "Responsable",
+    "pipelineValue": "Valor del pipeline",
+    "openDeals": "Deals abiertos",
+    "winProbability": "Probabilidad de cierre",
+    "date": "Fecha",
+    "type": "Tipo",
+    "create": "Crear empresa",
+    "created": "{name} se agregó al pipeline",
+    "view": "Ver",
+    "errors": {
+      "nameRequired": "El nombre es obligatorio.",
+      "nameTooLong": "El nombre tiene que tener menos de 60 caracteres.",
+      "amount": "Tiene que ser un monto positivo.",
+      "wholeNumber": "Tiene que ser un número entero.",
+      "tooManyDeals": "El máximo es 20 deals.",
+      "date": "Falta la fecha.",
+      "futureDate": "La fecha no puede ser futura."
+    }
+  },
+  "search": {
+    "title": "Buscar",
+    "description": "Buscar empresas por nombre, responsable, segmento o etapa",
+    "label": "Buscar empresas",
+    "placeholder": "Buscar empresas, responsables, etapas…",
+    "company": "Empresa",
+    "segmentStage": "Segmento y etapa",
+    "owner": "Responsable",
+    "pipeline": "Pipeline",
+    "win": "Prob. de cierre",
+    "lastInteraction": "Última interacción",
+    "empty": "Ninguna empresa coincide con “{query}”.",
+    "navigate": "Navegar",
+    "open": "Abrir",
+    "up": "Flecha arriba",
+    "down": "Flecha abajo",
+    "enter": "Enter"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "markAll": "Marcar todo como leído",
+    "filterLabel": "Filtrar notificaciones",
+    "all": "Todas",
+    "unread": "Sin leer",
+    "emptyTitle": "Estás al día",
+    "emptyText": "Las menciones y novedades de deals aparecerán aquí.",
+    "messages": {
+      "mention": "<b>{actor}</b> te mencionó en {company}",
+      "stage": "<b>{actor}</b> movió {company} a {stage}",
+      "winDrop": "La probabilidad de cierre de {company} bajó a {value}%",
+      "scoreUpdate": "<b>{actor}</b> actualizó el score card de {card} de {company}",
+      "demoLogged": "<b>{actor}</b> registró una demo con {company}",
+      "pipelineUp": "El valor del pipeline de {company} subió a {value}",
+      "invite": "<b>{actor}</b> te sumó al equipo de la cuenta {company}"
+    },
+    "quotes": {
+      "n1": "¿Podrías sumarte a la revisión del piloto el viernes? El equipo de IT quiere ver primero la parte de seguridad."
+    }
+  },
+  "deals": {
+    "boardLabel": "Tablero de deals",
+    "columnSummary": "{count, plural, one {# deal} other {# deals}} · {amount}",
+    "emptyColumn": "Sin deals",
+    "closes": "Cierra el {date}",
+    "closed": "Cerrado el {date}",
+    "overdue": "Vencido",
+    "probability": "{value}% de probabilidad de cierre",
+    "moveTo": "Mover a",
+    "dragHandle": "Mover {name}",
+    "actions": "Acciones de {name}",
+    "openCompany": "Abrir {name}",
+    "moved": "{deal} pasó a {stage}",
+    "openPipeline": "Pipeline abierto",
+    "weighted": "Ponderado",
+    "empty": "Ningún deal coincide con estos filtros.",
+    "dragHint": "Para mover un deal: barra espaciadora para tomarlo, flechas para cambiar de etapa y barra espaciadora otra vez para soltarlo. Escape cancela.",
+    "announcements": {
+      "pickedUp": "Se tomó {deal}, que está en {stage}.",
+      "over": "{deal} está sobre {stage}.",
+      "notOver": "{deal} no está sobre ninguna etapa.",
+      "dropped": "{deal} pasó a {stage}.",
+      "droppedSame": "{deal} sigue en {stage}.",
+      "cancelled": "Se canceló el movimiento de {deal}."
+    }
+  },
+  "toasts": {
+    "comingSoon": "{feature} no está disponible en esta demo.",
+    "storageError": "No se pudieron guardar los cambios en este navegador. Se mantienen hasta cerrar la pestaña.",
+    "demoReset": "Se restablecieron los datos de la demo",
+    "features": {
+      "invite": "Invitar al equipo",
+      "help": "El centro de ayuda",
+      "billing": "La facturación"
+    }
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "description": "Esta página no existe en la demo.",
+    "back": "Volver a Empresas"
+  }
+}

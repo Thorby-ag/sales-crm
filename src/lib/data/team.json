@@ -1,0 +1,21 @@
+{
+  "currentUser": "Valeria Quiroga",
+  "owners": [
+    { "name": "Sofia Marin", "team": "strategic" },
+    { "name": "Daniel Okafor", "team": "mid-market" },
+    { "name": "Lucas Ferreira", "team": "strategic" },
+    { "name": "Hana Sato", "team": "mid-market" },
+    { "name": "Mateo Alvarez", "team": "strategic" },
+    { "name": "Chloe Bennett", "team": "mid-market" },
+    { "name": "Omar Haddad", "team": "sdr" },
+    { "name": "Emma Lindqvist", "team": "mid-market" },
+    { "name": "Tomas Novak", "team": "sdr" },
+    { "name": "Aisha Bello", "team": "strategic" },
+    { "name": "Ryan Mitchell", "team": "mid-market" },
+    { "name": "Lea Fontaine", "team": "sdr" },
+    { "name": "Kenji Mori", "team": "strategic" },
+    { "name": "Grace Adeyemi", "team": "mid-market" },
+    { "name": "Nina Petrova", "team": "sdr" },
+    { "name": "Zoe Carter", "team": "sdr" }
+  ]
+}

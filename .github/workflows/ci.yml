@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    name: Lint, types and tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
+
+  docker:
+    name: Docker image
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build
+        run: docker build --build-arg SITE_URL=https://crm.example.com -t sales-crm .
+      - name: Smoke test
+        run: |
+          docker run -d --name crm -p 3000:3000 sales-crm
+          for i in $(seq 1 30); do curl -fsS -o /dev/null http://localhost:3000/en && break; sleep 1; done
+          curl -fsS http://localhost:3000/es/deals | grep -q 'https://crm.example.com/es/deals'
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/en/nope)" = 404
+      - if: failure()
+        run: docker logs crm
