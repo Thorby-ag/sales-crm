@@ -71,7 +71,8 @@
     "active": "Active",
     "contacts": "Contacts",
     "activities": "Activities",
-    "sequences": "Email Sequences"
+    "sequences": "Email Sequences",
+    "guide": "Guide"
   },
   "sort": {
     "pipelineValue": "Pipeline Value",
@@ -737,13 +738,143 @@
     "enroll": "{count, plural, =0 {Enroll Contacts} one {Enroll # Contact} other {Enroll # Contacts}}",
     "enrolled": "{count, plural, one {# contact enrolled} other {# contacts enrolled}} in {sequence}"
   },
+  "guide": {
+    "title": "How to use Sales CRM",
+    "intro": "A short tour of what each part of the CRM is for and how to use it. Every section has links that open the app in the right place.",
+    "liveDemo": "Live demo:",
+    "download": "Download PDF",
+    "openApp": "Open the app",
+    "contents": "On this page",
+    "tryIt": "Try it:",
+    "sections": {
+      "basics": {
+        "title": "Find your way around",
+        "lead": "The sidebar has every section, with the saved views below them. Whatever you filter or open goes into the URL, so any view can be bookmarked or shared.",
+        "steps": {
+          "1": "Switch between <b>Companies</b>, <b>Deals</b> and <b>Forecast</b> with the tabs at the top.",
+          "2": "Press <kbd>⌘K</kbd> or <kbd>/</kbd> to search companies and people from anywhere.",
+          "3": "Use the saved views in the sidebar: a team, a region, deals closing this quarter or slipping deals.",
+          "4": "Change the language with <b>EN</b> or <b>ES</b> in the header. The page and its filters stay as they are."
+        },
+        "alt": "The companies table with the search open, finding companies and contacts",
+        "links": {
+          "a": "EMEA accounts",
+          "b": "Slipping deals"
+        }
+      },
+      "companies": {
+        "title": "Prioritize your accounts",
+        "lead": "The companies table shows each account's pipeline, win probability and last interaction, worked out from its deals and activities.",
+        "steps": {
+          "1": "Sort by clicking a column header, or with <b>Sort by</b>.",
+          "2": "Narrow the list with the owner, stage and last activity filters. <b>Reset</b> clears them.",
+          "3": "Click a company to open its sheet: contacts, activities, pipeline health, deals and score cards.",
+          "4": "Select rows to reassign or delete them together, with undo, or export the view to CSV."
+        },
+        "alt": "The companies table with Halcyon Air's sheet open",
+        "links": {
+          "a": "Kenji Mori's accounts",
+          "b": "Halcyon Air"
+        }
+      },
+      "deals": {
+        "title": "Move deals through the pipeline",
+        "lead": "The board has a column per stage. Company metrics come from their deals, so moving a card updates the table and the forecast.",
+        "steps": {
+          "1": "Drag a card to another stage. On a phone, press and hold it first.",
+          "2": "From the keyboard, focus a card's handle, press <kbd>Space</kbd>, move it with the arrow keys and press <kbd>Space</kbd> again.",
+          "3": "Or open the card's <b>⋯</b> menu and choose a stage under <b>Move to</b>.",
+          "4": "Click a card to edit the deal: amount, close date, stage, probability and forecast category."
+        },
+        "alt": "The deals board, with a column per stage",
+        "links": {
+          "a": "Closing this quarter",
+          "b": "Kenji Mori's deals"
+        }
+      },
+      "forecast": {
+        "title": "Check the quarter's forecast",
+        "lead": "The forecast answers the question every sales manager asks: will we hit the number? It adds up what's won and what's expected for this quarter or the next.",
+        "steps": {
+          "1": "Read the totals: quota, closed won, <b>Commit</b>, <b>Best case</b>, weighted pipeline and what's left to reach the quota.",
+          "2": "Follow the chart: won so far, and where Commit and Best case lead by the end of the quarter. <b>Show the numbers</b> has the same data as a table.",
+          "3": "Compare reps under <b>By rep</b>. Clicking a name narrows the whole forecast to them.",
+          "4": "From a deal's <b>⋯</b> menu, change its forecast category or push it to the next quarter."
+        },
+        "alt": "The forecast: totals, the quarter's progress chart and the breakdown by rep",
+        "links": {
+          "a": "Next quarter",
+          "b": "SDR team"
+        }
+      },
+      "contacts": {
+        "title": "Know who you're selling to",
+        "lead": "Contacts are the people at each account and their role in the purchase: who decides, who champions you, who could stand in the way.",
+        "steps": {
+          "1": "Search by name, title, email or company, and filter by buying role.",
+          "2": "Open a contact to see their details, the account's open deals and their colleagues.",
+          "3": "Each company's sheet lists its buying committee, decision makers first.",
+          "4": "Add someone with <b>New Contact</b>, or from a company's sheet with <b>Add contact</b>."
+        },
+        "alt": "The contacts list with Olivia Chen's sheet open",
+        "links": {
+          "a": "Champions",
+          "b": "Olivia Chen"
+        }
+      },
+      "activities": {
+        "title": "Plan the next step",
+        "lead": "Activities are the calls, meetings, emails and tasks with each account. Every open deal should have a next step.",
+        "steps": {
+          "1": "Work through <b>To do</b>: overdue first, then today and upcoming. Check one off when it's done.",
+          "2": "A completed activity becomes the company's last interaction in the table.",
+          "3": "<b>No next step</b> lists the deals closing this quarter with nothing planned. <b>Plan next step</b> fixes that in one go.",
+          "4": "Log something that already happened with <b>New Activity</b> and <b>Already done</b>."
+        },
+        "alt": "Activities to do, grouped into overdue, today and upcoming, next to the deals with no next step",
+        "links": {
+          "a": "What's done",
+          "b": "Meetings"
+        }
+      },
+      "sequences": {
+        "title": "Automate outreach",
+        "lead": "A sequence is a series of emails, calls and tasks on set days. Contacts go through it until they reply. In this demo, emails aren't really sent.",
+        "steps": {
+          "1": "Open a sequence to see its steps, a preview and who's enrolled.",
+          "2": "Write steps with variables like <b>first_name</b> or <b>company</b>. The preview fills them in for a real contact.",
+          "3": "<b>Enroll Contacts</b> adds people. Their calls and tasks show up in Activities.",
+          "4": "When someone answers, use <b>Mark as replied</b> and the sequence stops for them."
+        },
+        "alt": "A sequence's steps, the email preview and the enrolled contacts",
+        "links": {
+          "a": "New logo outreach",
+          "b": "All sequences"
+        }
+      },
+      "demo": {
+        "title": "About this demo",
+        "lead": "Everything runs in your browser, with fictional companies and people.",
+        "steps": {
+          "1": "Changes are saved in this browser. Dates move forward every day, so the demo never looks stale.",
+          "2": "<b>Reset demo data</b> in the sidebar brings everything back, with undo.",
+          "3": "It works on phones too: filters move into a bottom sheet and the board scrolls sideways.",
+          "4": "Built with Next.js, React, TypeScript and Tailwind CSS. The code, and how it's built, is on GitHub."
+        },
+        "alt": "The deals board on a phone",
+        "links": {
+          "a": "Code on GitHub",
+          "b": "Open the app"
+        }
+      }
+    }
+  },
   "toasts": {
     "comingSoon": "{feature} isn't available in this demo.",
     "storageError": "Changes couldn't be saved in this browser. They'll stay until you close the tab.",
     "demoReset": "Demo data restored",
     "features": {
       "invite": "Inviting teammates",
-      "help": "The help center",
       "billing": "Billing"
     }
   },

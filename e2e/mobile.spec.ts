@@ -19,7 +19,7 @@ test("navigation lives in a drawer", async ({ page }) => {
 });
 
 test("the page never scrolls sideways", async ({ page }) => {
-  for (const path of ["/en", "/es/deals", "/en/forecast", "/es/contacts", "/en/activities", "/es/sequences?sequence=new-logo-outreach"]) {
+  for (const path of ["/en", "/es/deals", "/en/forecast", "/es/contacts", "/en/activities", "/es/sequences?sequence=new-logo-outreach", "/es/guide"]) {
     await page.goto(path);
     await expect(page.locator("main")).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);

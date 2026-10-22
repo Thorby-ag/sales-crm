@@ -4,7 +4,7 @@
 
 CRM de cuentas para equipos de ventas B2B: pipeline de empresas, contactos, actividades, secuencias de email, tablero de deals con arrastrar y soltar, forecast trimestral, vistas guardadas y búsqueda. Funciona completo en el navegador, en inglés y español.
 
-**Demo en vivo:** [salescrm.thomalabs.com](https://salescrm.thomalabs.com)
+**Demo en vivo:** [salescrm.thomalabs.com](https://salescrm.thomalabs.com) · **Guía:** [en la app](https://salescrm.thomalabs.com/es/guide) o en [PDF](https://salescrm.thomalabs.com/guide/sales-crm-guide-es.pdf)
 
 ![Vista de empresas](docs/screenshot.png)
 
@@ -26,6 +26,7 @@ CRM de cuentas para equipos de ventas B2B: pipeline de empresas, contactos, acti
 - **Contactos.** Las personas de cada cuenta y su rol en la compra: decisor, champion, influenciador, usuario o bloqueador. Se buscan y filtran (también desde la URL), cada ficha de empresa muestra quiénes participan en la compra, y el buscador ⌘K también encuentra personas.
 - **Actividades.** Llamadas, reuniones, emails y tareas, agendadas o ya hechas. Una lista de pendientes dividida en vencidas, de hoy y próximas, que se completan con un tilde (con opción de deshacer). Completar una actualiza la última interacción de la empresa. Un panel lateral muestra los deals que cierran este trimestre sin próximo paso, para agendarlo con un clic. Cada ficha de empresa, deal y contacto muestra las suyas.
 - **Secuencias de email.** Cadencias de prospección: emails, llamadas y tareas en días fijos desde que se inscribe un contacto. Los pasos se escriben con variables como `{{first_name}}` y se previsualizan con los datos de un contacto real. Se puede inscribir gente, marcar respuestas, y pausar o reanudar. Cada secuencia muestra inscriptos, respuestas, tasa de respuesta y emails enviados. Los emails son simulados (no hay backend), pero las llamadas y tareas se vuelven actividades agendadas y se quitan cuando el contacto responde.
+- **Guía incluida.** Organizada por tareas, en inglés y español, con capturas, links que abren la app en el estado justo y un PDF. Se renderiza en el servidor, y `npm run guide:assets` vuelve a sacar las capturas y los PDFs desde un build corriendo.
 - **Vistas guardadas.** Los ítems del sidebar son filtros reales: equipo, región, deals que cierran este trimestre y deals demorados.
 - **Inglés y español.** Rutas `/en` y `/es`, detección del idioma del navegador, moneda, fechas y plurales con el formato de cada idioma, metadata traducida con `hreflang` y claves de traducción verificadas por TypeScript.
 - **URLs para compartir.** Los filtros, el orden y la empresa abierta viven en la URL (`/es/deals?owner=kenji-mori&company=quantora`).
@@ -54,6 +55,7 @@ src/
       deals/           tablero, tarjetas, menú de etapas
       sequences/       secuencias, editor de pasos, vista previa, inscripciones
       forecast/        indicadores, gráfico del trimestre (SVG), vendedores, deals por categoría
+      guide/           guía de uso, renderizada en el servidor
       sheets/          detalle de empresa, deal y contacto, perfiles, diálogos de alta
   lib/                 lógica de dominio como funciones puras (+ __tests__)
 e2e/                   specs de Playwright (desktop + mobile, accesibilidad)
@@ -84,6 +86,7 @@ npm run dev        # http://localhost:3000
 | `npm run test:e2e` | Tests end-to-end contra el build de producción (Playwright). Ejecutar una vez `npx playwright install chromium`, o usar un Chrome instalado con `PW_CHANNEL=chrome`. Con `E2E_BASE_URL` se testea un sitio desplegado. |
 | `npm run lint` / `npm run typecheck` | ESLint y TypeScript |
 | `npm run avatars` | Regenera los avatares SVG |
+| `npm run guide:assets` | Saca las capturas y los PDFs de la guía desde un build corriendo (`BASE_URL`, por defecto `http://localhost:3000`) |
 
 GitHub Actions corre lint, typecheck y los tests unitarios y end-to-end en cada push, y además construye la imagen de Docker y la prueba.
 

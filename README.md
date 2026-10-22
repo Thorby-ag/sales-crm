@@ -4,7 +4,7 @@
 
 An account-based CRM for B2B sales teams: a companies pipeline, contacts, activities, email sequences, a deals board with drag and drop, a quarterly forecast, saved views and search. It runs entirely in the browser, in English and Spanish.
 
-**Live demo:** [salescrm.thomalabs.com](https://salescrm.thomalabs.com)
+**Live demo:** [salescrm.thomalabs.com](https://salescrm.thomalabs.com) · **Guide:** [in the app](https://salescrm.thomalabs.com/en/guide) or as a [PDF](https://salescrm.thomalabs.com/guide/sales-crm-guide-en.pdf)
 
 ![Companies view](docs/screenshot.png)
 
@@ -26,6 +26,7 @@ An account-based CRM for B2B sales teams: a companies pipeline, contacts, activi
 - **Contacts.** The people at each account and their role in the purchase: decision maker, champion, influencer, end user or blocker. Search and filter them (in the URL too), see each account's buying committee in its sheet, and find people from the ⌘K search.
 - **Activities.** Calls, meetings, emails and tasks, planned or already done. A to-do list grouped into overdue, today and upcoming, with a check to complete them (undo included). Completing one updates the company's last interaction. A side panel lists the deals closing this quarter with no next step, so one can be planned in a click. Each company, deal and contact sheet shows its own.
 - **Email sequences.** Outreach cadences: emails, calls and tasks on set days after a contact is enrolled. Write steps with variables like `{{first_name}}` and preview them for a real contact, enroll people, mark replies and pause or resume. Results per sequence: enrolled, replies, reply rate and emails sent. Emails are simulated (there's no backend), while calls and tasks become planned activities and leave when the contact replies.
+- **Built-in guide.** Task-based, in English and Spanish, with screenshots, links that open the app in the right state, and a PDF. It's rendered on the server, and `npm run guide:assets` takes the screenshots and PDFs again from a running build.
 - **Saved views.** Sidebar entries are real filters: team, region, deals closing this quarter, slipping deals.
 - **English and Spanish.** `/en` and `/es` routes, browser-language detection, currency, dates and plurals formatted per locale, translated metadata with `hreflang`, and type-checked translation keys.
 - **Shareable URLs.** Filters, sort order and the open company live in the query string (`/es/deals?owner=kenji-mori&company=quantora`).
@@ -54,6 +55,7 @@ src/
       deals/           board, cards, stage menu
       sequences/       sequences, steps editor, preview, enrollments
       forecast/        KPIs, quarter chart (SVG), reps, deals by category
+      guide/           in-app guide, rendered on the server
       sheets/          company, deal and contact details, profiles, dialogs for new records
   lib/                 domain logic as pure functions (+ __tests__)
 e2e/                   Playwright specs (desktop + mobile, a11y)
@@ -84,6 +86,7 @@ npm run dev        # http://localhost:3000
 | `npm run test:e2e` | End-to-end tests against a production build (Playwright). Run `npx playwright install chromium` once, or use an installed Chrome with `PW_CHANNEL=chrome`. Set `E2E_BASE_URL` to test a deployed site instead. |
 | `npm run lint` / `npm run typecheck` | ESLint and TypeScript |
 | `npm run avatars` | Regenerates the avatar SVGs |
+| `npm run guide:assets` | Takes the guide's screenshots and PDFs from a running build (`BASE_URL`, default `http://localhost:3000`) |
 
 GitHub Actions runs lint, typecheck, unit and end-to-end tests on every push, and builds and smoke-tests the Docker image.
 

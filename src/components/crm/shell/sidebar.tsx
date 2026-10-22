@@ -83,6 +83,7 @@ function useActiveItem(): string {
   if (pathname === "/contacts") return "contacts";
   if (pathname === "/activities") return "activities";
   if (pathname === "/sequences") return "sequences";
+  if (pathname === "/guide") return "guide";
   if (pathname === "/deals") return params.get("close") ? `close:${params.get("close")}` : "deals";
   if (pathname === "/") {
     if (params.get("team")) return `team:${params.get("team")}`;
@@ -128,6 +129,17 @@ function NavLink({
   );
 }
 
+function FooterButton({ label, icon: Icon, onClick }: { label: string; icon: LucideIcon; onClick: () => void }) {
+  return (
+    <li>
+      <Button variant="nav" size="md" className="group h-[30px] gap-2 py-0" onClick={onClick}>
+        <Icon aria-hidden className="size-3.5 text-subtle group-hover:text-foreground" />
+        {label}
+      </Button>
+    </li>
+  );
+}
+
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="border-b border-sidebar-border p-3 last:border-b-0">
@@ -147,7 +159,7 @@ function SidebarContent() {
   const openDeals = useCrm((s) => s.deals.filter(isOpen).length);
   const quarter = useCrm((s) => quarterOf(s.today));
 
-  const comingSoon = (feature: "invite" | "help" | "billing") =>
+  const comingSoon = (feature: "invite" | "billing") =>
     toast(t("toasts.comingSoon", { feature: t(`toasts.features.${feature}`) }));
   const resetDemo = () => withUndo(t("toasts.demoReset"), t("common.undo"), () => useCrm.getState().resetDemo());
 
@@ -201,20 +213,9 @@ function SidebarContent() {
       </div>
 
       <ul className="flex shrink-0 flex-col border-t border-sidebar-border p-3">
-        {(
-          [
-            { label: t("nav.invite"), icon: UserPlus, onClick: () => comingSoon("invite") },
-            { label: t("nav.help"), icon: CircleHelp, onClick: () => comingSoon("help") },
-            { label: t("nav.resetDemo"), icon: RotateCcw, onClick: resetDemo },
-          ] as const
-        ).map(({ label, icon: Icon, onClick }) => (
-          <li key={label}>
-            <Button variant="nav" size="md" className="group h-[30px] gap-2 py-0" onClick={onClick}>
-              <Icon aria-hidden className="size-3.5 text-subtle group-hover:text-foreground" />
-              {label}
-            </Button>
-          </li>
-        ))}
+        <FooterButton label={t("nav.invite")} icon={UserPlus} onClick={() => comingSoon("invite")} />
+        <NavLink id="guide" active={active} href="/guide" label={t("nav.help")} icon={CircleHelp} />
+        <FooterButton label={t("nav.resetDemo")} icon={RotateCcw} onClick={resetDemo} />
       </ul>
 
       <div className="flex shrink-0 items-center justify-between gap-2 border-t border-sidebar-border px-4 py-4">
@@ -284,7 +285,7 @@ function ResizeHandle() {
 
 export function DesktopSidebar() {
   return (
-    <aside className="relative hidden w-(--sidebar-width) shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex">
+    <aside className="relative hidden w-(--sidebar-width) shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex print:hidden">
       <SidebarContent />
       <ResizeHandle />
     </aside>

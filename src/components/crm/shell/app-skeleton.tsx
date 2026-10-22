@@ -15,7 +15,7 @@ const ROW_WIDTHS = ["w-24", "w-20", "w-28", "w-24", "w-16", "w-20"];
 
 export function SidebarSkeleton() {
   return (
-    <aside aria-hidden className="hidden w-(--sidebar-width) shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex">
+    <aside aria-hidden className="hidden w-(--sidebar-width) shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex print:hidden">
       <div className="flex h-14 shrink-0 items-center gap-2.5 border-b border-sidebar-border bg-sidebar-accent px-3.5">
         <span className="size-[30px] rounded-lg bg-muted" />
         <div className="flex flex-col gap-1.5">
