@@ -71,7 +71,8 @@
     "deals": "Deals",
     "forecast": "Forecast",
     "active": "Activo",
-    "contacts": "Contactos"
+    "contacts": "Contactos",
+    "activities": "Actividades"
   },
   "sort": {
     "pipelineValue": "Valor del pipeline",
@@ -226,7 +227,10 @@
     "saved": "Score card actualizado para {name}",
     "contacts": "Contactos",
     "noContacts": "Esta cuenta todavía no tiene contactos.",
-    "addContact": "Agregar contacto"
+    "addContact": "Agregar contacto",
+    "activities": "Actividades",
+    "noActivities": "Todavía no hay actividades con esta cuenta.",
+    "planActivity": "Agendar actividad"
   },
   "scoreCards": {
     "businessFit": {
@@ -471,7 +475,9 @@
       "tooLarge": "El monto tiene que ser menor a 100 millones.",
       "date": "Falta la fecha.",
       "futureClose": "Un deal cerrado no puede tener fecha futura."
-    }
+    },
+    "nextStep": "Próximo paso",
+    "noNextStep": "Nada agendado"
   },
   "buyingRoles": {
     "decisionMaker": "Decisor",
@@ -507,7 +513,9 @@
     "deals": "Deals abiertos en {company}",
     "noDeals": "Esta cuenta no tiene deals abiertos.",
     "colleagues": "También en {company}",
-    "noColleagues": "Todavía no hay otras personas de esta cuenta."
+    "noColleagues": "Todavía no hay otras personas de esta cuenta.",
+    "activity": "Actividad",
+    "noActivity": "Todavía no hay actividades con esta persona."
   },
   "contactDialog": {
     "newTitle": "Nuevo contacto",
@@ -533,6 +541,77 @@
       "emailRequired": "El email es obligatorio.",
       "email": "El email no es válido.",
       "phone": "Solo se pueden usar números, espacios y + ( ) -."
+    }
+  },
+  "activityTypes": {
+    "call": "Llamada",
+    "meeting": "Reunión",
+    "email": "Email",
+    "task": "Tarea"
+  },
+  "activities": {
+    "viewLabel": "Mostrar",
+    "views": {
+      "todo": "Pendientes",
+      "done": "Hechas"
+    },
+    "type": "Tipo",
+    "typeTitle": "Tipo de actividad",
+    "allTypes": "Todos",
+    "new": "Nueva actividad",
+    "groups": {
+      "overdue": "Vencidas",
+      "today": "Hoy",
+      "upcoming": "Próximas",
+      "done": "Hechas"
+    },
+    "emptyTodo": "No hay nada pendiente con estos filtros.",
+    "emptyDone": "Todavía no hay nada hecho con estos filtros.",
+    "today": "Hoy",
+    "overdueSince": "{date} · vencida",
+    "isDone": "Hecha",
+    "markDone": "Marcar {subject} como hecha",
+    "markDoneShort": "Marcar como hecha",
+    "actions": "Acciones de {subject}",
+    "edit": "Editar actividad",
+    "delete": "Eliminar actividad",
+    "completed": "Hecha: {subject}",
+    "deleted": "Se eliminó {subject}",
+    "gapsTitle": "Sin próximo paso",
+    "gapsHint": "{count, plural, one {# deal abierto que cierra este trimestre no tiene} other {# deals abiertos que cierran este trimestre no tienen}} nada agendado ({amount}).",
+    "gapsNone": "Todos los deals que cierran este trimestre tienen un próximo paso.",
+    "gapsMore": "{count, plural, one {# deal más} other {# deals más}}",
+    "planNextStep": "Agendar próximo paso",
+    "planFor": "Agendar próximo paso para {deal}"
+  },
+  "activityDialog": {
+    "newTitle": "Nueva actividad",
+    "editTitle": "Editar actividad",
+    "description": "Una llamada, reunión, email o tarea con una cuenta: algo por hacer o algo que ya pasó.",
+    "type": "Tipo",
+    "subject": "Asunto",
+    "subjectPlaceholder": "Revisión de precios con Priya",
+    "company": "Empresa",
+    "topic": "Tema",
+    "deal": "Deal",
+    "contact": "Con",
+    "none": "Ninguno",
+    "date": "Fecha",
+    "owner": "Responsable",
+    "done": "Ya se hizo",
+    "notes": "Notas",
+    "plan": "Agendar actividad",
+    "log": "Registrar actividad",
+    "save": "Guardar cambios",
+    "planned": "Agendada para el {date}: {subject}",
+    "logged": "Registrada: {subject}",
+    "saved": "Se actualizó {subject}",
+    "errors": {
+      "subjectRequired": "El asunto es obligatorio.",
+      "subjectTooLong": "El asunto tiene que tener menos de 80 caracteres.",
+      "company": "Falta elegir la empresa.",
+      "date": "Falta la fecha.",
+      "futureDone": "Algo que ya se hizo no puede tener fecha futura."
     }
   },
   "toasts": {

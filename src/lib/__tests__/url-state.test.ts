@@ -1,11 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_DEAL_FILTERS, DEFAULT_FILTERS, DEFAULT_FORECAST_FILTERS } from "../constants";
+import { DEFAULT_ACTIVITY_FILTERS, DEFAULT_CONTACT_FILTERS, DEFAULT_DEAL_FILTERS, DEFAULT_FILTERS, DEFAULT_FORECAST_FILTERS } from "../constants";
 import {
+  parseActivityFilters,
   parseCompanyFilters,
+  parseContactFilters,
   parseDealFilters,
   parseForecastFilters,
   toHref,
+  writeActivityFilters,
   writeCompanyFilters,
+  writeContactFilters,
   writeDealFilters,
   writeForecastFilters,
 } from "../url-state";
@@ -58,6 +62,21 @@ describe("forecast filters in the URL", () => {
   it("writes only what differs from this quarter's full view", () => {
     expect(writeForecastFilters(params("deal=x&quarter=next"), DEFAULT_FORECAST_FILTERS).toString()).toBe("deal=x");
     expect(writeForecastFilters(params(""), { period: "next", owner: "Kenji Mori", team: null }).toString()).toBe("quarter=next&owner=kenji-mori");
+  });
+});
+
+describe("contact and activity filters in the URL", () => {
+  it("round-trip the contact search and role", () => {
+    expect(parseContactFilters(params("q=head+of&role=champion"))).toEqual({ query: "head of", role: "champion" });
+    expect(parseContactFilters(params("role=boss"))).toEqual(DEFAULT_CONTACT_FILTERS);
+    expect(writeContactFilters(params("contact=x"), { query: "  ", role: null }).toString()).toBe("contact=x");
+  });
+
+  it("round-trip the activity view, owner and type", () => {
+    const filters = { view: "done" as const, owner: "Kenji Mori", type: "meeting" as const };
+    expect(parseActivityFilters(writeActivityFilters(params(""), filters), owners)).toEqual(filters);
+    expect(parseActivityFilters(params("view=later&type=fax"), owners)).toEqual(DEFAULT_ACTIVITY_FILTERS);
+    expect(writeActivityFilters(params("view=done"), DEFAULT_ACTIVITY_FILTERS).toString()).toBe("");
   });
 });
 

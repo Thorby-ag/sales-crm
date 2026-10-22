@@ -3,6 +3,7 @@ import { generateOpenDeals, isOpen } from "./deals";
 import { daysBetween } from "./format";
 import { hashString, normalize, uniqueSlug } from "./text";
 import type {
+  Activity,
   Company,
   CompanyFilters,
   CompanyLogo,
@@ -312,24 +313,30 @@ export interface DemoRecords {
   companies: Company[];
   deals: Deal[];
   contacts: Contact[];
+  activities: Activity[];
 }
 
-/** Reassigns accounts and their open deals. Closed deals keep their original owner. */
+/**
+ * Reassigns accounts with their open deals and planned activities. Closed deals and
+ * past activities keep their original owner.
+ */
 export function assignOwner(records: DemoRecords, ids: readonly string[], owner: string): DemoRecords {
   const set = new Set(ids);
   return {
     ...records,
     companies: records.companies.map((c) => (set.has(c.id) ? { ...c, owner } : c)),
     deals: records.deals.map((d) => (set.has(d.companyId) && isOpen(d) ? { ...d, owner } : d)),
+    activities: records.activities.map((a) => (set.has(a.companyId) && !a.done ? { ...a, owner } : a)),
   };
 }
 
-/** Deletes accounts with everything that belongs to them: deals and contacts. */
+/** Deletes accounts with everything that belongs to them: deals, contacts and activities. */
 export function deleteCompanies(records: DemoRecords, ids: readonly string[]): DemoRecords {
   const set = new Set(ids);
   return {
     companies: records.companies.filter((c) => !set.has(c.id)),
     deals: records.deals.filter((d) => !set.has(d.companyId)),
     contacts: records.contacts.filter((c) => !set.has(c.companyId)),
+    activities: records.activities.filter((a) => !set.has(a.companyId)),
   };
 }

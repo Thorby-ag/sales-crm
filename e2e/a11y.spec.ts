@@ -40,6 +40,21 @@ for (const locale of ["en", "es"]) {
   });
 }
 
+for (const locale of ["en", "es"]) {
+  test(`activities have no WCAG violations (${locale})`, async ({ page }) => {
+    await page.goto(`/${locale}/activities`);
+    await expect(page.getByRole("checkbox").first()).toBeVisible();
+    await expectNoViolations(page);
+  });
+}
+
+test("activity dialog has no WCAG violations", async ({ page }) => {
+  await page.goto("/en/activities");
+  await page.getByRole("button", { name: "New Activity" }).click();
+  await expect(page.getByRole("dialog", { name: "New Activity" })).toBeVisible();
+  await expectNoViolations(page);
+});
+
 test("contact sheet and dialog have no WCAG violations", async ({ page }) => {
   await page.goto("/en/contacts?contact=olivia-chen");
   await expect(page.getByRole("dialog")).toBeVisible();

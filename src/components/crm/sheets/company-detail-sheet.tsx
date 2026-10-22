@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, CalendarDays, ChevronDown, Clock, Mail, MousePointerClick, Phone, PhoneCall, Plus } from "lucide-react";
+import { Building2, CalendarDays, CalendarPlus, ChevronDown, Clock, Mail, MousePointerClick, Phone, PhoneCall, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetBody, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetSection } from "@/components/ui/sheet";
+import { doneActivities, plannedGroups } from "@/lib/activities";
 import { activitySummary, scoreCards } from "@/lib/companies";
 import { contactsAt } from "@/lib/contacts";
 import { SCORE_CARD_REVIEWERS, personByName } from "@/lib/data/people";
@@ -20,6 +21,7 @@ import { companyRows, dealsByStage, isOpen, isOverdue, pipelineByStage } from "@
 import { useCrm } from "@/lib/store";
 import { DEAL_STAGES, OPEN_DEAL_STAGES, TREND_WINDOWS, type Company, type Deal, type TrendWindow } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { ActivityList } from "../activities/activity-bits";
 import { RoleTag } from "../contacts/role-tag";
 import { DealActions, StageTag } from "../deals/deal-actions";
 import { closeCompany, openContact, openDeal, useOpenCompanyId } from "../url-state";
@@ -113,6 +115,19 @@ function ContactList({ companyId }: { companyId: string }) {
   );
 }
 
+/** What's planned with the account, then the latest that happened. */
+function CompanyActivities({ companyId }: { companyId: string }) {
+  const t = useTranslations("detail");
+  const all = useCrm((s) => s.activities);
+  const today = useCrm((s) => s.today);
+  const list = useMemo(() => {
+    const own = all.filter((a) => a.companyId === companyId);
+    const { overdue, today: due, upcoming } = plannedGroups(own, today);
+    return [...overdue, ...due, ...upcoming, ...doneActivities(own).slice(0, 3)];
+  }, [all, companyId, today]);
+  return <ActivityList activities={list} empty={t("noActivities")} />;
+}
+
 function DetailContent({ company }: { company: Company }) {
   const t = useTranslations();
   const { ago, money } = useFormat();
@@ -121,6 +136,7 @@ function DetailContent({ company }: { company: Company }) {
   const saved = useCrm((s) => s.scoreOverrides[company.id]);
   const openProfile = useCrm((s) => s.openProfile);
   const openContactDialog = useCrm((s) => s.openContactDialog);
+  const openActivityDialog = useCrm((s) => s.openActivityDialog);
   const setScoreOverride = useCrm((s) => s.setScoreOverride);
 
   const deals = useMemo(() => allDeals.filter((d) => d.companyId === company.id), [allDeals, company.id]);
@@ -195,6 +211,19 @@ function DetailContent({ company }: { company: Company }) {
           }
         >
           <ContactList companyId={company.id} />
+        </SheetSection>
+
+        <SheetSection
+          title={t("detail.activities")}
+          className="gap-2"
+          action={
+            <Button variant="secondary" onClick={() => openActivityDialog({ companyId: company.id })}>
+              <CalendarPlus aria-hidden className="size-3" />
+              {t("detail.planActivity")}
+            </Button>
+          }
+        >
+          <CompanyActivities companyId={company.id} />
         </SheetSection>
 
         <SheetSection title={t("detail.pipelineHealth")}>

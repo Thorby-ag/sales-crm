@@ -5,6 +5,7 @@ import { useEffect, type ReactNode } from "react";
 import { toast, Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { startPersistence, useCrm } from "@/lib/store";
+import { ActivityDialog } from "../sheets/activity-dialog";
 import { CompanyDetailSheet } from "../sheets/company-detail-sheet";
 import { ContactDialog } from "../sheets/contact-dialog";
 import { ContactSheet } from "../sheets/contact-sheet";
@@ -85,6 +86,7 @@ export function CrmShell({ children }: { children: ReactNode }) {
       <ProfileSheet />
       <NewCompanyDialog />
       <ContactDialog />
+      <ActivityDialog />
       <SearchDialog />
       <Toaster
         theme="dark"

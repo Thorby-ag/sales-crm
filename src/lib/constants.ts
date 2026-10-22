@@ -1,4 +1,4 @@
-import type { BuyingRole, CompanyFilters, ContactFilters, DealFilters, DealStage, ForecastCategory, ForecastFilters, OpenDealStage, SortKey, Tag } from "./types";
+import type { ActivityFilters, BuyingRole, CompanyFilters, ContactFilters, DealFilters, DealStage, ForecastCategory, ForecastFilters, OpenDealStage, SortKey, Tag } from "./types";
 
 export const DEFAULT_FILTERS: CompanyFilters = {
   sortBy: "pipelineValue",
@@ -14,6 +14,8 @@ export const DEFAULT_DEAL_FILTERS: DealFilters = { owner: null, close: null };
 export const DEFAULT_FORECAST_FILTERS: ForecastFilters = { period: "this", owner: null, team: null };
 
 export const DEFAULT_CONTACT_FILTERS: ContactFilters = { query: "", role: null };
+
+export const DEFAULT_ACTIVITY_FILTERS: ActivityFilters = { view: "todo", owner: null, type: null };
 
 export const SORT_KEYS: SortKey[] = ["pipelineValue", "winProbability", "openDeals", "lastInteraction", "name"];
 
