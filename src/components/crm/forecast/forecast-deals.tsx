@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { CARD, TEXT_LINK } from "@/components/ui/surface";
 import { personByName } from "@/lib/data/people";
 import { forecastCategory, isOverdue, shiftQuarter, withForecastCategory } from "@/lib/deals";
 import { FORECAST_GROUPS, quarterFor, type ForecastGroup } from "@/lib/forecast";
@@ -27,7 +28,7 @@ import { useFormat } from "../use-format";
 import { Avatar } from "../visuals/avatar";
 import { CompanyLogo } from "../visuals/company-logo";
 import { Money } from "../visuals/money";
-import { CARD, GROUP_COLOR } from "./styles";
+import { GROUP_COLOR } from "./styles";
 
 const TH = "border-b py-2.5 font-normal whitespace-nowrap";
 const TD = "border-b py-2.5";
@@ -98,7 +99,7 @@ function DealRow({ deal, company, period, today }: { deal: Deal; company: Compan
             <button
               type="button"
               onClick={() => openDeal(deal.id)}
-              className="type-lead block max-w-full truncate text-left outline-none decoration-white/40 underline-offset-4 hover:underline focus-visible:underline"
+              className={cn("type-lead", TEXT_LINK)}
             >
               {deal.name}
             </button>

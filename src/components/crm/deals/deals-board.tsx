@@ -19,6 +19,7 @@ import {
 import { useTranslations } from "next-intl";
 import { useMemo, useRef, useState } from "react";
 import { CountBadge } from "@/components/ui/chips";
+import { CARD } from "@/components/ui/surface";
 import { DEAL_STAGE_TONES } from "@/lib/constants";
 import { dealsByStage, dealSummary } from "@/lib/deals";
 import { useCrm } from "@/lib/store";
@@ -66,7 +67,8 @@ function Column({ stage, deals }: { stage: DealStage; deals: Deal[] }) {
       ref={setNodeRef}
       aria-labelledby={`stage-${stage}`}
       className={cn(
-        "flex w-[272px] shrink-0 snap-start flex-col rounded-xl border border-border bg-[#181818] transition-colors md:w-auto md:min-w-[214px] md:flex-1 md:basis-0",
+        CARD,
+        "flex w-[272px] shrink-0 snap-start flex-col transition-colors md:w-auto md:min-w-[214px] md:flex-1 md:basis-0",
         isOver && "border-primary/50 bg-primary/[0.05]",
       )}
     >

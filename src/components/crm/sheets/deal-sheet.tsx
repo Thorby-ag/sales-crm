@@ -8,6 +8,7 @@ import { Field, Input } from "@/components/ui/field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetBody, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetSection } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
+import { TEXT_LINK } from "@/components/ui/surface";
 import { nextStep } from "@/lib/activities";
 import { personByName } from "@/lib/data/people";
 import {
@@ -24,7 +25,7 @@ import { quarterOf } from "@/lib/format";
 import { useCrm } from "@/lib/store";
 import { DEAL_STAGES, FORECAST_CATEGORIES, type Deal, type DealStage, type ForecastCategory } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { ActivityIcon, DueDate, SUBJECT_LINK } from "../activities/activity-bits";
+import { ActivityIcon, DueDate } from "../activities/activity-bits";
 import { StageTag } from "../deals/deal-actions";
 import { withUndo } from "../undo";
 import { closeDeal, openCompany, useOpenDealId } from "../url-state";
@@ -152,7 +153,7 @@ function DealContent({ deal }: { deal: Deal }) {
                   <button
                     type="button"
                     onClick={() => openActivityDialog({ activityId: next.id })}
-                    className={`${SUBJECT_LINK} type-lead mt-2`}
+                    className={cn(TEXT_LINK, "type-lead mt-2")}
                   >
                     {next.subject}
                   </button>

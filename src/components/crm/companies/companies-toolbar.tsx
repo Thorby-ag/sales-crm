@@ -64,7 +64,7 @@ function useControls(filters: CompanyFilters, setFilters: (patch: Partial<Compan
 }
 
 /** A removable chip for filters that come from saved views (team, region). */
-export function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
+function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
   const t = useTranslations("filters");
   return (
     <span className="type-caption inline-flex h-[30px] items-center gap-1 rounded-full border border-primary/40 bg-primary/12 pr-1 pl-3 text-foreground">

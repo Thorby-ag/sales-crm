@@ -23,7 +23,7 @@ import {
  * Changes the query string without a navigation. Next.js keeps useSearchParams in sync
  * with history.replaceState, so every view reading the URL re-renders.
  */
-export function replaceSearchParams(update: (params: URLSearchParams) => URLSearchParams | void): void {
+function replaceSearchParams(update: (params: URLSearchParams) => URLSearchParams | void): void {
   const params = new URLSearchParams(window.location.search);
   window.history.replaceState(null, "", toHref(window.location.pathname, update(params) ?? params));
 }

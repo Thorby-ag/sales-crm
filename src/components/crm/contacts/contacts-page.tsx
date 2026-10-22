@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { TEXT_LINK } from "@/components/ui/surface";
 import { filterContacts } from "@/lib/contacts";
 import { useCrm } from "@/lib/store";
 import { BUYING_ROLES, type BuyingRole, type Company, type Contact } from "@/lib/types";
@@ -18,28 +19,16 @@ import { cn } from "@/lib/utils";
 import { ALL, FilterMenu } from "../filter-menu";
 import { ContentSkeleton } from "../shell/app-skeleton";
 import { PageHeader } from "../shell/page-header";
-import { withUndo } from "../undo";
-import { closeContact, openCompany, openContact, useContactFilters } from "../url-state";
+import { openCompany, openContact, useContactFilters } from "../url-state";
 import { CompanyLogo } from "../visuals/company-logo";
 import { ContactAvatar } from "../visuals/contact-avatar";
+import { useDeleteContact } from "./contact-actions";
 import { RoleTag } from "./role-tag";
 
 const CELL = "h-[52px] border-b border-border px-2.5 type-lead whitespace-nowrap transition-colors duration-100 group-hover:bg-[#1a1a1a]";
 const HEAD = "h-10 border-b border-border bg-background px-2.5 text-left type-caption font-normal whitespace-nowrap text-muted-foreground";
 
 const stop = (event: MouseEvent) => event.stopPropagation();
-
-/** Deletes a contact, with undo. Closes its sheet first so undo doesn't reopen it. */
-export function useDeleteContact() {
-  const t = useTranslations();
-  return useCallback(
-    (contact: Contact) => {
-      closeContact();
-      withUndo(t("contacts.deleted", { name: contact.name }), t("common.undo"), () => useCrm.getState().deleteContact(contact.id));
-    },
-    [t],
-  );
-}
 
 function ContactRow({ contact, company }: { contact: Contact; company: Company | undefined }) {
   const t = useTranslations();
@@ -59,7 +48,7 @@ function ContactRow({ contact, company }: { contact: Contact; company: Company |
                 stop(e);
                 open();
               }}
-              className="block max-w-full truncate text-left outline-none decoration-white/40 underline-offset-4 hover:underline focus-visible:underline"
+              className={TEXT_LINK}
             >
               {contact.name}
             </button>

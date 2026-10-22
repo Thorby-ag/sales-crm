@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { CARD } from "@/components/ui/surface";
 import { cn } from "@/lib/utils";
 
 // Placeholders shown in the static HTML until the browser loads the demo data.
@@ -50,14 +51,14 @@ function ForecastBody() {
     <div aria-hidden className="@container flex flex-1 flex-col gap-3 overflow-hidden px-4 pb-4">
       <div className="grid grid-cols-2 gap-2 @2xl:grid-cols-3 @5xl:grid-cols-6">
         {Array.from({ length: 6 }, (_, i) => (
-          <div key={i} className="flex h-[88px] flex-col gap-3 rounded-xl border border-border bg-[#181818] p-3.5">
+          <div key={i} className={cn(CARD, "flex h-[88px] flex-col gap-3 p-3.5")}>
             <Bar className="h-2 w-16" />
             <Bar className="h-4 w-24" />
           </div>
         ))}
       </div>
-      <div className="h-[300px] shrink-0 animate-pulse rounded-xl border border-border bg-[#181818]" />
-      <div className="flex-1 rounded-xl border border-border bg-[#181818]" />
+      <div className={cn(CARD, "h-[300px] shrink-0 animate-pulse")} />
+      <div className={cn(CARD, "flex-1")} />
     </div>
   );
 }
@@ -99,7 +100,7 @@ export function ContentSkeleton({ variant = "table", tabs = true }: { variant?: 
       ) : (
         <div aria-hidden className="flex flex-1 gap-3 overflow-hidden px-4 pb-4">
           {[4, 5, 4, 3, 2].map((cards, i) => (
-            <div key={i} className="flex w-[272px] shrink-0 flex-col gap-2 rounded-xl border border-border bg-[#181818] p-2 md:w-auto md:flex-1">
+            <div key={i} className={cn(CARD, "flex w-[272px] shrink-0 flex-col gap-2 p-2 md:w-auto md:flex-1")}>
               <Bar className="m-1.5 h-2.5 w-24" />
               {Array.from({ length: cards }, (_, j) => (
                 <span key={j} className="h-[104px] animate-pulse rounded-lg bg-white/[0.035]" />

@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetBody, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetSection } from "@/components/ui/sheet";
+import { TEXT_LINK } from "@/components/ui/surface";
 import { Link } from "@/i18n/navigation";
 import { doneActivities, plannedGroups } from "@/lib/activities";
 import { contactsAt } from "@/lib/contacts";
@@ -14,8 +15,9 @@ import { isOpen } from "@/lib/deals";
 import { enrollmentProgress } from "@/lib/sequences";
 import { useCrm } from "@/lib/store";
 import type { Contact } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import { ActivityList } from "../activities/activity-bits";
-import { useDeleteContact } from "../contacts/contacts-page";
+import { useDeleteContact } from "../contacts/contact-actions";
 import { RoleTag } from "../contacts/role-tag";
 import { EnrollmentStatusTag } from "../sequences/sequence-bits";
 import { StageTag } from "../deals/deal-actions";
@@ -24,7 +26,6 @@ import { useFormat } from "../use-format";
 import { ContactAvatar } from "../visuals/contact-avatar";
 import { Money } from "../visuals/money";
 
-const LINK = "block max-w-full truncate text-left outline-none decoration-white/40 underline-offset-4 hover:underline focus-visible:underline";
 
 /** The sequences a contact is in, and a menu to add them to another. */
 function ContactSequences({ contact }: { contact: Contact }) {
@@ -73,7 +74,7 @@ function ContactSequences({ contact }: { contact: Contact }) {
             if (!sequence) return null;
             return (
               <li key={enrollment.id} className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-white/[0.03]">
-                <Link href={{ pathname: "/sequences", query: { sequence: sequence.id } }} className={`${LINK} type-lead min-w-0 flex-1`}>
+                <Link href={{ pathname: "/sequences", query: { sequence: sequence.id } }} className={cn(TEXT_LINK, "type-lead min-w-0 flex-1")}>
                   {sequence.name}
                 </Link>
                 <EnrollmentStatusTag status={enrollmentProgress(sequence, enrollment, today).status} />
@@ -176,7 +177,7 @@ function ContactContent({ contact }: { contact: Contact }) {
               {deals.map((deal) => (
                 <li key={deal.id} className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-white/[0.03]">
                   <StageTag stage={deal.stage} className="w-[104px] justify-center" />
-                  <button type="button" onClick={() => openDeal(deal.id)} className={`${LINK} type-lead min-w-0 flex-1`}>
+                  <button type="button" onClick={() => openDeal(deal.id)} className={cn(TEXT_LINK, "type-lead min-w-0 flex-1")}>
                     {deal.name}
                   </button>
                   <span className="type-caption whitespace-nowrap text-muted-foreground">{t("deals.closes", { date: date(deal.closeDate) })}</span>

@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CARD, TEXT_LINK } from "@/components/ui/surface";
 import { personByName } from "@/lib/data/people";
 import {
   enrollmentProgress,
@@ -27,7 +28,6 @@ import { useCrm } from "@/lib/store";
 import type { Contact, Enrollment, Sequence } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ActivityIcon } from "../activities/activity-bits";
-import { CARD } from "../forecast/styles";
 import { ContentSkeleton } from "../shell/app-skeleton";
 import { PageHeader } from "../shell/page-header";
 import { withUndo } from "../undo";
@@ -140,7 +140,7 @@ function SequencesList() {
                           stop(e);
                           openSequence(sequence.id);
                         }}
-                        className="block max-w-full truncate text-left outline-none decoration-white/40 underline-offset-4 hover:underline focus-visible:underline"
+                        className={TEXT_LINK}
                       >
                         {sequence.name}
                       </button>
@@ -460,7 +460,7 @@ function SequenceDetail({ sequence }: { sequence: Sequence }) {
                                 <button
                                   type="button"
                                   onClick={() => openContact(contact.id)}
-                                  className="block max-w-full truncate text-left outline-none decoration-white/40 underline-offset-4 hover:underline focus-visible:underline"
+                                  className={TEXT_LINK}
                                 >
                                   {contact.name}
                                 </button>

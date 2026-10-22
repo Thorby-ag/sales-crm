@@ -6,7 +6,7 @@ CRM de cuentas para equipos de ventas B2B: pipeline de empresas, contactos, acti
 
 **Demo en vivo:** [salescrm.thomalabs.com](https://salescrm.thomalabs.com) · **Guía:** [en la app](https://salescrm.thomalabs.com/es/guide) o en [PDF](https://salescrm.thomalabs.com/guide/sales-crm-guide-es.pdf)
 
-![Vista de empresas](docs/screenshot.png)
+![Vista de empresas](docs/companies.png)
 
 ![Tablero de deals](docs/deals.png)
 
@@ -34,7 +34,7 @@ CRM de cuentas para equipos de ventas B2B: pipeline de empresas, contactos, acti
 - **Guía incluida.** Organizada por tareas, en inglés y español, con capturas, links que abren la app en el estado justo y un PDF. Se renderiza en el servidor, y `npm run guide:assets` vuelve a sacar las capturas y los PDFs desde un build corriendo.
 - **Vistas guardadas.** Los ítems del sidebar son filtros reales: equipo, región, deals que cierran este trimestre y deals demorados.
 - **Inglés y español.** Rutas `/en` y `/es`, detección del idioma del navegador, moneda, fechas y plurales con el formato de cada idioma, metadata traducida con `hreflang` y claves de traducción verificadas por TypeScript.
-- **URLs para compartir.** Los filtros, el orden y la empresa abierta viven en la URL (`/es/deals?owner=kenji-mori&company=quantora`).
+- **URLs para compartir.** Los filtros, el orden y lo que esté abierto (una empresa, un deal, un contacto o una secuencia) viven en la URL (`/es/deals?owner=kenji-mori&company=quantora`).
 - **Persistencia.** Los cambios se guardan en el navegador. En cada visita las fechas se corren hacia adelante, así la demo nunca se ve vieja. "Restablecer la demo" se puede deshacer.
 - **Accesibilidad.** Cero violaciones de WCAG 2.1 AA según axe-core, verificado en CI en los dos idiomas. Soporte de teclado en todo, alternativa al arrastre en el tablero (WCAG 2.5.7) y respuestas 404 reales.
 
@@ -46,7 +46,7 @@ Next.js 16 (App Router, páginas estáticas, `proxy.ts`) · React 19 · TypeScri
 
 ```
 src/
-  app/[locale]/        rutas por idioma: empresas (/), tablero (/deals), 404
+  app/[locale]/        rutas por idioma: empresas (/), deals, forecast, contactos, actividades, secuencias, guía, 404
   i18n/                routing, configuración por request, mensajes tipados
   messages/            en.json, es.json
   proxy.ts             redirige / al idioma del visitante
@@ -58,18 +58,19 @@ src/
       companies/       tabla, toolbar, pie, acciones masivas
       contacts/        tabla de contactos, roles en la compra
       deals/           tablero, tarjetas, menú de etapas
-      sequences/       secuencias, editor de pasos, vista previa, inscripciones
       forecast/        indicadores, gráfico del trimestre (SVG), vendedores, deals por categoría
       guide/           guía de uso, renderizada en el servidor
+      sequences/       secuencias, editor de pasos, vista previa, inscripciones
       sheets/          detalle de empresa, deal y contacto, perfiles, diálogos de alta
+      visuals/         avatares, logos, montos, medidores, sparklines
   lib/                 lógica de dominio como funciones puras (+ __tests__)
 e2e/                   specs de Playwright (desktop + mobile, accesibilidad)
 ```
 
 Algunas decisiones:
 
-- **La lógica de dominio es pura y está testeada.** Filtros, orden, métricas, forecast, búsqueda, validación, CSV, lectura de la URL y persistencia viven en `src/lib` sin React, y 148 tests unitarios los cubren directamente.
-- **La URL es el estado de todo lo que se comparte.** Los filtros y la empresa abierta se leen con `useSearchParams` y se escriben con `history.replaceState`, que Next.js sincroniza sin navegar. Zustand guarda los registros y el estado de la interfaz, como la selección y los diálogos abiertos.
+- **La lógica de dominio es pura y está testeada.** Filtros, orden, métricas, forecast, actividades, secuencias, búsqueda, validación, CSV, lectura de la URL y persistencia viven en `src/lib` sin React, y 148 tests unitarios los cubren directamente.
+- **La URL es el estado de todo lo que se comparte.** Los filtros y el registro abierto se leen con `useSearchParams` y se escriben con `history.replaceState`, que Next.js sincroniza sin navegar. Zustand guarda los registros y el estado de la interfaz, como la selección y los diálogos abiertos.
 - **Las fechas son relativas al día del visitante.** Los datos de ejemplo se definen como "hace N días". Los datos guardados registran la fecha en que se guardaron y se corren al cargarlos.
 - **El forecast se sostiene cualquier día.** Los deals ganados de ejemplo siguen el ritmo que predice el pipeline abierto de cada cuenta. Al principio del trimestre casi todo el forecast está abierto y al final casi todo está ganado, pero los totales quedan en un lugar parecido. Un test unitario lo verifica con varias fechas.
 - **HTML estático, datos en el cliente.** Las páginas se prerenderizan con esqueletos, porque los datos viven en el navegador. Igual se renderizan en el servidor, así que `notFound()` devuelve un `404` real.
@@ -110,7 +111,7 @@ La demo en vivo corre en un VPS con [Dokploy](https://dokploy.com), que la recon
 
 ## Créditos
 
-- La interfaz se basa en [Sales CRM de Kargul Studio](https://sales-crm-kargulstudio.vercel.app/). El código, los datos, los logos y los avatares de este repositorio son propios, y el tablero de deals, el forecast, la versión en español, la persistencia, las vistas guardadas y las acciones masivas son nuevos.
+- La interfaz se basa en [Sales CRM de Kargul Studio](https://sales-crm-kargulstudio.vercel.app/). El código, los datos, los logos y los avatares de este repositorio son propios. El original solo tiene la tabla de empresas: el tablero de deals, el forecast, los contactos, las actividades, las secuencias de email, la guía, la versión en español, la persistencia, las vistas guardadas y las acciones masivas son nuevos.
 - Avatares: estilo "Adventurer" de Lisa Wischofsky ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)), generados con [DiceBear](https://www.dicebear.com/).
 - Íconos: [Lucide](https://lucide.dev/) (ISC). Tipografía: [Geist](https://vercel.com/font) (SIL OFL).
 - Las empresas, las personas, los emails (`.example`) y los teléfonos (555-01xx) son ficticios.

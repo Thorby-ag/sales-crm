@@ -6,7 +6,7 @@ An account-based CRM for B2B sales teams: a companies pipeline, contacts, activi
 
 **Live demo:** [salescrm.thomalabs.com](https://salescrm.thomalabs.com) · **Guide:** [in the app](https://salescrm.thomalabs.com/en/guide) or as a [PDF](https://salescrm.thomalabs.com/guide/sales-crm-guide-en.pdf)
 
-![Companies view](docs/screenshot.png)
+![Companies view](docs/companies.png)
 
 ![Deals board](docs/deals.png)
 
@@ -34,7 +34,7 @@ An account-based CRM for B2B sales teams: a companies pipeline, contacts, activi
 - **Built-in guide.** Task-based, in English and Spanish, with screenshots, links that open the app in the right state, and a PDF. It's rendered on the server, and `npm run guide:assets` takes the screenshots and PDFs again from a running build.
 - **Saved views.** Sidebar entries are real filters: team, region, deals closing this quarter, slipping deals.
 - **English and Spanish.** `/en` and `/es` routes, browser-language detection, currency, dates and plurals formatted per locale, translated metadata with `hreflang`, and type-checked translation keys.
-- **Shareable URLs.** Filters, sort order and the open company live in the query string (`/es/deals?owner=kenji-mori&company=quantora`).
+- **Shareable URLs.** Filters, sort order and whatever is open (a company, deal, contact or sequence) live in the query string (`/es/deals?owner=kenji-mori&company=quantora`).
 - **Persistence.** Changes are saved in the browser. Every date moves forward on the next visit, so the demo never looks stale. "Reset demo data" can be undone.
 - **Accessibility.** No WCAG 2.1 AA violations in axe-core, checked in CI in both languages. Keyboard support everywhere, a non-dragging alternative for the board (WCAG 2.5.7), and real 404 responses.
 
@@ -46,7 +46,7 @@ Next.js 16 (App Router, static pages, `proxy.ts`) · React 19 · TypeScript (str
 
 ```
 src/
-  app/[locale]/        routes per language: companies (/), deals board (/deals), 404
+  app/[locale]/        routes per language: companies (/), deals, forecast, contacts, activities, sequences, guide, 404
   i18n/                routing, request config, typed messages
   messages/            en.json, es.json
   proxy.ts             redirects / to the visitor's language
@@ -58,18 +58,19 @@ src/
       companies/       table, toolbar, footer, bulk actions
       contacts/        contacts table, buying-role tags
       deals/           board, cards, stage menu
-      sequences/       sequences, steps editor, preview, enrollments
       forecast/        KPIs, quarter chart (SVG), reps, deals by category
       guide/           in-app guide, rendered on the server
+      sequences/       sequences, steps editor, preview, enrollments
       sheets/          company, deal and contact details, profiles, dialogs for new records
+      visuals/         avatars, logos, money, meters, sparklines
   lib/                 domain logic as pure functions (+ __tests__)
 e2e/                   Playwright specs (desktop + mobile, a11y)
 ```
 
 A few decisions worth noting:
 
-- **Domain logic is pure and tested.** Filtering, sorting, metrics, forecasting, search, validation, CSV, URL parsing and persistence live in `src/lib` without React, so 148 unit tests cover them directly.
-- **The URL is the state for anything shareable.** Filters and the open company are read with `useSearchParams` and written with `history.replaceState`, which Next.js keeps in sync without a navigation. Zustand holds the records and UI state such as selection and open dialogs.
+- **Domain logic is pure and tested.** Filtering, sorting, metrics, the forecast, activities, sequences, search, validation, CSV, URL parsing and persistence live in `src/lib` without React, so 148 unit tests cover them directly.
+- **The URL is the state for anything shareable.** Filters and the open record are read with `useSearchParams` and written with `history.replaceState`, which Next.js keeps in sync without a navigation. Zustand holds the records and UI state such as selection and open dialogs.
 - **Dates are relative to the visitor's today.** Seed data is defined as "N days ago". Saved data stores the date it was saved and is shifted forward on load.
 - **The forecast holds up on any day.** Seeded wins follow the pace each account's open pipeline predicts. Early in the quarter most of the forecast is still open, late in the quarter most of it is won, and the totals land in about the same place. A unit test checks this across several dates.
 - **Static HTML, client data.** Pages are prerendered with skeletons, because the data lives in the browser. Pages still render on the server, so `notFound()` returns a real `404`.
@@ -110,7 +111,7 @@ The live demo runs on a VPS with [Dokploy](https://dokploy.com), which rebuilds 
 
 ## Credits
 
-- The interface is based on [Sales CRM by Kargul Studio](https://sales-crm-kargulstudio.vercel.app/). The code, data, logos and avatars in this repository are original, and the deals board, forecast, Spanish version, persistence, saved views and bulk actions are new.
+- The interface is based on [Sales CRM by Kargul Studio](https://sales-crm-kargulstudio.vercel.app/). The code, data, logos and avatars in this repository are original. The original only has the companies table: the deals board, forecast, contacts, activities, email sequences, guide, Spanish version, persistence, saved views and bulk actions are new.
 - Avatars: "Adventurer" by Lisa Wischofsky ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)), generated with [DiceBear](https://www.dicebear.com/).
 - Icons: [Lucide](https://lucide.dev/) (ISC). Font: [Geist](https://vercel.com/font) (SIL OFL).
 - Companies, people, emails (`.example`) and phone numbers (555-01xx) are fictional.

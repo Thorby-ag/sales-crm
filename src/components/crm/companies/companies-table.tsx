@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import type { MouseEvent, ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { TEXT_LINK } from "@/components/ui/surface";
 import { personByName } from "@/lib/data/people";
 import { useCrm } from "@/lib/store";
 import type { CompanyRow, SortKey } from "@/lib/types";
@@ -85,7 +86,7 @@ function CompanyRowView({ row, selected }: { row: CompanyRow; selected: boolean 
             stop(e);
             open();
           }}
-          className="block max-w-full truncate text-left outline-none decoration-white/40 underline-offset-4 hover:underline focus-visible:underline"
+          className={TEXT_LINK}
         >
           {row.name}
         </button>

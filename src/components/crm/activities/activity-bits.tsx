@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { TEXT_LINK } from "@/components/ui/surface";
 import { useCrm } from "@/lib/store";
 import type { Activity, ActivityType } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -13,9 +14,6 @@ import { withUndo } from "../undo";
 import { useFormat } from "../use-format";
 
 const ICONS: Record<ActivityType, LucideIcon> = { call: Phone, meeting: CalendarDays, email: Mail, task: ListTodo };
-
-export const SUBJECT_LINK =
-  "block max-w-full truncate text-left outline-none decoration-white/40 underline-offset-4 hover:underline focus-visible:underline";
 
 export function ActivityIcon({ type, className }: { type: ActivityType; className?: string }) {
   const Icon = ICONS[type];
@@ -27,7 +25,7 @@ export function ActivityIcon({ type, className }: { type: ActivityType; classNam
 }
 
 /** Marks an activity done, with undo. */
-export function useCompleteActivity() {
+function useCompleteActivity() {
   const t = useTranslations();
   return useCallback(
     (activity: Activity) =>
@@ -109,7 +107,7 @@ export function ActivityList({ activities, empty }: { activities: Activity[]; em
         <li key={activity.id} className="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-white/[0.03]">
           <DoneToggle activity={activity} />
           <ActivityIcon type={activity.type} className="size-6" />
-          <button type="button" onClick={() => openActivityDialog({ activityId: activity.id })} className={cn(SUBJECT_LINK, "type-lead min-w-0 flex-1")}>
+          <button type="button" onClick={() => openActivityDialog({ activityId: activity.id })} className={cn(TEXT_LINK, "type-lead min-w-0 flex-1")}>
             {activity.subject}
           </button>
           <DueDate activity={activity} />

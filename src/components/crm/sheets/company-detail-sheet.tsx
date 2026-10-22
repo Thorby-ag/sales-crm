@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetBody, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetSection } from "@/components/ui/sheet";
+import { TEXT_LINK } from "@/components/ui/surface";
 import { doneActivities, plannedGroups } from "@/lib/activities";
 import { activitySummary, scoreCards } from "@/lib/companies";
 import { contactsAt } from "@/lib/contacts";
@@ -76,7 +77,7 @@ function DealList({ deals, today }: { deals: Deal[]; today: string }) {
             <button
               type="button"
               onClick={() => openDeal(deal.id)}
-              className="type-lead min-w-0 flex-1 truncate text-left outline-none decoration-white/40 underline-offset-4 hover:underline focus-visible:underline"
+              className={cn(TEXT_LINK, "type-lead min-w-0 flex-1")}
             >
               {deal.name}
             </button>

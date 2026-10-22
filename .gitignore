@@ -21,7 +21,7 @@ next-env.d.ts
 *.pem
 npm-debug.log*
 
-# capturas del sitio de referencia (solo uso local, no se publican)
+# screenshots of the reference site (local only, never published)
 /reference/
 
 # playwright

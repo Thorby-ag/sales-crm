@@ -4,6 +4,7 @@ import { useDraggable } from "@dnd-kit/core";
 import { CalendarClock, GripVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { MouseEvent, ReactNode, SyntheticEvent } from "react";
+import { TEXT_LINK } from "@/components/ui/surface";
 import { personByName } from "@/lib/data/people";
 import { isOpen, isOverdue } from "@/lib/deals";
 import { useCrm } from "@/lib/store";
@@ -48,7 +49,7 @@ function DealCardBody({ deal, company, today, controls }: { deal: Deal; company:
             e.stopPropagation();
             openDeal(deal.id);
           }}
-          className="type-lead block max-w-full truncate text-left outline-none decoration-white/40 underline-offset-4 hover:underline focus-visible:underline"
+          className={cn("type-lead", TEXT_LINK)}
         >
           {deal.name}
         </button>
