@@ -1,11 +1,12 @@
 import { create } from "zustand";
 import { assignOwner, deleteCompanies } from "./companies";
+import { upsertContact } from "./contacts";
 import { NOTIFICATIONS } from "./data/notifications";
 import { moveDeal, updateDeal } from "./deals";
 import { localToday } from "./format";
 import { LEGACY_STORAGE_KEYS, restoreDemo, serializeDemo, STORAGE_KEY, type DemoState } from "./persistence";
 import { seedDemo } from "./seed";
-import type { Company, Deal, DealStage } from "./types";
+import type { Company, Contact, Deal, DealStage } from "./types";
 
 interface CrmState extends DemoState {
   /** False until the browser has loaded saved data (or seeded fresh data). */
@@ -16,6 +17,8 @@ interface CrmState extends DemoState {
   profileName: string | null;
   profileOpen: boolean;
   newCompanyOpen: boolean;
+  /** The contact dialog: a contact to edit, or a new one (optionally at a given company). */
+  contactDialog: { contactId: string | null; companyId: string | null } | null;
   searchOpen: boolean;
   mobileNavOpen: boolean;
 }
@@ -29,6 +32,8 @@ interface CrmActions {
   moveDeal: (dealId: string, stage: DealStage) => void;
   /** Replaces a deal with `update(deal)`; the change functions live in lib/deals. */
   updateDeal: (dealId: string, update: (deal: Deal) => Deal) => void;
+  saveContact: (contact: Contact) => void;
+  deleteContact: (contactId: string) => void;
   assignOwner: (companyIds: string[], owner: string) => void;
   deleteCompanies: (companyIds: string[]) => void;
   setScoreOverride: (companyId: string, stars: number[]) => void;
@@ -39,6 +44,8 @@ interface CrmActions {
   openProfile: (name: string) => void;
   closeProfile: () => void;
   setNewCompanyOpen: (open: boolean) => void;
+  openContactDialog: (target: { contactId?: string; companyId?: string }) => void;
+  closeContactDialog: () => void;
   setSearchOpen: (open: boolean) => void;
   setMobileNavOpen: (open: boolean) => void;
 }
@@ -65,12 +72,14 @@ export const useCrm = create<CrmState & CrmActions>()((set, get) => ({
   today: "",
   companies: [],
   deals: [],
+  contacts: [],
   scoreOverrides: {},
   unreadIds: [],
   selectedIds: [],
   profileName: null,
   profileOpen: false,
   newCompanyOpen: false,
+  contactDialog: null,
   searchOpen: false,
   mobileNavOpen: false,
 
@@ -80,8 +89,8 @@ export const useCrm = create<CrmState & CrmActions>()((set, get) => ({
     set({ ...(restoreDemo(readSaved(), today) ?? freshDemo(today)), today, hydrated: true });
   },
   snapshot: () => {
-    const { companies, deals, scoreOverrides, unreadIds } = get();
-    return { companies, deals, scoreOverrides, unreadIds };
+    const { companies, deals, contacts, scoreOverrides, unreadIds } = get();
+    return { companies, deals, contacts, scoreOverrides, unreadIds };
   },
   restore: (snapshot) => set({ ...snapshot }),
   resetDemo: () => set({ ...freshDemo(get().today), selectedIds: [] }),
@@ -89,6 +98,8 @@ export const useCrm = create<CrmState & CrmActions>()((set, get) => ({
     set((s) => ({ companies: [company, ...s.companies], deals: [...deals, ...s.deals], newCompanyOpen: false })),
   moveDeal: (dealId, stage) => set((s) => ({ deals: moveDeal(s.deals, dealId, stage, s.today) })),
   updateDeal: (dealId, update) => set((s) => ({ deals: updateDeal(s.deals, dealId, update) })),
+  saveContact: (contact) => set((s) => ({ contacts: upsertContact(s.contacts, contact) })),
+  deleteContact: (contactId) => set((s) => ({ contacts: s.contacts.filter((c) => c.id !== contactId) })),
   assignOwner: (companyIds, owner) => set((s) => assignOwner(s, companyIds, owner)),
   deleteCompanies: (companyIds) =>
     set((s) => ({
@@ -106,6 +117,8 @@ export const useCrm = create<CrmState & CrmActions>()((set, get) => ({
   openProfile: (name) => set({ profileName: name, profileOpen: true }),
   closeProfile: () => set({ profileOpen: false }),
   setNewCompanyOpen: (open) => set({ newCompanyOpen: open }),
+  openContactDialog: ({ contactId, companyId }) => set({ contactDialog: { contactId: contactId ?? null, companyId: companyId ?? null } }),
+  closeContactDialog: () => set({ contactDialog: null }),
   setSearchOpen: (open) => set({ searchOpen: open }),
   setMobileNavOpen: (open) => set({ mobileNavOpen: open }),
 }));
@@ -136,6 +149,7 @@ export function startPersistence(onError: () => void): () => void {
     const changed =
       state.companies !== prev.companies ||
       state.deals !== prev.deals ||
+      state.contacts !== prev.contacts ||
       state.scoreOverrides !== prev.scoreOverrides ||
       state.unreadIds !== prev.unreadIds;
     if (!changed) return;

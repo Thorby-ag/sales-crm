@@ -27,6 +27,8 @@ export const CLOSE_WINDOWS = ["quarter", "overdue"] as const;
 /** How confident the team is that an open deal closes in its quarter, from most to least. */
 export const FORECAST_CATEGORIES = ["commit", "bestCase", "pipeline", "omitted"] as const;
 export const FORECAST_PERIODS = ["this", "next"] as const;
+/** Who someone is in a purchase, from most to least say over it. */
+export const BUYING_ROLES = ["decisionMaker", "champion", "influencer", "endUser", "blocker"] as const;
 
 /** Segment and stage tags are sales jargon: they stay in English in every locale. */
 export type Segment = (typeof SEGMENTS)[number];
@@ -42,6 +44,7 @@ export type OpenDealStage = (typeof OPEN_DEAL_STAGES)[number];
 export type CloseWindow = (typeof CLOSE_WINDOWS)[number];
 export type ForecastCategory = (typeof FORECAST_CATEGORIES)[number];
 export type ForecastPeriod = (typeof FORECAST_PERIODS)[number];
+export type BuyingRole = (typeof BUYING_ROLES)[number];
 export type SortKey = "pipelineValue" | "winProbability" | "openDeals" | "lastInteraction" | "name";
 
 export type LogoMark = "orbit" | "bars" | "diamond" | "split" | "grid" | "wave" | "peak" | "ring" | "spark" | "hex";
@@ -86,6 +89,18 @@ export interface Deal {
   forecast?: ForecastCategory;
 }
 
+/** Someone at a customer account: a person the team sells to. */
+export interface Contact {
+  id: string;
+  companyId: string;
+  name: string;
+  /** Job title, kept as entered in every locale. */
+  title: string;
+  email: string;
+  phone: string;
+  role: BuyingRole;
+}
+
 /** A company plus the metrics derived from its open deals. */
 export interface CompanyRow extends Company {
   openDeals: number;
@@ -114,6 +129,12 @@ export interface ForecastFilters {
   period: ForecastPeriod;
   owner: string | null;
   team: Team | null;
+}
+
+export interface ContactFilters {
+  /** Free text: name, title, email or company. */
+  query: string;
+  role: BuyingRole | null;
 }
 
 export type NotificationKind = "mention" | "stage" | "winDrop" | "scoreUpdate" | "demoLogged" | "pipelineUp" | "invite";

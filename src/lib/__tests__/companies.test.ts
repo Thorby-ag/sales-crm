@@ -23,7 +23,7 @@ import { DEFAULT_FILTERS } from "../constants";
 import { companyRows } from "../deals";
 import { seedDemo } from "../seed";
 import type { Team } from "../types";
-import { company, deal, row, TODAY } from "./fixtures";
+import { company, contact, deal, row, TODAY } from "./fixtures";
 
 const a = row({ id: "a", name: "Alpha", owner: "Ada", pipelineValue: 300, winProbability: 20, openDeals: 5, tags: ["SMB", "Pilot"], region: "apac", lastInteraction: { date: "2026-10-14", type: "demo" } });
 const b = row({ id: "b", name: "Bravo", owner: "Ben", pipelineValue: 500, winProbability: 80, openDeals: 1, tags: ["Enterprise"], region: "emea", lastInteraction: { date: "2026-08-01", type: "exec" } });
@@ -289,18 +289,21 @@ describe("bulk changes", () => {
   const records = {
     companies: [company({ id: "a" }), company({ id: "b", owner: "Ben" })],
     deals: [deal({ id: "a1", companyId: "a" }), deal({ id: "a2", companyId: "a", stage: "won" }), deal({ id: "b1", companyId: "b", owner: "Ben" })],
+    contacts: [contact({ id: "ann", companyId: "a" }), contact({ id: "bob", companyId: "b" })],
   };
 
   it("reassigns accounts and their open deals only", () => {
     const next = assignOwner(records, ["a"], "Zoe");
     expect(next.companies.map((x) => x.owner)).toEqual(["Zoe", "Ben"]);
     expect(next.deals.map((x) => x.owner)).toEqual(["Zoe", "Ada", "Ben"]);
+    expect(next.contacts).toBe(records.contacts);
   });
 
-  it("deletes accounts together with their deals", () => {
+  it("deletes accounts together with their deals and contacts", () => {
     const next = deleteCompanies(records, ["a"]);
     expect(next.companies.map((x) => x.id)).toEqual(["b"]);
     expect(next.deals.map((x) => x.id)).toEqual(["b1"]);
+    expect(next.contacts.map((x) => x.id)).toEqual(["bob"]);
   });
 });
 

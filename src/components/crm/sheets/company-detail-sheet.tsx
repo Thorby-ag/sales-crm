@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, CalendarDays, ChevronDown, Clock, Mail, MousePointerClick, Phone, PhoneCall } from "lucide-react";
+import { Building2, CalendarDays, ChevronDown, Clock, Mail, MousePointerClick, Phone, PhoneCall, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -14,16 +14,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetBody, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetSection } from "@/components/ui/sheet";
 import { activitySummary, scoreCards } from "@/lib/companies";
+import { contactsAt } from "@/lib/contacts";
 import { SCORE_CARD_REVIEWERS, personByName } from "@/lib/data/people";
 import { companyRows, dealsByStage, isOpen, isOverdue, pipelineByStage } from "@/lib/deals";
 import { useCrm } from "@/lib/store";
 import { DEAL_STAGES, OPEN_DEAL_STAGES, TREND_WINDOWS, type Company, type Deal, type TrendWindow } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { RoleTag } from "../contacts/role-tag";
 import { DealActions, StageTag } from "../deals/deal-actions";
-import { closeCompany, openDeal, useOpenCompanyId } from "../url-state";
+import { closeCompany, openContact, openDeal, useOpenCompanyId } from "../url-state";
 import { useFormat } from "../use-format";
 import { Avatar } from "../visuals/avatar";
 import { CompanyLogo } from "../visuals/company-logo";
+import { ContactAvatar } from "../visuals/contact-avatar";
 import { Money } from "../visuals/money";
 import { SegmentedMeter } from "../visuals/segmented-meter";
 import { Sparkline } from "../visuals/sparkline";
@@ -87,6 +90,29 @@ function DealList({ deals, today }: { deals: Deal[]; today: string }) {
   );
 }
 
+function ContactList({ companyId }: { companyId: string }) {
+  const t = useTranslations("detail");
+  const allContacts = useCrm((s) => s.contacts);
+  const contacts = useMemo(() => contactsAt(allContacts, companyId), [allContacts, companyId]);
+  if (contacts.length === 0) return <p className="type-caption text-muted-foreground">{t("noContacts")}</p>;
+  return (
+    <ul className="-mx-2 flex flex-col">
+      {contacts.map((contact) => (
+        <li key={contact.id}>
+          <Button variant="item" size="none" className="items-center p-2" onClick={() => openContact(contact.id)}>
+            <ContactAvatar name={contact.name} size={28} />
+            <span className="min-w-0 flex-1">
+              <span className="type-lead block truncate">{contact.name}</span>
+              <span className="type-caption mt-1.5 block truncate text-muted-foreground">{contact.title}</span>
+            </span>
+            <RoleTag role={contact.role} />
+          </Button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function DetailContent({ company }: { company: Company }) {
   const t = useTranslations();
   const { ago, money } = useFormat();
@@ -94,6 +120,7 @@ function DetailContent({ company }: { company: Company }) {
   const today = useCrm((s) => s.today);
   const saved = useCrm((s) => s.scoreOverrides[company.id]);
   const openProfile = useCrm((s) => s.openProfile);
+  const openContactDialog = useCrm((s) => s.openContactDialog);
   const setScoreOverride = useCrm((s) => s.setScoreOverride);
 
   const deals = useMemo(() => allDeals.filter((d) => d.companyId === company.id), [allDeals, company.id]);
@@ -155,6 +182,19 @@ function DetailContent({ company }: { company: Company }) {
               {owner.phone}
             </a>
           </div>
+        </SheetSection>
+
+        <SheetSection
+          title={t("detail.contacts")}
+          className="gap-2"
+          action={
+            <Button variant="secondary" onClick={() => openContactDialog({ companyId: company.id })}>
+              <Plus aria-hidden className="size-3" />
+              {t("detail.addContact")}
+            </Button>
+          }
+        >
+          <ContactList companyId={company.id} />
         </SheetSection>
 
         <SheetSection title={t("detail.pipelineHealth")}>

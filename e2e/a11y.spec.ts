@@ -32,6 +32,24 @@ for (const locale of ["en", "es"]) {
   });
 }
 
+for (const locale of ["en", "es"]) {
+  test(`contacts have no WCAG violations (${locale})`, async ({ page }) => {
+    await page.goto(`/${locale}/contacts`);
+    await expect(page.locator("tbody tr").first()).toBeVisible();
+    await expectNoViolations(page);
+  });
+}
+
+test("contact sheet and dialog have no WCAG violations", async ({ page }) => {
+  await page.goto("/en/contacts?contact=olivia-chen");
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await expectNoViolations(page);
+
+  await page.getByRole("button", { name: "Edit contact" }).click();
+  await expect(page.getByRole("dialog", { name: "Edit Contact" })).toBeVisible();
+  await expectNoViolations(page);
+});
+
 test("deal sheet has no WCAG violations", async ({ page }) => {
   await page.goto("/en/forecast?deal=lumenfold-1");
   await expect(page.getByRole("dialog")).toBeVisible();

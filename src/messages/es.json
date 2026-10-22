@@ -70,7 +70,8 @@
     "companies": "Empresas",
     "deals": "Deals",
     "forecast": "Forecast",
-    "active": "Activo"
+    "active": "Activo",
+    "contacts": "Contactos"
   },
   "sort": {
     "pipelineValue": "Valor del pipeline",
@@ -222,7 +223,10 @@
     "updated": "Actualizado {time}",
     "needHelp": "Ayuda y soporte",
     "save": "Guardar cambios",
-    "saved": "Score card actualizado para {name}"
+    "saved": "Score card actualizado para {name}",
+    "contacts": "Contactos",
+    "noContacts": "Esta cuenta todavía no tiene contactos.",
+    "addContact": "Agregar contacto"
   },
   "scoreCards": {
     "businessFit": {
@@ -302,21 +306,22 @@
   },
   "search": {
     "title": "Buscar",
-    "description": "Buscar empresas por nombre, responsable, segmento o etapa",
-    "label": "Buscar empresas",
-    "placeholder": "Buscar empresas, responsables, etapas…",
+    "description": "Buscar empresas por nombre, responsable, segmento o etapa, y contactos por nombre, cargo o email",
+    "label": "Buscar empresas y contactos",
+    "placeholder": "Buscar empresas, contactos, responsables…",
     "company": "Empresa",
     "segmentStage": "Segmento y etapa",
     "owner": "Responsable",
     "pipeline": "Pipeline",
     "win": "Prob. de cierre",
     "lastInteraction": "Última interacción",
-    "empty": "Ninguna empresa coincide con “{query}”.",
+    "empty": "Ninguna empresa ni contacto coincide con “{query}”.",
     "navigate": "Navegar",
     "open": "Abrir",
     "up": "Flecha arriba",
     "down": "Flecha abajo",
-    "enter": "Enter"
+    "enter": "Enter",
+    "contacts": "Contactos"
   },
   "notifications": {
     "title": "Notificaciones",
@@ -466,6 +471,68 @@
       "tooLarge": "El monto tiene que ser menor a 100 millones.",
       "date": "Falta la fecha.",
       "futureClose": "Un deal cerrado no puede tener fecha futura."
+    }
+  },
+  "buyingRoles": {
+    "decisionMaker": "Decisor",
+    "champion": "Champion",
+    "influencer": "Influenciador",
+    "endUser": "Usuario",
+    "blocker": "Bloqueador"
+  },
+  "contacts": {
+    "searchLabel": "Buscar contactos",
+    "searchPlaceholder": "Nombre, cargo, email o empresa",
+    "role": "Rol",
+    "roleTitle": "Rol en la compra",
+    "allRoles": "Todos",
+    "count": "{count, plural, one {# contacto} other {# contactos}}",
+    "new": "Nuevo contacto",
+    "caption": "Personas de las empresas clientes",
+    "name": "Nombre",
+    "company": "Empresa",
+    "email": "Email",
+    "phone": "Teléfono",
+    "empty": "Ningún contacto coincide con estos filtros.",
+    "actions": "Acciones de {name}",
+    "edit": "Editar contacto",
+    "delete": "Eliminar contacto",
+    "deleted": "Se eliminó a {name}",
+    "openCompany": "Abrir {name}"
+  },
+  "contactSheet": {
+    "title": "Detalle del contacto",
+    "description": "Datos de contacto, rol en la compra, deals abiertos y colegas en la cuenta",
+    "contact": "Contacto",
+    "deals": "Deals abiertos en {company}",
+    "noDeals": "Esta cuenta no tiene deals abiertos.",
+    "colleagues": "También en {company}",
+    "noColleagues": "Todavía no hay otras personas de esta cuenta."
+  },
+  "contactDialog": {
+    "newTitle": "Nuevo contacto",
+    "editTitle": "Editar contacto",
+    "description": "Una persona de una empresa cliente y su rol en la compra.",
+    "name": "Nombre completo",
+    "namePlaceholder": "Ana Torres",
+    "jobTitle": "Cargo",
+    "jobTitlePlaceholder": "Gerente de Operaciones",
+    "company": "Empresa",
+    "companyPlaceholder": "Elegir una empresa",
+    "role": "Rol en la compra",
+    "email": "Email",
+    "phone": "Teléfono",
+    "create": "Crear contacto",
+    "save": "Guardar cambios",
+    "created": "{name} se agregó a {company}",
+    "saved": "{name} se actualizó",
+    "errors": {
+      "nameRequired": "El nombre es obligatorio.",
+      "nameTooLong": "El nombre tiene que tener menos de 60 caracteres.",
+      "company": "Falta elegir la empresa.",
+      "emailRequired": "El email es obligatorio.",
+      "email": "El email no es válido.",
+      "phone": "Solo se pueden usar números, espacios y + ( ) -."
     }
   },
   "toasts": {
