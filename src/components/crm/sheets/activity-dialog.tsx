@@ -104,7 +104,7 @@ function ActivityFormBody({ target }: { target: ActivityDialogTarget }) {
       if (first) document.getElementById(FIELD_IDS[first])?.focus();
       return;
     }
-    saveActivity(activityFromForm(result.value, activities, editing?.id));
+    saveActivity(activityFromForm(result.value, activities, editing));
     const message = editing ? "saved" : result.value.done ? "logged" : "planned";
     toast.success(t(`activityDialog.${message}`, { subject: result.value.subject, date: formatDate(result.value.date) }));
     close();

@@ -48,6 +48,30 @@ for (const locale of ["en", "es"]) {
   });
 }
 
+for (const locale of ["en", "es"]) {
+  test(`sequences have no WCAG violations (${locale})`, async ({ page }) => {
+    await page.goto(`/${locale}/sequences`);
+    await expect(page.locator("tbody tr").first()).toBeVisible();
+    await expectNoViolations(page);
+
+    await page.goto(`/${locale}/sequences?sequence=new-logo-outreach`);
+    await expect(page.locator("tbody tr").first()).toBeVisible();
+    await expectNoViolations(page);
+  });
+}
+
+test("step and enroll dialogs have no WCAG violations", async ({ page }) => {
+  await page.goto("/en/sequences?sequence=new-logo-outreach");
+  await page.getByRole("button", { name: "Add step" }).click();
+  await expect(page.getByRole("dialog", { name: "New Step" })).toBeVisible();
+  await expectNoViolations(page);
+
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Enroll Contacts" }).click();
+  await expect(page.getByRole("dialog", { name: "Enroll Contacts" })).toBeVisible();
+  await expectNoViolations(page);
+});
+
 test("activity dialog has no WCAG violations", async ({ page }) => {
   await page.goto("/en/activities");
   await page.getByRole("button", { name: "New Activity" }).click();

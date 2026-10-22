@@ -14,7 +14,7 @@ import { NotificationsPopover } from "./notifications-popover";
 /** Pipeline views share tabs; the other pages only have a title. */
 const VIEW_PATHS = { companies: "/", deals: "/deals", forecast: "/forecast" } as const;
 type PipelineView = keyof typeof VIEW_PATHS;
-export type View = PipelineView | "contacts" | "activities";
+export type View = PipelineView | "contacts" | "activities" | "sequences";
 
 const isPipelineView = (view: View): view is PipelineView => view in VIEW_PATHS;
 

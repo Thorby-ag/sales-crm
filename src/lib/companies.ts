@@ -2,6 +2,7 @@ import { DEFAULT_FILTERS, LOGO_MAX_BYTES, LOGO_TYPES } from "./constants";
 import { generateOpenDeals, isOpen } from "./deals";
 import { daysBetween } from "./format";
 import { hashString, normalize, uniqueSlug } from "./text";
+import { forgetContacts } from "./sequences";
 import type {
   Activity,
   Company,
@@ -10,10 +11,12 @@ import type {
   CompanyRow,
   Contact,
   Deal,
+  Enrollment,
   InteractionType,
   LogoMark,
   Region,
   Segment,
+  Sequence,
   SortKey,
   Stage,
   Tag,
@@ -314,6 +317,8 @@ export interface DemoRecords {
   deals: Deal[];
   contacts: Contact[];
   activities: Activity[];
+  sequences: Sequence[];
+  enrollments: Enrollment[];
 }
 
 /**
@@ -330,13 +335,17 @@ export function assignOwner(records: DemoRecords, ids: readonly string[], owner:
   };
 }
 
-/** Deletes accounts with everything that belongs to them: deals, contacts and activities. */
+/** Deletes accounts with everything that belongs to them: deals, contacts, activities and enrollments. */
 export function deleteCompanies(records: DemoRecords, ids: readonly string[]): DemoRecords {
   const set = new Set(ids);
+  const people = new Set(records.contacts.filter((c) => set.has(c.companyId)).map((c) => c.id));
+  const { enrollments } = forgetContacts(records, people);
   return {
+    ...records,
     companies: records.companies.filter((c) => !set.has(c.id)),
     deals: records.deals.filter((d) => !set.has(d.companyId)),
     contacts: records.contacts.filter((c) => !set.has(c.companyId)),
     activities: records.activities.filter((a) => !set.has(a.companyId)),
+    enrollments,
   };
 }

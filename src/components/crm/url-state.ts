@@ -139,3 +139,14 @@ export const closeDeal = () => closeSheet("deal");
 export const useOpenContactId = (): string | null => useSearchParams().get("contact");
 export const openContact = (id: string) => openSheet("contact", id);
 export const closeContact = () => closeSheet("contact");
+
+/** The sequence open on the sequences page (?sequence=id); without it, the page lists them all. */
+export const useOpenSequenceId = (): string | null => useSearchParams().get("sequence");
+export const openSequence = (id: string) =>
+  replaceSearchParams((p) => {
+    p.set("sequence", id);
+  });
+export const closeSequence = () =>
+  replaceSearchParams((p) => {
+    p.delete("sequence");
+  });

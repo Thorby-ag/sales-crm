@@ -291,6 +291,11 @@ describe("bulk changes", () => {
     deals: [deal({ id: "a1", companyId: "a" }), deal({ id: "a2", companyId: "a", stage: "won" }), deal({ id: "b1", companyId: "b", owner: "Ben" })],
     contacts: [contact({ id: "ann", companyId: "a" }), contact({ id: "bob", companyId: "b" })],
     activities: [activity({ id: "call", companyId: "a" }), activity({ id: "demo", companyId: "a", done: true }), activity({ id: "qbr", companyId: "b", owner: "Ben" })],
+    sequences: [],
+    enrollments: [
+      { id: "s--ann", sequenceId: "s", contactId: "ann", enrolledAt: "2026-10-01", repliedAt: null },
+      { id: "s--bob", sequenceId: "s", contactId: "bob", enrolledAt: "2026-10-01", repliedAt: null },
+    ],
   };
 
   it("reassigns accounts and their open deals only", () => {
@@ -301,8 +306,9 @@ describe("bulk changes", () => {
     expect(next.contacts).toBe(records.contacts);
   });
 
-  it("deletes accounts together with their deals, contacts and activities", () => {
+  it("deletes accounts together with their deals, contacts, activities and enrollments", () => {
     const next = deleteCompanies(records, ["a"]);
+    expect(next.enrollments.map((x) => x.id)).toEqual(["s--bob"]);
     expect(next.companies.map((x) => x.id)).toEqual(["b"]);
     expect(next.deals.map((x) => x.id)).toEqual(["b1"]);
     expect(next.contacts.map((x) => x.id)).toEqual(["bob"]);

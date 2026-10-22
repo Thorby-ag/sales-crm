@@ -31,6 +31,7 @@ export function activity(overrides: Partial<Activity> & Pick<Activity, "id">): A
     date: "2026-10-20",
     done: false,
     notes: "",
+    enrollmentId: null,
     ...overrides,
   };
 }

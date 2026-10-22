@@ -1,18 +1,23 @@
 "use client";
 
-import { CalendarPlus, Mail, Phone, UserRound } from "lucide-react";
+import { CalendarPlus, Mail, Phone, Send, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetBody, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetSection } from "@/components/ui/sheet";
+import { Link } from "@/i18n/navigation";
 import { doneActivities, plannedGroups } from "@/lib/activities";
 import { contactsAt } from "@/lib/contacts";
 import { isOpen } from "@/lib/deals";
+import { enrollmentProgress } from "@/lib/sequences";
 import { useCrm } from "@/lib/store";
 import type { Contact } from "@/lib/types";
 import { ActivityList } from "../activities/activity-bits";
 import { useDeleteContact } from "../contacts/contacts-page";
 import { RoleTag } from "../contacts/role-tag";
+import { EnrollmentStatusTag } from "../sequences/sequence-bits";
 import { StageTag } from "../deals/deal-actions";
 import { closeContact, openCompany, openContact, openDeal, useOpenContactId } from "../url-state";
 import { useFormat } from "../use-format";
@@ -20,6 +25,68 @@ import { ContactAvatar } from "../visuals/contact-avatar";
 import { Money } from "../visuals/money";
 
 const LINK = "block max-w-full truncate text-left outline-none decoration-white/40 underline-offset-4 hover:underline focus-visible:underline";
+
+/** The sequences a contact is in, and a menu to add them to another. */
+function ContactSequences({ contact }: { contact: Contact }) {
+  const t = useTranslations();
+  const sequences = useCrm((s) => s.sequences);
+  const allEnrollments = useCrm((s) => s.enrollments);
+  const today = useCrm((s) => s.today);
+  const enrollContacts = useCrm((s) => s.enrollContacts);
+  const enrollments = allEnrollments.filter((e) => e.contactId === contact.id);
+  const inside = new Set(enrollments.map((e) => e.sequenceId));
+  const available = sequences.filter((s) => s.active && !inside.has(s.id));
+
+  return (
+    <SheetSection
+      title={t("contactSheet.sequences")}
+      className="gap-2"
+      action={
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="secondary" disabled={available.length === 0}>
+              <Send aria-hidden className="size-3" />
+              {t("contactSheet.addToSequence")}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="min-w-[200px]">
+            <DropdownMenuLabel>{t("contactSheet.addToSequence")}</DropdownMenuLabel>
+            {available.map((sequence) => (
+              <DropdownMenuItem
+                key={sequence.id}
+                onSelect={() => {
+                  enrollContacts(sequence.id, [contact.id]);
+                  toast.success(t("contactSheet.enrolledIn", { name: contact.name, sequence: sequence.name }));
+                }}
+              >
+                {sequence.name}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      }
+    >
+      {enrollments.length > 0 ? (
+        <ul className="-mx-2 flex flex-col">
+          {enrollments.map((enrollment) => {
+            const sequence = sequences.find((s) => s.id === enrollment.sequenceId);
+            if (!sequence) return null;
+            return (
+              <li key={enrollment.id} className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-white/[0.03]">
+                <Link href={{ pathname: "/sequences", query: { sequence: sequence.id } }} className={`${LINK} type-lead min-w-0 flex-1`}>
+                  {sequence.name}
+                </Link>
+                <EnrollmentStatusTag status={enrollmentProgress(sequence, enrollment, today).status} />
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p className="type-caption text-muted-foreground">{t("contactSheet.noSequences")}</p>
+      )}
+    </SheetSection>
+  );
+}
 
 function ContactContent({ contact }: { contact: Contact }) {
   const t = useTranslations();
@@ -100,6 +167,8 @@ function ContactContent({ contact }: { contact: Contact }) {
         >
           <ActivityList activities={activities} empty={t("contactSheet.noActivity")} />
         </SheetSection>
+
+        <ContactSequences contact={contact} />
 
         <SheetSection title={t("contactSheet.deals", { company: companyName })} className="gap-2">
           {deals.length > 0 ? (

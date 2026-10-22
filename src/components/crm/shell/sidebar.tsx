@@ -24,9 +24,8 @@ import { Dialog as DialogPrimitive } from "radix-ui";
 import type { ComponentProps, PointerEvent as ReactPointerEvent, ReactNode } from "react";
 import { toast } from "sonner";
 import { Button, buttonClasses } from "@/components/ui/button";
-import { CountBadge, SoonBadge } from "@/components/ui/chips";
+import { CountBadge } from "@/components/ui/chips";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Tooltip } from "@/components/ui/tooltip";
 import { Link, usePathname } from "@/i18n/navigation";
 import { dueCount } from "@/lib/activities";
 import { isOpen } from "@/lib/deals";
@@ -83,6 +82,7 @@ function useActiveItem(): string {
   if (pathname === "/forecast") return "forecast";
   if (pathname === "/contacts") return "contacts";
   if (pathname === "/activities") return "activities";
+  if (pathname === "/sequences") return "sequences";
   if (pathname === "/deals") return params.get("close") ? `close:${params.get("close")}` : "deals";
   if (pathname === "/") {
     if (params.get("team")) return `team:${params.get("team")}`;
@@ -128,26 +128,6 @@ function NavLink({
   );
 }
 
-/** A section the demo doesn't include: visible, focusable, but clearly unavailable. */
-function NavSoon({ label, icon }: { label: string; icon: LucideIcon }) {
-  const t = useTranslations("common");
-  return (
-    <li>
-      <Tooltip content={t("comingSoon")} side="right">
-        <button
-          type="button"
-          aria-disabled="true"
-          className={buttonClasses({ variant: "nav", size: "md", className: cn(ITEM, "cursor-default hover:text-sidebar-foreground") })}
-        >
-          <ItemIcon icon={icon} />
-          <span className="truncate">{label}</span>
-          <SoonBadge className="ml-auto">{t("soon")}</SoonBadge>
-        </button>
-      </Tooltip>
-    </li>
-  );
-}
-
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="border-b border-sidebar-border p-3 last:border-b-0">
@@ -163,6 +143,7 @@ function SidebarContent() {
   const companyCount = useCrm((s) => s.companies.length);
   const contactCount = useCrm((s) => s.contacts.length);
   const due = useCrm((s) => dueCount(s.activities, s.today));
+  const sequenceCount = useCrm((s) => s.sequences.length);
   const openDeals = useCrm((s) => s.deals.filter(isOpen).length);
   const quarter = useCrm((s) => quarterOf(s.today));
 
@@ -189,7 +170,7 @@ function SidebarContent() {
           <NavLink id="forecast" active={active} href="/forecast" label={t("nav.forecast")} icon={ChartColumn} />
           <NavLink id="activities" active={active} href="/activities" label={t("nav.activities")} icon={ListChecks} count={due || undefined} />
           <NavLink id="contacts" active={active} href="/contacts" label={t("nav.contacts")} icon={BookUser} count={contactCount} />
-          <NavSoon label={t("nav.emailSequences")} icon={Mail} />
+          <NavLink id="sequences" active={active} href="/sequences" label={t("nav.emailSequences")} icon={Mail} count={sequenceCount} />
         </ul>
         <Section title={t("nav.team")}>
           {TEAMS.map(({ team, icon }) => (
