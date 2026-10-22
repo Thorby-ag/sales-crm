@@ -13,6 +13,11 @@ An account-based CRM for B2B sales teams: a companies pipeline, contacts, activi
 ![Quarterly forecast](docs/forecast.png)
 
 <p>
+  <img src="docs/activities.png" alt="Activities to do, next to the deals with no next step" width="49%" />
+  <img src="docs/sequences.png" alt="An email sequence: steps, preview and enrolled contacts" width="49%" />
+</p>
+
+<p>
   <img src="docs/detail-es.png" alt="Company details in Spanish" width="66%" />
   <img src="docs/mobile-es.png" alt="Deals board on a phone" width="30%" />
 </p>
