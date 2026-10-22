@@ -11,9 +11,12 @@ import { Avatar } from "../visuals/avatar";
 import { LanguageSwitcher } from "./language-switcher";
 import { NotificationsPopover } from "./notifications-popover";
 
-export type View = "companies" | "deals" | "forecast";
-
+/** Pipeline views share tabs; the other pages only have a title. */
 const VIEW_PATHS = { companies: "/", deals: "/deals", forecast: "/forecast" } as const;
+type PipelineView = keyof typeof VIEW_PATHS;
+export type View = PipelineView | "contacts";
+
+const isPipelineView = (view: View): view is PipelineView => view in VIEW_PATHS;
 
 function StatusBadge({ children }: { children: string }) {
   return (
@@ -27,12 +30,12 @@ function StatusBadge({ children }: { children: string }) {
 }
 
 /** Tabs that switch between the pages. */
-function ViewTabs({ view }: { view: View }) {
+function ViewTabs({ view }: { view: PipelineView }) {
   const t = useTranslations();
   return (
     <nav aria-label={t("views.label")} className="shrink-0 border-b border-border px-4">
       <ul className="flex items-end gap-4">
-        {(Object.keys(VIEW_PATHS) as View[]).map((v) => (
+        {(Object.keys(VIEW_PATHS) as PipelineView[]).map((v) => (
           <li key={v}>
             <Link href={VIEW_PATHS[v]} aria-current={v === view ? "page" : undefined} className={TAB_CLASSES}>
               <TabLabel>{t(`views.${v}`)}</TabLabel>
@@ -85,7 +88,7 @@ export function PageHeader({ view }: { view?: View }) {
           </Button>
         </div>
       </header>
-      {view && <ViewTabs view={view} />}
+      {view && isPipelineView(view) && <ViewTabs view={view} />}
     </>
   );
 }

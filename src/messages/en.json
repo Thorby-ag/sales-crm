@@ -70,7 +70,8 @@
     "companies": "Companies",
     "deals": "Deals",
     "forecast": "Forecast",
-    "active": "Active"
+    "active": "Active",
+    "contacts": "Contacts"
   },
   "sort": {
     "pipelineValue": "Pipeline Value",
@@ -222,7 +223,10 @@
     "updated": "Updated {time}",
     "needHelp": "Need help? Ask us.",
     "save": "Save Update",
-    "saved": "Score card updated for {name}"
+    "saved": "Score card updated for {name}",
+    "contacts": "Contacts",
+    "noContacts": "No contacts at this account yet.",
+    "addContact": "Add contact"
   },
   "scoreCards": {
     "businessFit": {
@@ -302,21 +306,22 @@
   },
   "search": {
     "title": "Search",
-    "description": "Search companies by name, owner, segment or stage",
-    "label": "Search companies",
-    "placeholder": "Search companies, owners, stages…",
+    "description": "Search companies by name, owner, segment or stage, and contacts by name, title or email",
+    "label": "Search companies and contacts",
+    "placeholder": "Search companies, contacts, owners…",
     "company": "Company",
     "segmentStage": "Segment & Stage",
     "owner": "Account owner",
     "pipeline": "Pipeline",
     "win": "Win probability",
     "lastInteraction": "Last interaction",
-    "empty": "No companies match “{query}”.",
+    "empty": "No companies or contacts match “{query}”.",
     "navigate": "Navigate",
     "open": "Open",
     "up": "Up arrow",
     "down": "Down arrow",
-    "enter": "Enter"
+    "enter": "Enter",
+    "contacts": "Contacts"
   },
   "notifications": {
     "title": "Notifications",
@@ -466,6 +471,68 @@
       "tooLarge": "Keep the amount under 100 million.",
       "date": "Pick a date.",
       "futureClose": "A closed deal can't close in the future."
+    }
+  },
+  "buyingRoles": {
+    "decisionMaker": "Decision maker",
+    "champion": "Champion",
+    "influencer": "Influencer",
+    "endUser": "End user",
+    "blocker": "Blocker"
+  },
+  "contacts": {
+    "searchLabel": "Search contacts",
+    "searchPlaceholder": "Name, title, email or company",
+    "role": "Role",
+    "roleTitle": "Buying role",
+    "allRoles": "All roles",
+    "count": "{count, plural, one {# contact} other {# contacts}}",
+    "new": "New Contact",
+    "caption": "People at customer accounts",
+    "name": "Name",
+    "company": "Company",
+    "email": "Email",
+    "phone": "Phone",
+    "empty": "No contacts match the current filters.",
+    "actions": "Actions for {name}",
+    "edit": "Edit contact",
+    "delete": "Delete contact",
+    "deleted": "{name} was deleted",
+    "openCompany": "Open {name}"
+  },
+  "contactSheet": {
+    "title": "Contact Details",
+    "description": "Contact details, buying role, open deals and colleagues at the account",
+    "contact": "Contact",
+    "deals": "Open deals at {company}",
+    "noDeals": "No open deals at this account.",
+    "colleagues": "Also at {company}",
+    "noColleagues": "No one else at this account yet."
+  },
+  "contactDialog": {
+    "newTitle": "New Contact",
+    "editTitle": "Edit Contact",
+    "description": "A person at a customer account and their role in the purchase.",
+    "name": "Full name",
+    "namePlaceholder": "Ana Torres",
+    "jobTitle": "Job title",
+    "jobTitlePlaceholder": "Head of Operations",
+    "company": "Company",
+    "companyPlaceholder": "Pick a company",
+    "role": "Buying role",
+    "email": "Email",
+    "phone": "Phone",
+    "create": "Create Contact",
+    "save": "Save Changes",
+    "created": "{name} was added to {company}",
+    "saved": "{name} was updated",
+    "errors": {
+      "nameRequired": "Enter a name.",
+      "nameTooLong": "Keep the name under 60 characters.",
+      "company": "Pick a company.",
+      "emailRequired": "Enter an email.",
+      "email": "Enter a valid email address.",
+      "phone": "Use digits, spaces and + ( ) - only."
     }
   },
   "toasts": {

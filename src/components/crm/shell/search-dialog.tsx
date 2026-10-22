@@ -8,13 +8,16 @@ import { useMemo, useState } from "react";
 import { Kbd } from "@/components/ui/chips";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { searchCompanies } from "@/lib/companies";
+import { searchContacts } from "@/lib/contacts";
 import { personByName } from "@/lib/data/people";
 import { companyRows } from "@/lib/deals";
 import { useCrm } from "@/lib/store";
-import { openCompany } from "../url-state";
+import { RoleTag } from "../contacts/role-tag";
+import { openCompany, openContact } from "../url-state";
 import { useFormat } from "../use-format";
 import { Avatar } from "../visuals/avatar";
 import { CompanyLogo } from "../visuals/company-logo";
+import { ContactAvatar } from "../visuals/contact-avatar";
 import { Money } from "../visuals/money";
 import { SegmentedMeter } from "../visuals/segmented-meter";
 import { TagList } from "../visuals/tag-list";
@@ -29,7 +32,12 @@ function SearchBody() {
   const companies = useCrm((s) => s.companies);
   const deals = useCrm((s) => s.deals);
   const setSearchOpen = useCrm((s) => s.setSearchOpen);
+  const contacts = useCrm((s) => s.contacts);
   const results = useMemo(() => searchCompanies(companyRows(companies, deals), query), [companies, deals, query]);
+  const people = useMemo(() => {
+    const names = new Map(companies.map((c) => [c.id, c.name]));
+    return searchContacts(contacts, query, (id) => names.get(id) ?? "").map((contact) => ({ contact, company: names.get(contact.companyId) ?? "" }));
+  }, [companies, contacts, query]);
 
   return (
     <Command shouldFilter={false} loop label={t("search.label")} className="flex min-h-0 flex-col">
@@ -61,7 +69,7 @@ function SearchBody() {
           return (
             <Command.Item
               key={row.id}
-              value={row.id}
+              value={`company:${row.id}`}
               onSelect={() => {
                 setSearchOpen(false);
                 openCompany(row.id);
@@ -93,6 +101,31 @@ function SearchBody() {
             </Command.Item>
           );
         })}
+        {people.length > 0 && (
+          <Command.Group
+            heading={t("search.contacts")}
+            className="mt-1 border-t pt-1 [&_[cmdk-group-heading]]:type-caption [&_[cmdk-group-heading]]:px-2.5 [&_[cmdk-group-heading]]:pt-2.5 [&_[cmdk-group-heading]]:pb-1.5 [&_[cmdk-group-heading]]:text-muted-foreground"
+          >
+            {people.map(({ contact, company }) => (
+              <Command.Item
+                key={contact.id}
+                value={`contact:${contact.id}`}
+                onSelect={() => {
+                  setSearchOpen(false);
+                  openContact(contact.id);
+                }}
+                className="type-lead flex h-11 cursor-pointer items-center gap-2.5 rounded-lg px-2.5 outline-none data-[selected=true]:bg-white/6"
+              >
+                <ContactAvatar name={contact.name} size={24} />
+                <span className="truncate">{contact.name}</span>
+                <span className="type-caption min-w-0 truncate text-muted-foreground">
+                  {contact.title} · {company}
+                </span>
+                <RoleTag role={contact.role} className="ml-auto" />
+              </Command.Item>
+            ))}
+          </Command.Group>
+        )}
       </Command.List>
       <div className="type-caption flex h-10 shrink-0 items-center gap-2 border-t px-4 text-muted-foreground">
         <Kbd>

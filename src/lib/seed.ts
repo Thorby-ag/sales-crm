@@ -1,4 +1,5 @@
 import type { DemoRecords } from "./companies";
+import { seedContacts } from "./contacts";
 import { COMPANY_SEEDS } from "./data/companies";
 import { seedDealsFor } from "./deals";
 import { addDays } from "./format";
@@ -16,5 +17,5 @@ export function seedDemo(today: string): DemoRecords {
     lastInteraction: { date: addDays(today, -seed.lastInteraction.daysAgo), type: seed.lastInteraction.type },
     logo: seed.logo,
   }));
-  return { companies, deals: COMPANY_SEEDS.flatMap((seed) => seedDealsFor(seed, today)) };
+  return { companies, deals: COMPANY_SEEDS.flatMap((seed) => seedDealsFor(seed, today)), contacts: seedContacts() };
 }

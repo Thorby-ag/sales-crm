@@ -6,6 +6,8 @@ import { toast, Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { startPersistence, useCrm } from "@/lib/store";
 import { CompanyDetailSheet } from "../sheets/company-detail-sheet";
+import { ContactDialog } from "../sheets/contact-dialog";
+import { ContactSheet } from "../sheets/contact-sheet";
 import { DealSheet } from "../sheets/deal-sheet";
 import { NewCompanyDialog } from "../sheets/new-company-dialog";
 import { ProfileSheet } from "../sheets/profile-sheet";
@@ -79,8 +81,10 @@ export function CrmShell({ children }: { children: ReactNode }) {
       </div>
       <CompanyDetailSheet />
       <DealSheet />
+      <ContactSheet />
       <ProfileSheet />
       <NewCompanyDialog />
+      <ContactDialog />
       <SearchDialog />
       <Toaster
         theme="dark"

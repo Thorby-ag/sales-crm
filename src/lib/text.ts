@@ -13,6 +13,14 @@ export function slugify(value: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+/** A slug for `value` that isn't taken yet: "acme", then "acme-2", "acme-3"… */
+export function uniqueSlug(value: string, taken: ReadonlySet<string>, fallback: string): string {
+  const base = slugify(value) || fallback;
+  let slug = base;
+  for (let n = 2; taken.has(slug); n++) slug = `${base}-${n}`;
+  return slug;
+}
+
 /** Small, stable string hash for deterministic demo data. */
 export function hashString(value: string): number {
   let h = 0;

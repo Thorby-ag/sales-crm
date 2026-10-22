@@ -62,7 +62,7 @@ function ForecastBody() {
   );
 }
 
-export function ContentSkeleton({ variant = "table" }: { variant?: "table" | "board" | "forecast" }) {
+export function ContentSkeleton({ variant = "table", tabs = true }: { variant?: "table" | "board" | "forecast"; tabs?: boolean }) {
   const t = useTranslations("common");
   return (
     <div className="flex min-h-0 flex-1 flex-col" aria-busy="true">
@@ -70,11 +70,13 @@ export function ContentSkeleton({ variant = "table" }: { variant?: "table" | "bo
         {t("loading")}
       </span>
       <HeaderSkeleton />
-      <div aria-hidden className="flex h-[46px] shrink-0 items-end gap-4 border-b border-border px-4 pb-4">
-        <Bar className="h-2.5 w-16" />
-        <Bar className="h-2.5 w-10" />
-        <Bar className="h-2.5 w-14" />
-      </div>
+      {tabs && (
+        <div aria-hidden className="flex h-[46px] shrink-0 items-end gap-4 border-b border-border px-4 pb-4">
+          <Bar className="h-2.5 w-16" />
+          <Bar className="h-2.5 w-10" />
+          <Bar className="h-2.5 w-14" />
+        </div>
+      )}
       <div aria-hidden className="flex shrink-0 gap-2 p-4">
         {["w-40", "w-36", "w-24", "w-40"].map((w, i) => (
           <span key={i} className={cn("h-[30px] animate-pulse rounded-full bg-white/[0.05]", w, i > 1 && "max-md:hidden")} />

@@ -86,7 +86,7 @@ test("search finds companies by owner and opens them with the keyboard", async (
   await page.keyboard.press("ControlOrMeta+k");
   await expect(input).toBeFocused();
   await page.keyboard.type("zzzz");
-  await expect(page.getByText("No companies match “zzzz”.")).toBeVisible();
+  await expect(page.getByText("No companies or contacts match “zzzz”.")).toBeVisible();
 });
 
 test("exports the companies in view as CSV", async ({ page }) => {

@@ -1,12 +1,13 @@
 import { DEFAULT_FILTERS, LOGO_MAX_BYTES, LOGO_TYPES } from "./constants";
 import { generateOpenDeals, isOpen } from "./deals";
 import { daysBetween } from "./format";
-import { hashString, normalize, slugify } from "./text";
+import { hashString, normalize, uniqueSlug } from "./text";
 import type {
   Company,
   CompanyFilters,
   CompanyLogo,
   CompanyRow,
+  Contact,
   Deal,
   InteractionType,
   LogoMark,
@@ -268,13 +269,6 @@ export function validateLogoFile(file: { type: string; size: number }): LogoErro
   return null;
 }
 
-function uniqueId(name: string, taken: ReadonlySet<string>): string {
-  const base = slugify(name) || "company";
-  let id = base;
-  for (let n = 2; taken.has(id); n++) id = `${base}-${n}`;
-  return id;
-}
-
 const LOGO_MARKS: LogoMark[] = ["orbit", "bars", "diamond", "split", "grid", "wave", "peak", "ring", "spark", "hex"];
 const LOGO_COLORS = ["#8b7bff", "#5eb1ff", "#3dd68c", "#ffb547", "#ff7a7a", "#4fd1c5", "#f472b6", "#facc15"];
 
@@ -292,7 +286,7 @@ const NEW_COMPANY_TREND = [2, 3, 3, 4, 2, 5, 6, 4, 5, 6, 4, 5, 7, 9];
 
 /** Builds a company and its open deals from the form (deals split the pipeline value). */
 export function createCompany(input: ValidNewCompany, existing: readonly Company[], today: string): { company: Company; deals: Deal[] } {
-  const id = uniqueId(input.name, new Set(existing.map((c) => c.id)));
+  const id = uniqueSlug(input.name, new Set(existing.map((c) => c.id)), "company");
   const company: Company = {
     id,
     name: input.name,
@@ -317,21 +311,25 @@ export function createCompany(input: ValidNewCompany, existing: readonly Company
 export interface DemoRecords {
   companies: Company[];
   deals: Deal[];
+  contacts: Contact[];
 }
 
 /** Reassigns accounts and their open deals. Closed deals keep their original owner. */
-export function assignOwner({ companies, deals }: DemoRecords, ids: readonly string[], owner: string): DemoRecords {
+export function assignOwner(records: DemoRecords, ids: readonly string[], owner: string): DemoRecords {
   const set = new Set(ids);
   return {
-    companies: companies.map((c) => (set.has(c.id) ? { ...c, owner } : c)),
-    deals: deals.map((d) => (set.has(d.companyId) && isOpen(d) ? { ...d, owner } : d)),
+    ...records,
+    companies: records.companies.map((c) => (set.has(c.id) ? { ...c, owner } : c)),
+    deals: records.deals.map((d) => (set.has(d.companyId) && isOpen(d) ? { ...d, owner } : d)),
   };
 }
 
-export function deleteCompanies({ companies, deals }: DemoRecords, ids: readonly string[]): DemoRecords {
+/** Deletes accounts with everything that belongs to them: deals and contacts. */
+export function deleteCompanies(records: DemoRecords, ids: readonly string[]): DemoRecords {
   const set = new Set(ids);
   return {
-    companies: companies.filter((c) => !set.has(c.id)),
-    deals: deals.filter((d) => !set.has(d.companyId)),
+    companies: records.companies.filter((c) => !set.has(c.id)),
+    deals: records.deals.filter((d) => !set.has(d.companyId)),
+    contacts: records.contacts.filter((c) => !set.has(c.companyId)),
   };
 }

@@ -1,4 +1,4 @@
-import type { CompanyFilters, DealFilters, DealStage, ForecastCategory, ForecastFilters, OpenDealStage, SortKey, Tag } from "./types";
+import type { BuyingRole, CompanyFilters, ContactFilters, DealFilters, DealStage, ForecastCategory, ForecastFilters, OpenDealStage, SortKey, Tag } from "./types";
 
 export const DEFAULT_FILTERS: CompanyFilters = {
   sortBy: "pipelineValue",
@@ -12,6 +12,8 @@ export const DEFAULT_FILTERS: CompanyFilters = {
 export const DEFAULT_DEAL_FILTERS: DealFilters = { owner: null, close: null };
 
 export const DEFAULT_FORECAST_FILTERS: ForecastFilters = { period: "this", owner: null, team: null };
+
+export const DEFAULT_CONTACT_FILTERS: ContactFilters = { query: "", role: null };
 
 export const SORT_KEYS: SortKey[] = ["pipelineValue", "winProbability", "openDeals", "lastInteraction", "name"];
 
@@ -37,6 +39,14 @@ export const DEAL_STAGE_TONES: Record<DealStage, TagTone> = {
   procurement: "green",
   won: "teal",
   lost: "neutral",
+};
+
+export const BUYING_ROLE_TONES: Record<BuyingRole, TagTone> = {
+  decisionMaker: "purple",
+  champion: "green",
+  influencer: "blue",
+  endUser: "neutral",
+  blocker: "red",
 };
 
 /** Probability a deal takes when it moves into a stage. */

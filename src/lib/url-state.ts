@@ -2,14 +2,17 @@ import { DEFAULT_DEAL_FILTERS, DEFAULT_FILTERS } from "./constants";
 import { slugify } from "./text";
 import {
   ACTIVITY_WINDOWS,
+  BUYING_ROLES,
   CLOSE_WINDOWS,
   REGIONS,
   SEGMENTS,
   STAGES,
   TEAMS,
   type ActivityWindow,
+  type BuyingRole,
   type CloseWindow,
   type CompanyFilters,
+  type ContactFilters,
   type DealFilters,
   type ForecastFilters,
   type Region,
@@ -97,6 +100,19 @@ export function writeForecastFilters(params: URLSearchParams, filters: ForecastF
   set("quarter", filters.period === "next" ? "next" : null);
   set("owner", filters.owner ? slugify(filters.owner) : null);
   set("team", filters.team);
+  return next;
+}
+
+export function parseContactFilters(params: URLSearchParams): ContactFilters {
+  return { query: params.get("q") ?? "", role: oneOf<BuyingRole>(BUYING_ROLES, params.get("role")) };
+}
+
+export function writeContactFilters(params: URLSearchParams, filters: ContactFilters): URLSearchParams {
+  const next = new URLSearchParams(params);
+  if (filters.query.trim()) next.set("q", filters.query);
+  else next.delete("q");
+  if (filters.role) next.set("role", filters.role);
+  else next.delete("role");
   return next;
 }
 

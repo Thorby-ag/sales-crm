@@ -80,6 +80,7 @@ function useActiveItem(): string {
   const pathname = usePathname();
   const params = useSearchParams();
   if (pathname === "/forecast") return "forecast";
+  if (pathname === "/contacts") return "contacts";
   if (pathname === "/deals") return params.get("close") ? `close:${params.get("close")}` : "deals";
   if (pathname === "/") {
     if (params.get("team")) return `team:${params.get("team")}`;
@@ -158,6 +159,7 @@ function SidebarContent() {
   const t = useTranslations();
   const active = useActiveItem();
   const companyCount = useCrm((s) => s.companies.length);
+  const contactCount = useCrm((s) => s.contacts.length);
   const openDeals = useCrm((s) => s.deals.filter(isOpen).length);
   const quarter = useCrm((s) => quarterOf(s.today));
 
@@ -183,7 +185,7 @@ function SidebarContent() {
           <NavLink id="deals" active={active} href="/deals" label={t("nav.dealsBoard")} icon={SquareKanban} count={openDeals} />
           <NavLink id="forecast" active={active} href="/forecast" label={t("nav.forecast")} icon={ChartColumn} />
           <NavSoon label={t("nav.activities")} icon={ListChecks} />
-          <NavSoon label={t("nav.contacts")} icon={BookUser} />
+          <NavLink id="contacts" active={active} href="/contacts" label={t("nav.contacts")} icon={BookUser} count={contactCount} />
           <NavSoon label={t("nav.emailSequences")} icon={Mail} />
         </ul>
         <Section title={t("nav.team")}>

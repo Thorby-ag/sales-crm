@@ -2,15 +2,17 @@
 
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { DEFAULT_DEAL_FILTERS, DEFAULT_FILTERS, DEFAULT_FORECAST_FILTERS } from "@/lib/constants";
+import { DEFAULT_CONTACT_FILTERS, DEFAULT_DEAL_FILTERS, DEFAULT_FILTERS, DEFAULT_FORECAST_FILTERS } from "@/lib/constants";
 import { OWNER_NAMES } from "@/lib/data/people";
-import type { CompanyFilters, DealFilters, ForecastFilters } from "@/lib/types";
+import type { CompanyFilters, ContactFilters, DealFilters, ForecastFilters } from "@/lib/types";
 import {
   parseCompanyFilters,
+  parseContactFilters,
   parseDealFilters,
   parseForecastFilters,
   toHref,
   writeCompanyFilters,
+  writeContactFilters,
   writeDealFilters,
   writeForecastFilters,
 } from "@/lib/url-state";
@@ -75,40 +77,44 @@ export function useForecastFilters() {
   return { filters, setFilters, resetFilters };
 }
 
-// One sheet at a time: opening a company closes an open deal, and the other way round.
-
-/** The company whose detail sheet is open (?company=id), on any page. */
-export function useOpenCompanyId(): string | null {
-  return useSearchParams().get("company");
+export function useContactFilters() {
+  const query = useSearchParams().toString();
+  const filters = useMemo(() => parseContactFilters(new URLSearchParams(query)), [query]);
+  const setFilters = useCallback(
+    (patch: Partial<ContactFilters>) => replaceSearchParams((p) => writeContactFilters(p, { ...parseContactFilters(p), ...patch })),
+    [],
+  );
+  const resetFilters = useCallback(() => replaceSearchParams((p) => writeContactFilters(p, DEFAULT_CONTACT_FILTERS)), []);
+  return { filters, setFilters, resetFilters };
 }
 
-export function openCompany(id: string): void {
+// Detail sheets, on any page: ?company=id, ?deal=id or ?contact=id. One at a time, so
+// opening one closes the others.
+
+const SHEETS = ["company", "deal", "contact"] as const;
+type SheetParam = (typeof SHEETS)[number];
+
+function openSheet(param: SheetParam, id: string): void {
   replaceSearchParams((p) => {
-    p.delete("deal");
-    p.set("company", id);
+    for (const sheet of SHEETS) p.delete(sheet);
+    p.set(param, id);
   });
 }
 
-export function closeCompany(): void {
+function closeSheet(param: SheetParam): void {
   replaceSearchParams((p) => {
-    p.delete("company");
+    p.delete(param);
   });
 }
 
-/** The deal whose sheet is open (?deal=id), on any page. */
-export function useOpenDealId(): string | null {
-  return useSearchParams().get("deal");
-}
+export const useOpenCompanyId = (): string | null => useSearchParams().get("company");
+export const openCompany = (id: string) => openSheet("company", id);
+export const closeCompany = () => closeSheet("company");
 
-export function openDeal(id: string): void {
-  replaceSearchParams((p) => {
-    p.delete("company");
-    p.set("deal", id);
-  });
-}
+export const useOpenDealId = (): string | null => useSearchParams().get("deal");
+export const openDeal = (id: string) => openSheet("deal", id);
+export const closeDeal = () => closeSheet("deal");
 
-export function closeDeal(): void {
-  replaceSearchParams((p) => {
-    p.delete("deal");
-  });
-}
+export const useOpenContactId = (): string | null => useSearchParams().get("contact");
+export const openContact = (id: string) => openSheet("contact", id);
+export const closeContact = () => closeSheet("contact");

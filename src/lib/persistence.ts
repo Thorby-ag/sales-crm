@@ -1,4 +1,5 @@
 import type { DemoRecords } from "./companies";
+import { seedContacts } from "./contacts";
 import { addDays, daysBetween } from "./format";
 import type { Company, Deal } from "./types";
 
@@ -63,6 +64,8 @@ export function restoreDemo(raw: string | null, today: string): DemoState | null
   const state: DemoState = {
     companies: parsed.companies,
     deals: parsed.deals,
+    // Saved before contacts existed: seed them for the companies that are still there.
+    contacts: Array.isArray(parsed.contacts) ? parsed.contacts : seedContacts(new Set(parsed.companies.map((c) => c.id))),
     scoreOverrides: parsed.scoreOverrides,
     unreadIds: parsed.unreadIds,
   };
