@@ -6,7 +6,7 @@ import { bestCaseForecast, commitForecast, shareOfQuota, type RepForecast } from
 import { cn } from "@/lib/utils";
 import { Avatar } from "../visuals/avatar";
 import { Money } from "../visuals/money";
-import { CARD } from "./styles";
+import { CARD } from "@/components/ui/surface";
 
 const TH = "border-b py-2.5 font-normal whitespace-nowrap";
 const TD = "border-b py-2.5 group-last:border-b-0";

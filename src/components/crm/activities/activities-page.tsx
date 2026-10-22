@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { CountBadge } from "@/components/ui/chips";
 import { Segmented } from "@/components/ui/segmented";
+import { CARD, TEXT_LINK } from "@/components/ui/surface";
 import { Link } from "@/i18n/navigation";
 import { dealsWithoutNextStep, doneActivities, filterActivities, plannedGroups } from "@/lib/activities";
 import { OWNER_NAMES, personByName } from "@/lib/data/people";
@@ -21,7 +22,7 @@ import { Avatar } from "../visuals/avatar";
 import { CompanyLogo } from "../visuals/company-logo";
 import { ContactAvatar } from "../visuals/contact-avatar";
 import { Money } from "../visuals/money";
-import { ActivityIcon, ActivityMenu, DoneToggle, DueDate, SUBJECT_LINK } from "./activity-bits";
+import { ActivityIcon, ActivityMenu, DoneToggle, DueDate } from "./activity-bits";
 
 const META_LINK = "min-w-0 truncate outline-none hover:text-foreground focus-visible:text-foreground focus-visible:underline";
 
@@ -46,7 +47,7 @@ function ActivityRow({ activity, lookups }: { activity: Activity; lookups: Looku
       <DoneToggle activity={activity} />
       <ActivityIcon type={activity.type} />
       <div className="min-w-0 flex-1">
-        <button type="button" onClick={() => openActivityDialog({ activityId: activity.id })} className={cn(SUBJECT_LINK, "type-lead")}>
+        <button type="button" onClick={() => openActivityDialog({ activityId: activity.id })} className={cn(TEXT_LINK, "type-lead")}>
           {activity.subject}
         </button>
         <p className="type-caption mt-1.5 flex min-w-0 items-center gap-1.5 text-muted-foreground">
@@ -140,12 +141,12 @@ function NextStepGaps({ deals, companies }: { deals: Deal[]; companies: Map<stri
         {shown.map((deal) => {
           const company = companies.get(deal.companyId);
           return (
-            <li key={deal.id} className="flex flex-col gap-2.5 rounded-xl border border-border bg-[#181818] p-3">
+            <li key={deal.id} className={cn(CARD, "flex flex-col gap-2.5 p-3")}>
               <div className="flex min-w-0 items-center gap-2">
                 {company && <CompanyLogo logo={company.logo} size={18} />}
                 <span className="type-caption truncate text-muted-foreground">{company?.name}</span>
               </div>
-              <button type="button" onClick={() => openDeal(deal.id)} className={cn(SUBJECT_LINK, "type-lead")}>
+              <button type="button" onClick={() => openDeal(deal.id)} className={cn(TEXT_LINK, "type-lead")}>
                 {deal.name}
               </button>
               <div className="type-caption flex items-center justify-between gap-2 text-soft">

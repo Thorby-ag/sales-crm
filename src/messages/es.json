@@ -8,7 +8,6 @@
     "close": "Cerrar",
     "undo": "Deshacer",
     "reset": "Restablecer",
-    "remove": "Quitar",
     "noValue": "—",
     "skipToContent": "Saltar al contenido",
     "loading": "Cargando la demo…"
@@ -103,7 +102,6 @@
     "filtersActive": "Filtros, {count} activos",
     "filtersDescription": "Ordenar y filtrar la tabla",
     "showCompanies": "Ver {count, plural, one {# empresa} other {# empresas}}",
-    "showDeals": "Ver {count, plural, one {# deal} other {# deals}}",
     "team": "Equipo: {name}",
     "region": "Región: {name}",
     "removeFilter": "Quitar el filtro {name}"
@@ -220,7 +218,6 @@
     "scoreCard": "Score card",
     "rating": "Calificación de {title}",
     "starOf": "{value} de 5",
-    "ratingValue": "{title}: {value} de 5",
     "updated": "Actualizado {time}",
     "needHelp": "Ayuda y soporte",
     "save": "Guardar cambios",
@@ -350,7 +347,6 @@
   },
   "deals": {
     "boardLabel": "Tablero de deals",
-    "columnSummary": "{count, plural, one {# deal} other {# deals}} · {amount}",
     "emptyColumn": "Sin deals",
     "closes": "Cierra el {date}",
     "closed": "Cerrado el {date}",
@@ -364,7 +360,6 @@
     "moved": "{deal} pasó a {stage}",
     "openPipeline": "Pipeline abierto",
     "weighted": "Ponderado",
-    "empty": "Ningún deal coincide con estos filtros.",
     "dragHint": "Para mover un deal: barra espaciadora para tomarlo, flechas para cambiar de etapa y barra espaciadora otra vez para soltarlo. Escape cancela.",
     "announcements": {
       "pickedUp": "Se tomó {deal}, que está en {stage}.",

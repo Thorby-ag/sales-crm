@@ -8,7 +8,6 @@ import { FLOATING_SURFACE, MENU_ITEM } from "./surface";
 export const DropdownMenu = DropdownMenuPrimitive.Root;
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 export const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
-export const DropdownMenuGroup = DropdownMenuPrimitive.Group;
 
 export function DropdownMenuContent({
   className,

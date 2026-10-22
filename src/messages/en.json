@@ -8,7 +8,6 @@
     "close": "Close",
     "undo": "Undo",
     "reset": "Reset",
-    "remove": "Remove",
     "noValue": "—",
     "skipToContent": "Skip to content",
     "loading": "Loading the demo…"
@@ -103,7 +102,6 @@
     "filtersActive": "Filters, {count} active",
     "filtersDescription": "Sort and filter the table",
     "showCompanies": "Show {count, plural, one {# company} other {# companies}}",
-    "showDeals": "Show {count, plural, one {# deal} other {# deals}}",
     "team": "Team: {name}",
     "region": "Region: {name}",
     "removeFilter": "Remove filter {name}"
@@ -220,7 +218,6 @@
     "scoreCard": "Score card",
     "rating": "{title} rating",
     "starOf": "{value} of 5",
-    "ratingValue": "{title}: {value} of 5",
     "updated": "Updated {time}",
     "needHelp": "Need help? Ask us.",
     "save": "Save Update",
@@ -350,7 +347,6 @@
   },
   "deals": {
     "boardLabel": "Deals board",
-    "columnSummary": "{count, plural, one {# deal} other {# deals}} · {amount}",
     "emptyColumn": "No deals",
     "closes": "Closes {date}",
     "closed": "Closed {date}",
@@ -364,7 +360,6 @@
     "moved": "{deal} moved to {stage}",
     "openPipeline": "Open pipeline",
     "weighted": "Weighted",
-    "empty": "No deals match the current filters.",
     "dragHint": "To move a deal, press space to pick it up, use the arrow keys to change the stage, and press space again to drop it. Press escape to cancel.",
     "announcements": {
       "pickedUp": "Picked up {deal}, currently in {stage}.",

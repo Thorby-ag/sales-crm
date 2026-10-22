@@ -15,6 +15,7 @@ import { filterContacts } from "@/lib/contacts";
 import { OWNERS } from "@/lib/data/people";
 import {
   createSequence,
+  MAX_STEP_DAY,
   newStepId,
   saveStep,
   TEMPLATE_VARIABLES,
@@ -223,7 +224,7 @@ function StepFormBody({ sequence, stepId, onDone }: { sequence: Sequence; stepId
               type="number"
               inputMode="numeric"
               min={0}
-              max={90}
+              max={MAX_STEP_DAY}
               className="tabular-nums"
               value={form.day}
               onChange={(e) => update("day", e.target.value)}

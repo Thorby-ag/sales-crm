@@ -10,7 +10,7 @@ import type { Activity, ActivityFilters, ActivityType, Company, Contact, Deal, I
 // ---------------------------------------------------------------------------
 
 /** Seeded subjects are records (data), so they stay in English in every locale. */
-export const TOPIC_SUBJECTS: Record<InteractionType, string> = {
+const TOPIC_SUBJECTS: Record<InteractionType, string> = {
   discovery: "Discovery call",
   demo: "Product demo",
   pricing: "Pricing review",
@@ -26,7 +26,7 @@ export const TOPIC_SUBJECTS: Record<InteractionType, string> = {
 };
 
 /** How each kind of conversation usually happens. */
-export const TOPIC_TYPE: Record<InteractionType, ActivityType> = {
+const TOPIC_TYPE: Record<InteractionType, ActivityType> = {
   discovery: "call",
   demo: "meeting",
   pricing: "call",

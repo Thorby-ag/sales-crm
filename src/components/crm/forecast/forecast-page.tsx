@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Segmented } from "@/components/ui/segmented";
+import { CARD } from "@/components/ui/surface";
 import { Link } from "@/i18n/navigation";
 import { OWNER_NAMES, OWNERS } from "@/lib/data/people";
 import {
@@ -35,7 +36,7 @@ import { useFormat } from "../use-format";
 import { ForecastChart } from "./forecast-chart";
 import { ForecastDeals } from "./forecast-deals";
 import { RepTable } from "./rep-table";
-import { CARD, GROUP_COLOR } from "./styles";
+import { GROUP_COLOR } from "./styles";
 
 export function ForecastPage() {
   const hydrated = useCrm((s) => s.hydrated);

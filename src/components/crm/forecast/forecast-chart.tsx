@@ -6,7 +6,7 @@ import { axisTicks, valueAt, weeklyRows, type ForecastSeries, type Quarter, type
 import { addDays, addMonths, daysBetween } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { useFormat } from "../use-format";
-import { CARD } from "./styles";
+import { CARD } from "@/components/ui/surface";
 
 const HEIGHT = 232;
 const PAD = { top: 22, right: 8, bottom: 24 };
