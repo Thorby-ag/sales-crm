@@ -8,8 +8,6 @@
     "close": "Close",
     "undo": "Undo",
     "reset": "Reset",
-    "soon": "Soon",
-    "comingSoon": "Coming soon",
     "remove": "Remove",
     "noValue": "—",
     "skipToContent": "Skip to content",
@@ -72,7 +70,8 @@
     "forecast": "Forecast",
     "active": "Active",
     "contacts": "Contacts",
-    "activities": "Activities"
+    "activities": "Activities",
+    "sequences": "Email Sequences"
   },
   "sort": {
     "pipelineValue": "Pipeline Value",
@@ -515,7 +514,11 @@
     "colleagues": "Also at {company}",
     "noColleagues": "No one else at this account yet.",
     "activity": "Activity",
-    "noActivity": "No activities with this person yet."
+    "noActivity": "No activities with this person yet.",
+    "sequences": "Sequences",
+    "noSequences": "Not in any sequence.",
+    "addToSequence": "Add to sequence",
+    "enrolledIn": "{name} was enrolled in {sequence}"
   },
   "contactDialog": {
     "newTitle": "New Contact",
@@ -613,6 +616,126 @@
       "date": "Pick a date.",
       "futureDone": "Something already done can't be in the future."
     }
+  },
+  "stepTypes": {
+    "email": "Email",
+    "call": "Call",
+    "task": "Task"
+  },
+  "sequences": {
+    "count": "{count, plural, one {# sequence} other {# sequences}}",
+    "new": "New Sequence",
+    "caption": "Email sequences and how they're doing",
+    "name": "Sequence",
+    "owner": "Sender",
+    "status": "Status",
+    "enrolled": "Enrolled",
+    "active": "In progress",
+    "replied": "Replied",
+    "replyRate": "Reply rate",
+    "emailsSent": "Emails sent",
+    "running": "Active",
+    "paused": "Paused",
+    "empty": "No sequences yet.",
+    "actions": "Actions for {name}",
+    "open": "Open sequence",
+    "edit": "Edit sequence",
+    "pause": "Pause",
+    "resume": "Resume",
+    "delete": "Delete sequence",
+    "deleted": "{name} was deleted",
+    "pausedToast": "{name} is paused: its pending calls and tasks were cleared",
+    "resumedToast": "{name} is running again",
+    "back": "Sequences",
+    "enroll": "Enroll Contacts",
+    "enrollPaused": "Paused: resume it to enroll contacts.",
+    "sentBy": "Sent by {name}",
+    "about": "About: {topic}",
+    "steps": "Steps",
+    "noSteps": "No steps yet.",
+    "addStep": "Add step",
+    "day": "Day {day}",
+    "stepActions": "Actions for step {subject}",
+    "editStep": "Edit step",
+    "deleteStep": "Delete step",
+    "stepDeleted": "Step deleted",
+    "preview": "Preview",
+    "previewAs": "For",
+    "from": "From",
+    "to": "To",
+    "subject": "Subject",
+    "taskFor": "{type} for {name}:",
+    "missingVariable": "Unknown variable: {name}",
+    "people": "Enrolled contacts",
+    "noPeople": "Nobody is enrolled yet.",
+    "contact": "Contact",
+    "enrolledOn": "Enrolled",
+    "progress": "{completed} of {total} steps · next: {type}, {date}",
+    "repliedOn": "Replied {date}",
+    "allDone": "All {total} steps done",
+    "markReplied": "Mark as replied",
+    "repliedToast": "{name} replied: the sequence stops for them",
+    "remove": "Remove from sequence",
+    "removed": "{name} left {sequence}",
+    "enrollmentActions": "Actions for {name}",
+    "statuses": {
+      "active": "Active",
+      "paused": "Paused",
+      "replied": "Replied",
+      "finished": "Finished"
+    }
+  },
+  "sequenceDialog": {
+    "newTitle": "New Sequence",
+    "editTitle": "Edit Sequence",
+    "description": "A series of emails, calls and tasks that runs for every contact you enroll, until they reply.",
+    "name": "Name",
+    "namePlaceholder": "Q1 outbound",
+    "owner": "Sender",
+    "topic": "About",
+    "create": "Create Sequence",
+    "save": "Save Changes",
+    "created": "{name} was created with three starter steps",
+    "saved": "{name} was updated",
+    "errors": {
+      "nameRequired": "Enter a name.",
+      "nameTooLong": "Keep the name under 60 characters."
+    },
+    "starter": {
+      "emailSubject": "A quick idea for {company}",
+      "emailBody": "Hi {first_name},\n\nI work with teams like yours at {company}. Would a short call next week make sense?\n\n{sender}",
+      "callSubject": "Call {first_name} at {company}",
+      "followUpSubject": "Following up",
+      "followUpBody": "Hi {first_name},\n\nFollowing up on my last email. Is this a priority for {company} right now?\n\n{sender}"
+    }
+  },
+  "stepDialog": {
+    "newTitle": "New Step",
+    "editTitle": "Edit Step",
+    "description": "Each step runs on its day, counted from when a contact is enrolled. Emails go out on their own; calls and tasks become activities.",
+    "day": "Day",
+    "dayHint": "Days after enrolling, from 0 to 90. Steps run in day order.",
+    "type": "Type",
+    "subject": "Subject",
+    "body": "Message",
+    "notes": "Notes",
+    "insert": "Insert",
+    "insertVariable": "Insert {variable}",
+    "add": "Add Step",
+    "save": "Save Step",
+    "errors": {
+      "day": "Use a whole number from 0 to 90.",
+      "subjectRequired": "Enter a subject.",
+      "subjectTooLong": "Keep the subject under 120 characters."
+    }
+  },
+  "enrollDialog": {
+    "title": "Enroll Contacts",
+    "description": "The first step runs today and the rest on schedule, until each contact replies.",
+    "search": "Search contacts",
+    "none": "Everyone who matches is already in this sequence.",
+    "enroll": "{count, plural, =0 {Enroll Contacts} one {Enroll # Contact} other {Enroll # Contacts}}",
+    "enrolled": "{count, plural, one {# contact enrolled} other {# contacts enrolled}} in {sequence}"
   },
   "toasts": {
     "comingSoon": "{feature} isn't available in this demo.",

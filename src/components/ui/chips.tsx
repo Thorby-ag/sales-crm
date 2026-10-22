@@ -28,20 +28,6 @@ export function Tag({ tone, className, children }: { tone: TagTone; className?: 
   );
 }
 
-/** Small "Soon" marker for sections the demo doesn't include. */
-export function SoonBadge({ children, className }: { children: ReactNode; className?: string }) {
-  return (
-    <span
-      className={cn(
-        "inline-flex h-4 shrink-0 items-center rounded-full border border-dashed border-[#4a4a4a] px-1.5 text-[10px] leading-none font-medium tracking-wide text-soft uppercase",
-        className,
-      )}
-    >
-      {children}
-    </span>
-  );
-}
-
 export function Kbd({ className, ...props }: ComponentProps<"kbd">) {
   return (
     <kbd

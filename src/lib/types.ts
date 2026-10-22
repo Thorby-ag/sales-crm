@@ -29,6 +29,7 @@ export const FORECAST_CATEGORIES = ["commit", "bestCase", "pipeline", "omitted"]
 export const FORECAST_PERIODS = ["this", "next"] as const;
 export const ACTIVITY_TYPES = ["call", "meeting", "email", "task"] as const;
 export const ACTIVITY_VIEWS = ["todo", "done"] as const;
+export const STEP_TYPES = ["email", "call", "task"] as const;
 /** Who someone is in a purchase, from most to least say over it. */
 export const BUYING_ROLES = ["decisionMaker", "champion", "influencer", "endUser", "blocker"] as const;
 
@@ -49,6 +50,7 @@ export type ForecastPeriod = (typeof FORECAST_PERIODS)[number];
 export type BuyingRole = (typeof BUYING_ROLES)[number];
 export type ActivityType = (typeof ACTIVITY_TYPES)[number];
 export type ActivityView = (typeof ACTIVITY_VIEWS)[number];
+export type StepType = (typeof STEP_TYPES)[number];
 export type SortKey = "pipelineValue" | "winProbability" | "openDeals" | "lastInteraction" | "name";
 
 export type LogoMark = "orbit" | "bars" | "diamond" | "split" | "grid" | "wave" | "peak" | "ring" | "spark" | "hex";
@@ -121,6 +123,38 @@ export interface Activity {
   date: string;
   done: boolean;
   notes: string;
+  /** Set when a sequence step created it (see Enrollment). */
+  enrollmentId: string | null;
+}
+
+/** One step of a sequence, run `day` days after a contact is enrolled. */
+export interface SequenceStep {
+  id: string;
+  day: number;
+  type: StepType;
+  /** Templates with {{variables}}, kept as entered in every locale. */
+  subject: string;
+  body: string;
+}
+
+/** An outreach cadence: emails go out on their own; calls and tasks become activities. */
+export interface Sequence {
+  id: string;
+  name: string;
+  owner: string;
+  /** What the conversations are about, for the activities the steps create. */
+  topic: InteractionType;
+  active: boolean;
+  steps: SequenceStep[];
+}
+
+/** A contact going through a sequence, until the last step or a reply. */
+export interface Enrollment {
+  id: string;
+  sequenceId: string;
+  contactId: string;
+  enrolledAt: string;
+  repliedAt: string | null;
 }
 
 /** A company plus the metrics derived from its open deals. */

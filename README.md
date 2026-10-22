@@ -2,7 +2,7 @@
 
 **English** · [Español](README.es.md)
 
-An account-based CRM for B2B sales teams: a companies pipeline, contacts, activities, a deals board with drag and drop, a quarterly forecast, saved views and search. It runs entirely in the browser, in English and Spanish.
+An account-based CRM for B2B sales teams: a companies pipeline, contacts, activities, email sequences, a deals board with drag and drop, a quarterly forecast, saved views and search. It runs entirely in the browser, in English and Spanish.
 
 **Live demo:** [salescrm.thomalabs.com](https://salescrm.thomalabs.com)
 
@@ -25,6 +25,7 @@ An account-based CRM for B2B sales teams: a companies pipeline, contacts, activi
 - **Deal details.** Clicking a deal opens a sheet to edit its amount, close date, stage, probability and forecast category. It shows where the deal will count in the forecast before saving. Every view follows: board, companies table and forecast.
 - **Contacts.** The people at each account and their role in the purchase: decision maker, champion, influencer, end user or blocker. Search and filter them (in the URL too), see each account's buying committee in its sheet, and find people from the ⌘K search.
 - **Activities.** Calls, meetings, emails and tasks, planned or already done. A to-do list grouped into overdue, today and upcoming, with a check to complete them (undo included). Completing one updates the company's last interaction. A side panel lists the deals closing this quarter with no next step, so one can be planned in a click. Each company, deal and contact sheet shows its own.
+- **Email sequences.** Outreach cadences: emails, calls and tasks on set days after a contact is enrolled. Write steps with variables like `{{first_name}}` and preview them for a real contact, enroll people, mark replies and pause or resume. Results per sequence: enrolled, replies, reply rate and emails sent. Emails are simulated (there's no backend), while calls and tasks become planned activities and leave when the contact replies.
 - **Saved views.** Sidebar entries are real filters: team, region, deals closing this quarter, slipping deals.
 - **English and Spanish.** `/en` and `/es` routes, browser-language detection, currency, dates and plurals formatted per locale, translated metadata with `hreflang`, and type-checked translation keys.
 - **Shareable URLs.** Filters, sort order and the open company live in the query string (`/es/deals?owner=kenji-mori&company=quantora`).
@@ -51,6 +52,7 @@ src/
       companies/       table, toolbar, footer, bulk actions
       contacts/        contacts table, buying-role tags
       deals/           board, cards, stage menu
+      sequences/       sequences, steps editor, preview, enrollments
       forecast/        KPIs, quarter chart (SVG), reps, deals by category
       sheets/          company, deal and contact details, profiles, dialogs for new records
   lib/                 domain logic as pure functions (+ __tests__)
@@ -59,7 +61,7 @@ e2e/                   Playwright specs (desktop + mobile, a11y)
 
 A few decisions worth noting:
 
-- **Domain logic is pure and tested.** Filtering, sorting, metrics, forecasting, search, validation, CSV, URL parsing and persistence live in `src/lib` without React, so 135 unit tests cover them directly.
+- **Domain logic is pure and tested.** Filtering, sorting, metrics, forecasting, search, validation, CSV, URL parsing and persistence live in `src/lib` without React, so 148 unit tests cover them directly.
 - **The URL is the state for anything shareable.** Filters and the open company are read with `useSearchParams` and written with `history.replaceState`, which Next.js keeps in sync without a navigation. Zustand holds the records and UI state such as selection and open dialogs.
 - **Dates are relative to the visitor's today.** Seed data is defined as "N days ago". Saved data stores the date it was saved and is shifted forward on load.
 - **The forecast holds up on any day.** Seeded wins follow the pace each account's open pipeline predicts. Early in the quarter most of the forecast is still open, late in the quarter most of it is won, and the totals land in about the same place. A unit test checks this across several dates.

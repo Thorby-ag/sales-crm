@@ -2,7 +2,7 @@
 
 [English](README.md) · **Español**
 
-CRM de cuentas para equipos de ventas B2B: pipeline de empresas, contactos, actividades, tablero de deals con arrastrar y soltar, forecast trimestral, vistas guardadas y búsqueda. Funciona completo en el navegador, en inglés y español.
+CRM de cuentas para equipos de ventas B2B: pipeline de empresas, contactos, actividades, secuencias de email, tablero de deals con arrastrar y soltar, forecast trimestral, vistas guardadas y búsqueda. Funciona completo en el navegador, en inglés y español.
 
 **Demo en vivo:** [salescrm.thomalabs.com](https://salescrm.thomalabs.com)
 
@@ -25,6 +25,7 @@ CRM de cuentas para equipos de ventas B2B: pipeline de empresas, contactos, acti
 - **Detalle del deal.** Al hacer clic en un deal se abre una ficha para editar el monto, la fecha de cierre, la etapa, la probabilidad y la categoría de forecast. Antes de guardar muestra dónde va a contar en el forecast. Todas las vistas se actualizan: tablero, tabla de empresas y forecast.
 - **Contactos.** Las personas de cada cuenta y su rol en la compra: decisor, champion, influenciador, usuario o bloqueador. Se buscan y filtran (también desde la URL), cada ficha de empresa muestra quiénes participan en la compra, y el buscador ⌘K también encuentra personas.
 - **Actividades.** Llamadas, reuniones, emails y tareas, agendadas o ya hechas. Una lista de pendientes dividida en vencidas, de hoy y próximas, que se completan con un tilde (con opción de deshacer). Completar una actualiza la última interacción de la empresa. Un panel lateral muestra los deals que cierran este trimestre sin próximo paso, para agendarlo con un clic. Cada ficha de empresa, deal y contacto muestra las suyas.
+- **Secuencias de email.** Cadencias de prospección: emails, llamadas y tareas en días fijos desde que se inscribe un contacto. Los pasos se escriben con variables como `{{first_name}}` y se previsualizan con los datos de un contacto real. Se puede inscribir gente, marcar respuestas, y pausar o reanudar. Cada secuencia muestra inscriptos, respuestas, tasa de respuesta y emails enviados. Los emails son simulados (no hay backend), pero las llamadas y tareas se vuelven actividades agendadas y se quitan cuando el contacto responde.
 - **Vistas guardadas.** Los ítems del sidebar son filtros reales: equipo, región, deals que cierran este trimestre y deals demorados.
 - **Inglés y español.** Rutas `/en` y `/es`, detección del idioma del navegador, moneda, fechas y plurales con el formato de cada idioma, metadata traducida con `hreflang` y claves de traducción verificadas por TypeScript.
 - **URLs para compartir.** Los filtros, el orden y la empresa abierta viven en la URL (`/es/deals?owner=kenji-mori&company=quantora`).
@@ -51,6 +52,7 @@ src/
       companies/       tabla, toolbar, pie, acciones masivas
       contacts/        tabla de contactos, roles en la compra
       deals/           tablero, tarjetas, menú de etapas
+      sequences/       secuencias, editor de pasos, vista previa, inscripciones
       forecast/        indicadores, gráfico del trimestre (SVG), vendedores, deals por categoría
       sheets/          detalle de empresa, deal y contacto, perfiles, diálogos de alta
   lib/                 lógica de dominio como funciones puras (+ __tests__)
@@ -59,7 +61,7 @@ e2e/                   specs de Playwright (desktop + mobile, accesibilidad)
 
 Algunas decisiones:
 
-- **La lógica de dominio es pura y está testeada.** Filtros, orden, métricas, forecast, búsqueda, validación, CSV, lectura de la URL y persistencia viven en `src/lib` sin React, y 135 tests unitarios los cubren directamente.
+- **La lógica de dominio es pura y está testeada.** Filtros, orden, métricas, forecast, búsqueda, validación, CSV, lectura de la URL y persistencia viven en `src/lib` sin React, y 148 tests unitarios los cubren directamente.
 - **La URL es el estado de todo lo que se comparte.** Los filtros y la empresa abierta se leen con `useSearchParams` y se escriben con `history.replaceState`, que Next.js sincroniza sin navegar. Zustand guarda los registros y el estado de la interfaz, como la selección y los diálogos abiertos.
 - **Las fechas son relativas al día del visitante.** Los datos de ejemplo se definen como "hace N días". Los datos guardados registran la fecha en que se guardaron y se corren al cargarlos.
 - **El forecast se sostiene cualquier día.** Los deals ganados de ejemplo siguen el ritmo que predice el pipeline abierto de cada cuenta. Al principio del trimestre casi todo el forecast está abierto y al final casi todo está ganado, pero los totales quedan en un lugar parecido. Un test unitario lo verifica con varias fechas.

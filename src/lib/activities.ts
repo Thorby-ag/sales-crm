@@ -80,7 +80,7 @@ export function seedActivities(companies: readonly Company[], deals: readonly De
     const last = company.lastInteraction;
     const earlier: InteractionType = last.type === "discovery" ? "partner" : "discovery";
     const next = NEXT_TOPIC[last.type];
-    const base = { companyId: company.id, owner: company.owner, notes: "" };
+    const base = { companyId: company.id, owner: company.owner, notes: "", enrollmentId: null };
 
     activities.push(
       { ...base, id: `${company.id}-a1`, type: TOPIC_TYPE[earlier], subject: TOPIC_SUBJECTS[earlier], topic: earlier, dealId: null, contactId: champion?.id ?? null, date: addDays(last.date, -(7 + (h % 12))), done: true },
@@ -225,10 +225,13 @@ export function validateActivity(
   return { ok: true, value: { ...form, subject, notes: form.notes.trim() } };
 }
 
-/** The activity a valid form describes, keeping `id` (or a new one unique among `existing`). */
-export function activityFromForm(form: ActivityForm, existing: readonly Activity[], id?: string): Activity {
+/**
+ * The activity a valid form describes. Editing keeps the original's id and sequence link;
+ * a new one gets an id that's unique among `existing`.
+ */
+export function activityFromForm(form: ActivityForm, existing: readonly Activity[], original?: Activity): Activity {
   return {
-    id: id ?? uniqueSlug(`${form.companyId} ${form.subject}`, new Set(existing.map((a) => a.id)), "activity"),
+    id: original?.id ?? uniqueSlug(`${form.companyId} ${form.subject}`, new Set(existing.map((a) => a.id)), "activity"),
     type: form.type,
     subject: form.subject,
     topic: form.topic,
@@ -239,5 +242,6 @@ export function activityFromForm(form: ActivityForm, existing: readonly Activity
     date: form.date,
     done: form.done,
     notes: form.notes,
+    enrollmentId: original?.enrollmentId ?? null,
   };
 }

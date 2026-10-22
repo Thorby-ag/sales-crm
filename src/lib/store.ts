@@ -2,12 +2,13 @@ import { create } from "zustand";
 import { completeActivity, logInteraction, upsertActivity } from "./activities";
 import { assignOwner, deleteCompanies } from "./companies";
 import { upsertContact } from "./contacts";
+import { deleteSequences, enroll, forgetContacts, markReplied, setSequenceActive, unenroll } from "./sequences";
 import { NOTIFICATIONS } from "./data/notifications";
 import { moveDeal, updateDeal } from "./deals";
 import { localToday } from "./format";
 import { LEGACY_STORAGE_KEYS, restoreDemo, serializeDemo, STORAGE_KEY, type DemoState } from "./persistence";
 import { seedDemo } from "./seed";
-import type { Activity, Company, Contact, Deal, DealStage } from "./types";
+import type { Activity, Company, Contact, Deal, DealStage, Sequence } from "./types";
 
 interface CrmState extends DemoState {
   /** False until the browser has loaded saved data (or seeded fresh data). */
@@ -48,6 +49,13 @@ interface CrmActions {
   saveActivity: (activity: Activity) => void;
   completeActivity: (activityId: string) => void;
   deleteActivity: (activityId: string) => void;
+  saveSequence: (sequence: Sequence) => void;
+  deleteSequence: (sequenceId: string) => void;
+  /** Enrolls the contacts that aren't in the sequence yet. */
+  enrollContacts: (sequenceId: string, contactIds: string[]) => void;
+  markReplied: (enrollmentId: string) => void;
+  unenroll: (enrollmentId: string) => void;
+  setSequenceActive: (sequenceId: string, active: boolean) => void;
   assignOwner: (companyIds: string[], owner: string) => void;
   deleteCompanies: (companyIds: string[]) => void;
   setScoreOverride: (companyId: string, stars: number[]) => void;
@@ -90,6 +98,8 @@ export const useCrm = create<CrmState & CrmActions>()((set, get) => ({
   deals: [],
   contacts: [],
   activities: [],
+  sequences: [],
+  enrollments: [],
   scoreOverrides: {},
   unreadIds: [],
   selectedIds: [],
@@ -107,8 +117,8 @@ export const useCrm = create<CrmState & CrmActions>()((set, get) => ({
     set({ ...(restoreDemo(readSaved(), today) ?? freshDemo(today)), today, hydrated: true });
   },
   snapshot: () => {
-    const { companies, deals, contacts, activities, scoreOverrides, unreadIds } = get();
-    return { companies, deals, contacts, activities, scoreOverrides, unreadIds };
+    const { companies, deals, contacts, activities, sequences, enrollments, scoreOverrides, unreadIds } = get();
+    return { companies, deals, contacts, activities, sequences, enrollments, scoreOverrides, unreadIds };
   },
   restore: (snapshot) => set({ ...snapshot }),
   resetDemo: () => set({ ...freshDemo(get().today), selectedIds: [] }),
@@ -117,16 +127,40 @@ export const useCrm = create<CrmState & CrmActions>()((set, get) => ({
   moveDeal: (dealId, stage) => set((s) => ({ deals: moveDeal(s.deals, dealId, stage, s.today) })),
   updateDeal: (dealId, update) => set((s) => ({ deals: updateDeal(s.deals, dealId, update) })),
   saveContact: (contact) => set((s) => ({ contacts: upsertContact(s.contacts, contact) })),
-  // Activities with a deleted contact stay: they happened, or still need doing.
+  // A deleted contact leaves their sequences; their other activities stay, unlinked.
   deleteContact: (contactId) =>
-    set((s) => ({
-      contacts: s.contacts.filter((c) => c.id !== contactId),
-      activities: s.activities.map((a) => (a.contactId === contactId ? { ...a, contactId: null } : a)),
-    })),
+    set((s) => {
+      const { enrollments, activities } = forgetContacts(s, new Set([contactId]));
+      return {
+        contacts: s.contacts.filter((c) => c.id !== contactId),
+        enrollments,
+        activities: activities.map((a) => (a.contactId === contactId ? { ...a, contactId: null } : a)),
+      };
+    }),
   saveActivity: (activity) =>
     set((s) => ({ activities: upsertActivity(s.activities, activity), companies: logInteraction(s.companies, activity) })),
   completeActivity: (activityId) => set((s) => completeActivity(s, activityId, s.today)),
   deleteActivity: (activityId) => set((s) => ({ activities: s.activities.filter((a) => a.id !== activityId) })),
+  saveSequence: (sequence) =>
+    set((s) => ({
+      sequences: s.sequences.some((x) => x.id === sequence.id) ? s.sequences.map((x) => (x.id === sequence.id ? sequence : x)) : [sequence, ...s.sequences],
+    })),
+  deleteSequence: (sequenceId) => set((s) => deleteSequences(s, [sequenceId])),
+  enrollContacts: (sequenceId, contactIds) =>
+    set((s) => {
+      const sequence = s.sequences.find((x) => x.id === sequenceId);
+      if (!sequence) return {};
+      const ids = new Set(contactIds);
+      const names = new Map(s.companies.map((c) => [c.id, c.name]));
+      return enroll(s, sequence, s.contacts.filter((c) => ids.has(c.id)), (id) => names.get(id) ?? "", s.today);
+    }),
+  markReplied: (enrollmentId) => set((s) => markReplied(s, enrollmentId, s.today)),
+  unenroll: (enrollmentId) => set((s) => unenroll(s, enrollmentId)),
+  setSequenceActive: (sequenceId, active) =>
+    set((s) => {
+      const names = new Map(s.companies.map((c) => [c.id, c.name]));
+      return setSequenceActive(s, sequenceId, active, s.contacts, (id) => names.get(id) ?? "", s.today);
+    }),
   assignOwner: (companyIds, owner) => set((s) => assignOwner(s, companyIds, owner)),
   deleteCompanies: (companyIds) =>
     set((s) => ({
@@ -180,6 +214,8 @@ export function startPersistence(onError: () => void): () => void {
       state.deals !== prev.deals ||
       state.contacts !== prev.contacts ||
       state.activities !== prev.activities ||
+      state.sequences !== prev.sequences ||
+      state.enrollments !== prev.enrollments ||
       state.scoreOverrides !== prev.scoreOverrides ||
       state.unreadIds !== prev.unreadIds;
     if (!changed) return;

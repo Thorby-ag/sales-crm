@@ -1,6 +1,7 @@
 import { seedActivities } from "./activities";
 import type { DemoRecords } from "./companies";
 import { seedContacts } from "./contacts";
+import { seedSequences } from "./sequences";
 import { COMPANY_SEEDS } from "./data/companies";
 import { seedDealsFor } from "./deals";
 import { addDays } from "./format";
@@ -20,5 +21,13 @@ export function seedDemo(today: string): DemoRecords {
   }));
   const deals = COMPANY_SEEDS.flatMap((seed) => seedDealsFor(seed, today));
   const contacts = seedContacts();
-  return { companies, deals, contacts, activities: seedActivities(companies, deals, contacts, today) };
+  const outreach = seedSequences(contacts, companies, today);
+  return {
+    companies,
+    deals,
+    contacts,
+    activities: [...seedActivities(companies, deals, contacts, today), ...outreach.activities],
+    sequences: outreach.sequences,
+    enrollments: outreach.enrollments,
+  };
 }

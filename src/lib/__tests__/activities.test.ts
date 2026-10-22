@@ -26,7 +26,7 @@ describe("seeded activities", () => {
 
   it("give every seeded account its history and a next step", () => {
     for (const seed of COMPANY_SEEDS) {
-      const own = demo.activities.filter((a) => a.companyId === seed.id);
+      const own = demo.activities.filter((a) => a.companyId === seed.id && !a.enrollmentId);
       expect(own.filter((a) => a.done).length, seed.id).toBe(2);
       expect(own.some((a) => !a.done), seed.id).toBe(true);
     }
@@ -132,7 +132,8 @@ describe("the activity form", () => {
     if (!result.ok) return;
     const created = activityFromForm(result.value, [activity({ id: "a-pricing-call" })]);
     expect(created).toMatchObject({ id: "a-pricing-call-2", dealId: null, contactId: null });
-    expect(activityFromForm(result.value, [], "keep").id).toBe("keep");
+    const original = activity({ id: "keep", enrollmentId: "seq--ann" });
+    expect(activityFromForm(result.value, [], original)).toMatchObject({ id: "keep", enrollmentId: "seq--ann" });
   });
 
   it("reports missing or invalid fields", () => {

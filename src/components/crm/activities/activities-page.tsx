@@ -1,15 +1,16 @@
 "use client";
 
-import { CalendarPlus, Plus, RotateCcw } from "lucide-react";
+import { CalendarPlus, Plus, RotateCcw, Send } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { CountBadge } from "@/components/ui/chips";
 import { Segmented } from "@/components/ui/segmented";
+import { Link } from "@/i18n/navigation";
 import { dealsWithoutNextStep, doneActivities, filterActivities, plannedGroups } from "@/lib/activities";
 import { OWNER_NAMES, personByName } from "@/lib/data/people";
 import { useCrm } from "@/lib/store";
-import { ACTIVITY_TYPES, ACTIVITY_VIEWS, type Activity, type ActivityType, type Company, type Contact, type Deal } from "@/lib/types";
+import { ACTIVITY_TYPES, ACTIVITY_VIEWS, type Activity, type ActivityType, type Company, type Contact, type Deal, type Sequence } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ALL, FilterMenu } from "../filter-menu";
 import { ContentSkeleton } from "../shell/app-skeleton";
@@ -28,6 +29,8 @@ interface Lookups {
   companies: Map<string, Company>;
   deals: Map<string, Deal>;
   contacts: Map<string, Contact>;
+  /** The sequence each enrollment belongs to. */
+  sequences: Map<string, Sequence>;
 }
 
 function ActivityRow({ activity, lookups }: { activity: Activity; lookups: Lookups }) {
@@ -35,6 +38,7 @@ function ActivityRow({ activity, lookups }: { activity: Activity; lookups: Looku
   const company = lookups.companies.get(activity.companyId);
   const deal = activity.dealId ? lookups.deals.get(activity.dealId) : undefined;
   const contact = activity.contactId ? lookups.contacts.get(activity.contactId) : undefined;
+  const sequence = activity.enrollmentId ? lookups.sequences.get(activity.enrollmentId) : undefined;
   const owner = personByName(activity.owner);
 
   return (
@@ -60,6 +64,17 @@ function ActivityRow({ activity, lookups }: { activity: Activity; lookups: Looku
               <button type="button" onClick={() => openDeal(deal.id)} className={META_LINK}>
                 {deal.name}
               </button>
+            </>
+          )}
+          {sequence && (
+            <>
+              <span aria-hidden className="text-faint">
+                ·
+              </span>
+              <Link href={{ pathname: "/sequences", query: { sequence: sequence.id } }} className={cn(META_LINK, "flex items-center gap-1")}>
+                <Send aria-hidden className="size-3 shrink-0" />
+                <span className="truncate">{sequence.name}</span>
+              </Link>
             </>
           )}
         </p>
@@ -162,17 +177,20 @@ function ActivitiesView() {
   const companies = useCrm((s) => s.companies);
   const deals = useCrm((s) => s.deals);
   const contacts = useCrm((s) => s.contacts);
+  const sequences = useCrm((s) => s.sequences);
+  const enrollments = useCrm((s) => s.enrollments);
   const today = useCrm((s) => s.today);
   const openActivityDialog = useCrm((s) => s.openActivityDialog);
 
-  const lookups = useMemo<Lookups>(
-    () => ({
+  const lookups = useMemo<Lookups>(() => {
+    const byId = new Map(sequences.map((s) => [s.id, s]));
+    return {
       companies: new Map(companies.map((c) => [c.id, c])),
       deals: new Map(deals.map((d) => [d.id, d])),
       contacts: new Map(contacts.map((c) => [c.id, c])),
-    }),
-    [companies, deals, contacts],
-  );
+      sequences: new Map(enrollments.flatMap((e) => (byId.has(e.sequenceId) ? [[e.id, byId.get(e.sequenceId)!] as const] : []))),
+    };
+  }, [companies, deals, contacts, sequences, enrollments]);
   const visible = useMemo(() => filterActivities(activities, filters), [activities, filters]);
   const groups = useMemo(() => plannedGroups(visible, today), [visible, today]);
   const done = useMemo(() => doneActivities(visible), [visible]);

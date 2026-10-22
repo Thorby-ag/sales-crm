@@ -8,8 +8,6 @@
     "close": "Cerrar",
     "undo": "Deshacer",
     "reset": "Restablecer",
-    "soon": "Pronto",
-    "comingSoon": "Próximamente",
     "remove": "Quitar",
     "noValue": "—",
     "skipToContent": "Saltar al contenido",
@@ -72,7 +70,8 @@
     "forecast": "Forecast",
     "active": "Activo",
     "contacts": "Contactos",
-    "activities": "Actividades"
+    "activities": "Actividades",
+    "sequences": "Secuencias"
   },
   "sort": {
     "pipelineValue": "Valor del pipeline",
@@ -515,7 +514,11 @@
     "colleagues": "También en {company}",
     "noColleagues": "Todavía no hay otras personas de esta cuenta.",
     "activity": "Actividad",
-    "noActivity": "Todavía no hay actividades con esta persona."
+    "noActivity": "Todavía no hay actividades con esta persona.",
+    "sequences": "Secuencias",
+    "noSequences": "No está en ninguna secuencia.",
+    "addToSequence": "Agregar a secuencia",
+    "enrolledIn": "{name} se inscribió en {sequence}"
   },
   "contactDialog": {
     "newTitle": "Nuevo contacto",
@@ -613,6 +616,126 @@
       "date": "Falta la fecha.",
       "futureDone": "Algo que ya se hizo no puede tener fecha futura."
     }
+  },
+  "stepTypes": {
+    "email": "Email",
+    "call": "Llamada",
+    "task": "Tarea"
+  },
+  "sequences": {
+    "count": "{count, plural, one {# secuencia} other {# secuencias}}",
+    "new": "Nueva secuencia",
+    "caption": "Secuencias de email y cómo vienen",
+    "name": "Secuencia",
+    "owner": "Remitente",
+    "status": "Estado",
+    "enrolled": "Inscriptos",
+    "active": "En curso",
+    "replied": "Respondieron",
+    "replyRate": "Tasa de respuesta",
+    "emailsSent": "Emails enviados",
+    "running": "Activa",
+    "paused": "Pausada",
+    "empty": "Todavía no hay secuencias.",
+    "actions": "Acciones de {name}",
+    "open": "Abrir secuencia",
+    "edit": "Editar secuencia",
+    "pause": "Pausar",
+    "resume": "Reanudar",
+    "delete": "Eliminar secuencia",
+    "deleted": "Se eliminó {name}",
+    "pausedToast": "{name} quedó pausada: se quitaron sus llamadas y tareas pendientes",
+    "resumedToast": "{name} volvió a correr",
+    "back": "Secuencias",
+    "enroll": "Inscribir contactos",
+    "enrollPaused": "Pausada: hay que reanudarla para inscribir contactos.",
+    "sentBy": "La envía {name}",
+    "about": "Tema: {topic}",
+    "steps": "Pasos",
+    "noSteps": "Todavía no tiene pasos.",
+    "addStep": "Agregar paso",
+    "day": "Día {day}",
+    "stepActions": "Acciones del paso {subject}",
+    "editStep": "Editar paso",
+    "deleteStep": "Eliminar paso",
+    "stepDeleted": "Se eliminó el paso",
+    "preview": "Vista previa",
+    "previewAs": "Para",
+    "from": "De",
+    "to": "Para",
+    "subject": "Asunto",
+    "taskFor": "{type} de {name}:",
+    "missingVariable": "Variable desconocida: {name}",
+    "people": "Contactos inscriptos",
+    "noPeople": "Todavía no hay nadie inscripto.",
+    "contact": "Contacto",
+    "enrolledOn": "Inscripción",
+    "progress": "{completed} de {total} pasos · sigue: {type}, {date}",
+    "repliedOn": "Respondió el {date}",
+    "allDone": "Completó los {total} pasos",
+    "markReplied": "Marcar que respondió",
+    "repliedToast": "{name} respondió: la secuencia se detiene para esta persona",
+    "remove": "Quitar de la secuencia",
+    "removed": "{name} salió de {sequence}",
+    "enrollmentActions": "Acciones de {name}",
+    "statuses": {
+      "active": "Activo",
+      "paused": "Pausado",
+      "replied": "Respondió",
+      "finished": "Terminó"
+    }
+  },
+  "sequenceDialog": {
+    "newTitle": "Nueva secuencia",
+    "editTitle": "Editar secuencia",
+    "description": "Una serie de emails, llamadas y tareas que corre para cada contacto que se inscribe, hasta que responde.",
+    "name": "Nombre",
+    "namePlaceholder": "Prospección Q1",
+    "owner": "Remitente",
+    "topic": "Tema",
+    "create": "Crear secuencia",
+    "save": "Guardar cambios",
+    "created": "Se creó {name} con tres pasos iniciales",
+    "saved": "Se actualizó {name}",
+    "errors": {
+      "nameRequired": "El nombre es obligatorio.",
+      "nameTooLong": "El nombre tiene que tener menos de 60 caracteres."
+    },
+    "starter": {
+      "emailSubject": "Una idea rápida para {company}",
+      "emailBody": "Hola {first_name}:\n\nTrabajo con equipos como el de {company}. ¿Tendría sentido una llamada corta la semana que viene?\n\n{sender}",
+      "callSubject": "Llamar a {first_name} de {company}",
+      "followUpSubject": "Seguimiento",
+      "followUpBody": "Hola {first_name}:\n\nRetomo mi último email. ¿Es una prioridad para {company} en este momento?\n\n{sender}"
+    }
+  },
+  "stepDialog": {
+    "newTitle": "Nuevo paso",
+    "editTitle": "Editar paso",
+    "description": "Cada paso corre en su día, contado desde que se inscribe el contacto. Los emails salen solos; las llamadas y tareas se vuelven actividades.",
+    "day": "Día",
+    "dayHint": "Días después de la inscripción, de 0 a 90. Los pasos corren en orden de día.",
+    "type": "Tipo",
+    "subject": "Asunto",
+    "body": "Mensaje",
+    "notes": "Notas",
+    "insert": "Insertar",
+    "insertVariable": "Insertar {variable}",
+    "add": "Agregar paso",
+    "save": "Guardar paso",
+    "errors": {
+      "day": "Tiene que ser un número entero de 0 a 90.",
+      "subjectRequired": "El asunto es obligatorio.",
+      "subjectTooLong": "El asunto tiene que tener menos de 120 caracteres."
+    }
+  },
+  "enrollDialog": {
+    "title": "Inscribir contactos",
+    "description": "El primer paso corre hoy y el resto según el calendario, hasta que cada contacto responde.",
+    "search": "Buscar contactos",
+    "none": "Todos los que coinciden ya están en esta secuencia.",
+    "enroll": "{count, plural, =0 {Inscribir contactos} one {Inscribir # contacto} other {Inscribir # contactos}}",
+    "enrolled": "{count, plural, one {Se inscribió # contacto} other {Se inscribieron # contactos}} en {sequence}"
   },
   "toasts": {
     "comingSoon": "{feature} no está disponible en esta demo.",

@@ -1,8 +1,9 @@
 import { seedActivities } from "./activities";
 import type { DemoRecords } from "./companies";
 import { seedContacts } from "./contacts";
+import { seedSequences } from "./sequences";
 import { addDays, daysBetween } from "./format";
-import type { Activity, Company, Deal } from "./types";
+import type { Activity, Company, Deal, Enrollment } from "./types";
 
 // Version 2 seeds a quarter of won deals for the forecast. Version 1 data had none,
 // so it's dropped rather than migrated: visitors start again from fresh demo data.
@@ -50,6 +51,9 @@ export function shiftDemo<T extends DemoRecords>(data: T, days: number): T {
     ),
     deals: data.deals.map((d): Deal => ({ ...d, closeDate: addDays(d.closeDate, days) })),
     activities: data.activities.map((a): Activity => ({ ...a, date: addDays(a.date, days) })),
+    enrollments: data.enrollments.map(
+      (e): Enrollment => ({ ...e, enrolledAt: addDays(e.enrolledAt, days), repliedAt: e.repliedAt && addDays(e.repliedAt, days) }),
+    ),
   };
 }
 
@@ -63,14 +67,24 @@ export function restoreDemo(raw: string | null, today: string): DemoState | null
     return null;
   }
   if (!isPersistedDemo(parsed)) return null;
-  // Data saved before contacts or activities existed gets them seeded for what's still
-  // there, as of the day it was saved; the shift below brings everything up to today.
-  const contacts = Array.isArray(parsed.contacts) ? parsed.contacts : seedContacts(new Set(parsed.companies.map((c) => c.id)));
+  // Data saved before contacts, activities or sequences existed gets them seeded for what's
+  // still there, as of the day it was saved; the shift below brings everything up to today.
+  const { companies, deals, asOf } = parsed;
+  const contacts = Array.isArray(parsed.contacts) ? parsed.contacts : seedContacts(new Set(companies.map((c) => c.id)));
+  let activities = Array.isArray(parsed.activities) ? parsed.activities : seedActivities(companies, deals, contacts, asOf);
+  let { sequences, enrollments } = parsed;
+  if (!Array.isArray(sequences) || !Array.isArray(enrollments)) {
+    const outreach = seedSequences(contacts, companies, asOf);
+    ({ sequences, enrollments } = outreach);
+    activities = [...activities, ...outreach.activities];
+  }
   const state: DemoState = {
-    companies: parsed.companies,
-    deals: parsed.deals,
+    companies,
+    deals,
     contacts,
-    activities: Array.isArray(parsed.activities) ? parsed.activities : seedActivities(parsed.companies, parsed.deals, contacts, parsed.asOf),
+    activities,
+    sequences,
+    enrollments,
     scoreOverrides: parsed.scoreOverrides,
     unreadIds: parsed.unreadIds,
   };
