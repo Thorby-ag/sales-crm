@@ -27,6 +27,8 @@ export const CLOSE_WINDOWS = ["quarter", "overdue"] as const;
 /** How confident the team is that an open deal closes in its quarter, from most to least. */
 export const FORECAST_CATEGORIES = ["commit", "bestCase", "pipeline", "omitted"] as const;
 export const FORECAST_PERIODS = ["this", "next"] as const;
+export const ACTIVITY_TYPES = ["call", "meeting", "email", "task"] as const;
+export const ACTIVITY_VIEWS = ["todo", "done"] as const;
 /** Who someone is in a purchase, from most to least say over it. */
 export const BUYING_ROLES = ["decisionMaker", "champion", "influencer", "endUser", "blocker"] as const;
 
@@ -45,6 +47,8 @@ export type CloseWindow = (typeof CLOSE_WINDOWS)[number];
 export type ForecastCategory = (typeof FORECAST_CATEGORIES)[number];
 export type ForecastPeriod = (typeof FORECAST_PERIODS)[number];
 export type BuyingRole = (typeof BUYING_ROLES)[number];
+export type ActivityType = (typeof ACTIVITY_TYPES)[number];
+export type ActivityView = (typeof ACTIVITY_VIEWS)[number];
 export type SortKey = "pipelineValue" | "winProbability" | "openDeals" | "lastInteraction" | "name";
 
 export type LogoMark = "orbit" | "bars" | "diamond" | "split" | "grid" | "wave" | "peak" | "ring" | "spark" | "hex";
@@ -101,6 +105,24 @@ export interface Contact {
   role: BuyingRole;
 }
 
+/** A call, meeting, email or task: something planned, or something that happened. */
+export interface Activity {
+  id: string;
+  type: ActivityType;
+  /** Kept as entered in every locale. */
+  subject: string;
+  /** What the conversation is about; completing it updates the company's last interaction. */
+  topic: InteractionType;
+  companyId: string;
+  dealId: string | null;
+  contactId: string | null;
+  owner: string;
+  /** Due date while planned; the day it happened once done. */
+  date: string;
+  done: boolean;
+  notes: string;
+}
+
 /** A company plus the metrics derived from its open deals. */
 export interface CompanyRow extends Company {
   openDeals: number;
@@ -129,6 +151,12 @@ export interface ForecastFilters {
   period: ForecastPeriod;
   owner: string | null;
   team: Team | null;
+}
+
+export interface ActivityFilters {
+  view: ActivityView;
+  owner: string | null;
+  type: ActivityType | null;
 }
 
 export interface ContactFilters {

@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { restoreDemo, serializeDemo, shiftDemo, type DemoState } from "../persistence";
 import { seedDemo } from "../seed";
-import { company, contact, deal, TODAY } from "./fixtures";
+import { activity, company, contact, deal, TODAY } from "./fixtures";
 
 const state: DemoState = {
   companies: [company({ id: "a", lastInteraction: { date: "2026-10-10", type: "demo" } })],
   deals: [deal({ id: "d1", companyId: "a", closeDate: "2026-11-01", forecast: "commit" })],
   contacts: [contact({ id: "ann", companyId: "a" })],
+  activities: [activity({ id: "call", companyId: "a", date: "2026-10-20" })],
   scoreOverrides: { a: [5, 4, 3] },
   unreadIds: ["n1"],
 };
@@ -20,6 +21,7 @@ describe("persistence", () => {
     const restored = restoreDemo(serializeDemo(state, TODAY), "2026-10-26");
     expect(restored?.companies[0]?.lastInteraction.date).toBe("2026-10-20");
     expect(restored?.deals[0]?.closeDate).toBe("2026-11-11");
+    expect(restored?.activities[0]?.date).toBe("2026-10-30");
     expect(restored?.scoreOverrides).toEqual(state.scoreOverrides);
   });
 
@@ -27,20 +29,28 @@ describe("persistence", () => {
     const saved = serializeDemo({ ...seedDemo(TODAY), scoreOverrides: {}, unreadIds: [] }, TODAY);
     const later = "2027-03-02";
     const restored = restoreDemo(saved, later);
-    const { companies, deals, contacts } = seedDemo(later);
+    const { companies, deals, contacts, activities } = seedDemo(later);
     expect(restored?.companies).toEqual(companies);
     expect(restored?.deals).toEqual(deals);
     expect(restored?.contacts).toEqual(contacts);
+    expect(restored?.activities).toEqual(activities);
   });
 
-  it("seeds contacts for data saved before they existed", () => {
+  it("seeds contacts and activities for data saved before they existed", () => {
     const { companies, deals } = seedDemo(TODAY);
     const kept = companies.filter((c) => c.id !== "lumenfold");
-    const saved = JSON.parse(serializeDemo({ companies: kept, deals, contacts: [], scoreOverrides: {}, unreadIds: [] }, TODAY)) as Record<string, unknown>;
+    const saved = JSON.parse(
+      serializeDemo({ companies: kept, deals, contacts: [], activities: [], scoreOverrides: {}, unreadIds: [] }, TODAY),
+    ) as Record<string, unknown>;
     delete saved.contacts;
-    const restored = restoreDemo(JSON.stringify(saved), TODAY);
+    delete saved.activities;
+    const restored = restoreDemo(JSON.stringify(saved), "2026-10-26");
     expect(restored?.contacts.length).toBeGreaterThan(0);
     expect(restored?.contacts.some((c) => c.companyId === "lumenfold")).toBe(false);
+    expect(restored?.activities.length).toBeGreaterThan(0);
+    expect(restored?.activities.some((a) => a.companyId === "lumenfold")).toBe(false);
+    // Seeded as of the day it was saved, then moved forward like everything else.
+    expect(restored?.activities).toEqual(seedDemo("2026-10-26").activities.filter((a) => a.companyId !== "lumenfold"));
   });
 
   it("ignores missing, corrupt or incompatible data", () => {

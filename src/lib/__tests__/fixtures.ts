@@ -1,4 +1,4 @@
-import type { Company, CompanyRow, Contact, Deal } from "../types";
+import type { Activity, Company, CompanyRow, Contact, Deal } from "../types";
 
 export const TODAY = "2026-10-16";
 
@@ -17,6 +17,22 @@ export function company(overrides: Partial<Company> & Pick<Company, "id">): Comp
 
 export function row(overrides: Partial<CompanyRow> & Pick<CompanyRow, "id">): CompanyRow {
   return { ...company(overrides), openDeals: 1, pipelineValue: 1000, winProbability: 50, ...overrides };
+}
+
+export function activity(overrides: Partial<Activity> & Pick<Activity, "id">): Activity {
+  return {
+    type: "call",
+    subject: overrides.id,
+    topic: "pricing",
+    companyId: "a",
+    dealId: null,
+    contactId: null,
+    owner: "Ada",
+    date: "2026-10-20",
+    done: false,
+    notes: "",
+    ...overrides,
+  };
 }
 
 export function contact(overrides: Partial<Contact> & Pick<Contact, "id">): Contact {

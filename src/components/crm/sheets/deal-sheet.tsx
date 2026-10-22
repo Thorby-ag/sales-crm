@@ -1,6 +1,6 @@
 "use client";
 
-import { Handshake } from "lucide-react";
+import { CalendarPlus, Handshake } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Field, Input } from "@/components/ui/field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetBody, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetSection } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
+import { nextStep } from "@/lib/activities";
 import { personByName } from "@/lib/data/people";
 import {
   applyDealForm,
@@ -23,6 +24,7 @@ import { quarterOf } from "@/lib/format";
 import { useCrm } from "@/lib/store";
 import { DEAL_STAGES, FORECAST_CATEGORIES, type Deal, type DealStage, type ForecastCategory } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { ActivityIcon, DueDate, SUBJECT_LINK } from "../activities/activity-bits";
 import { StageTag } from "../deals/deal-actions";
 import { withUndo } from "../undo";
 import { closeDeal, openCompany, useOpenDealId } from "../url-state";
@@ -54,6 +56,8 @@ function DealContent({ deal }: { deal: Deal }) {
   const today = useCrm((s) => s.today);
   const company = useCrm((s) => s.companies.find((c) => c.id === deal.companyId));
   const openProfile = useCrm((s) => s.openProfile);
+  const openActivityDialog = useCrm((s) => s.openActivityDialog);
+  const next = useCrm((s) => nextStep(s.activities, deal.id));
   const [initial] = useState(() => dealForm(deal));
   const [form, setForm] = useState(initial);
   const [errors, setErrors] = useState<DealErrors>({});
@@ -139,6 +143,37 @@ function DealContent({ deal }: { deal: Deal }) {
             <Stat label={t("dealSheet.forecast")}>{placement}</Stat>
             <Stat label={t("dealSheet.weighted")}>{weighted}</Stat>
           </dl>
+          <div className="flex items-center gap-3 rounded-lg border border-line-strong p-3">
+            {next ? (
+              <>
+                <ActivityIcon type={next.type} />
+                <div className="min-w-0 flex-1">
+                  <p className="type-caption text-soft">{t("dealSheet.nextStep")}</p>
+                  <button
+                    type="button"
+                    onClick={() => openActivityDialog({ activityId: next.id })}
+                    className={`${SUBJECT_LINK} type-lead mt-2`}
+                  >
+                    {next.subject}
+                  </button>
+                </div>
+                <DueDate activity={next} />
+              </>
+            ) : (
+              <>
+                <div className="min-w-0 flex-1">
+                  <p className="type-caption text-soft">{t("dealSheet.nextStep")}</p>
+                  <p className="type-lead mt-2">{t("dealSheet.noNextStep")}</p>
+                </div>
+                {isOpen(deal) && (
+                  <Button variant="secondary" onClick={() => openActivityDialog({ companyId: deal.companyId, dealId: deal.id })}>
+                    <CalendarPlus aria-hidden className="size-3" />
+                    {t("activities.planNextStep")}
+                  </Button>
+                )}
+              </>
+            )}
+          </div>
         </SheetSection>
 
         <SheetSection title={t("dealSheet.details")}>

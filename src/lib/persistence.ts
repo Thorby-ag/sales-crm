@@ -1,7 +1,8 @@
+import { seedActivities } from "./activities";
 import type { DemoRecords } from "./companies";
 import { seedContacts } from "./contacts";
 import { addDays, daysBetween } from "./format";
-import type { Company, Deal } from "./types";
+import type { Activity, Company, Deal } from "./types";
 
 // Version 2 seeds a quarter of won deals for the forecast. Version 1 data had none,
 // so it's dropped rather than migrated: visitors start again from fresh demo data.
@@ -48,6 +49,7 @@ export function shiftDemo<T extends DemoRecords>(data: T, days: number): T {
       (c): Company => ({ ...c, lastInteraction: { ...c.lastInteraction, date: addDays(c.lastInteraction.date, days) } }),
     ),
     deals: data.deals.map((d): Deal => ({ ...d, closeDate: addDays(d.closeDate, days) })),
+    activities: data.activities.map((a): Activity => ({ ...a, date: addDays(a.date, days) })),
   };
 }
 
@@ -61,11 +63,14 @@ export function restoreDemo(raw: string | null, today: string): DemoState | null
     return null;
   }
   if (!isPersistedDemo(parsed)) return null;
+  // Data saved before contacts or activities existed gets them seeded for what's still
+  // there, as of the day it was saved; the shift below brings everything up to today.
+  const contacts = Array.isArray(parsed.contacts) ? parsed.contacts : seedContacts(new Set(parsed.companies.map((c) => c.id)));
   const state: DemoState = {
     companies: parsed.companies,
     deals: parsed.deals,
-    // Saved before contacts existed: seed them for the companies that are still there.
-    contacts: Array.isArray(parsed.contacts) ? parsed.contacts : seedContacts(new Set(parsed.companies.map((c) => c.id))),
+    contacts,
+    activities: Array.isArray(parsed.activities) ? parsed.activities : seedActivities(parsed.companies, parsed.deals, contacts, parsed.asOf),
     scoreOverrides: parsed.scoreOverrides,
     unreadIds: parsed.unreadIds,
   };

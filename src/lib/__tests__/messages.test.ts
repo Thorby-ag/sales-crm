@@ -62,7 +62,7 @@ describe("translations", () => {
 
   it("aren't left untranslated by accident", () => {
     // Sales jargon and proper names stay the same on purpose; anything else should differ.
-    const sameOnPurpose = /^(meta\.title|brand\.name|common\.noValue|languages\.|teams\.mid-market|regions\.(emea|apac)|nav\.(forecast|pipelines)|views\.(deals|forecast)|interactions\.(discovery|demo|legal|partner)|detail\.(deals|emails|scoreCard)|profile\.(pipeline|statPipeline)|search\.(pipeline|enter)|table\.(openDeals|pipelineValue)|deals\.columnSummary|detail\.stageLine|filters\.showDeals|forecast\.quarter$|forecast\.(kpis|chart|reps)\.(commit|bestCase)$|forecast\.deals\.(deal|groupSummary)$|forecastCategories\.(commit|bestCase|pipeline)$|dealSheet\.(forecast|countsIn)$|buyingRoles\.champion$|contacts\.email$|contactDialog\.(namePlaceholder|email)$)/;
+    const sameOnPurpose = /^(meta\.title|brand\.name|common\.noValue|languages\.|teams\.mid-market|regions\.(emea|apac)|nav\.(forecast|pipelines)|views\.(deals|forecast)|interactions\.(discovery|demo|legal|partner)|detail\.(deals|emails|scoreCard)|profile\.(pipeline|statPipeline)|search\.(pipeline|enter)|table\.(openDeals|pipelineValue)|deals\.columnSummary|detail\.stageLine|filters\.showDeals|forecast\.quarter$|forecast\.(kpis|chart|reps)\.(commit|bestCase)$|forecast\.deals\.(deal|groupSummary)$|forecastCategories\.(commit|bestCase|pipeline)$|dealSheet\.(forecast|countsIn)$|buyingRoles\.champion$|contacts\.email$|contactDialog\.(namePlaceholder|email)$|activityTypes\.email$|activityDialog\.deal$)/;
     const identical = [...english].filter(([key, message]) => spanish.get(key) === message && !sameOnPurpose.test(key));
     expect(identical.map(([key]) => key)).toEqual([]);
   });

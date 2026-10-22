@@ -1,14 +1,16 @@
 "use client";
 
-import { Mail, Phone, UserRound } from "lucide-react";
+import { CalendarPlus, Mail, Phone, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetBody, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetSection } from "@/components/ui/sheet";
+import { doneActivities, plannedGroups } from "@/lib/activities";
 import { contactsAt } from "@/lib/contacts";
 import { isOpen } from "@/lib/deals";
 import { useCrm } from "@/lib/store";
 import type { Contact } from "@/lib/types";
+import { ActivityList } from "../activities/activity-bits";
 import { useDeleteContact } from "../contacts/contacts-page";
 import { RoleTag } from "../contacts/role-tag";
 import { StageTag } from "../deals/deal-actions";
@@ -26,7 +28,15 @@ function ContactContent({ contact }: { contact: Contact }) {
   const contacts = useCrm((s) => s.contacts);
   const allDeals = useCrm((s) => s.deals);
   const openContactDialog = useCrm((s) => s.openContactDialog);
+  const openActivityDialog = useCrm((s) => s.openActivityDialog);
+  const allActivities = useCrm((s) => s.activities);
+  const today = useCrm((s) => s.today);
   const deleteContact = useDeleteContact();
+  const activities = useMemo(() => {
+    const own = allActivities.filter((a) => a.contactId === contact.id);
+    const { overdue, today: due, upcoming } = plannedGroups(own, today);
+    return [...overdue, ...due, ...upcoming, ...doneActivities(own).slice(0, 5)];
+  }, [allActivities, contact.id, today]);
   const colleagues = useMemo(() => contactsAt(contacts, contact.companyId).filter((c) => c.id !== contact.id), [contacts, contact]);
   const deals = useMemo(
     () => allDeals.filter((d) => d.companyId === contact.companyId && isOpen(d)).sort((a, b) => a.closeDate.localeCompare(b.closeDate)),
@@ -76,6 +86,19 @@ function ContactContent({ contact }: { contact: Contact }) {
               </a>
             )}
           </div>
+        </SheetSection>
+
+        <SheetSection
+          title={t("contactSheet.activity")}
+          className="gap-2"
+          action={
+            <Button variant="secondary" onClick={() => openActivityDialog({ companyId: contact.companyId, contactId: contact.id })}>
+              <CalendarPlus aria-hidden className="size-3" />
+              {t("detail.planActivity")}
+            </Button>
+          }
+        >
+          <ActivityList activities={activities} empty={t("contactSheet.noActivity")} />
         </SheetSection>
 
         <SheetSection title={t("contactSheet.deals", { company: companyName })} className="gap-2">

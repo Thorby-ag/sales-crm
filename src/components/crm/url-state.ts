@@ -2,15 +2,17 @@
 
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { DEFAULT_CONTACT_FILTERS, DEFAULT_DEAL_FILTERS, DEFAULT_FILTERS, DEFAULT_FORECAST_FILTERS } from "@/lib/constants";
+import { DEFAULT_ACTIVITY_FILTERS, DEFAULT_CONTACT_FILTERS, DEFAULT_DEAL_FILTERS, DEFAULT_FILTERS, DEFAULT_FORECAST_FILTERS } from "@/lib/constants";
 import { OWNER_NAMES } from "@/lib/data/people";
-import type { CompanyFilters, ContactFilters, DealFilters, ForecastFilters } from "@/lib/types";
+import type { ActivityFilters, CompanyFilters, ContactFilters, DealFilters, ForecastFilters } from "@/lib/types";
 import {
+  parseActivityFilters,
   parseCompanyFilters,
   parseContactFilters,
   parseDealFilters,
   parseForecastFilters,
   toHref,
+  writeActivityFilters,
   writeCompanyFilters,
   writeContactFilters,
   writeDealFilters,
@@ -85,6 +87,25 @@ export function useContactFilters() {
     [],
   );
   const resetFilters = useCallback(() => replaceSearchParams((p) => writeContactFilters(p, DEFAULT_CONTACT_FILTERS)), []);
+  return { filters, setFilters, resetFilters };
+}
+
+export function useActivityFilters() {
+  const query = useSearchParams().toString();
+  const filters = useMemo(() => parseActivityFilters(new URLSearchParams(query), OWNER_NAMES), [query]);
+  const setFilters = useCallback(
+    (patch: Partial<ActivityFilters>) =>
+      replaceSearchParams((p) => writeActivityFilters(p, { ...parseActivityFilters(p, OWNER_NAMES), ...patch })),
+    [],
+  );
+  // The to-do/done switch is a view, not a filter: resetting keeps it.
+  const resetFilters = useCallback(
+    () =>
+      replaceSearchParams((p) =>
+        writeActivityFilters(p, { ...DEFAULT_ACTIVITY_FILTERS, view: parseActivityFilters(p, OWNER_NAMES).view }),
+      ),
+    [],
+  );
   return { filters, setFilters, resetFilters };
 }
 

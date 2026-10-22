@@ -71,7 +71,8 @@
     "deals": "Deals",
     "forecast": "Forecast",
     "active": "Active",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "activities": "Activities"
   },
   "sort": {
     "pipelineValue": "Pipeline Value",
@@ -226,7 +227,10 @@
     "saved": "Score card updated for {name}",
     "contacts": "Contacts",
     "noContacts": "No contacts at this account yet.",
-    "addContact": "Add contact"
+    "addContact": "Add contact",
+    "activities": "Activities",
+    "noActivities": "Nothing planned or logged with this account yet.",
+    "planActivity": "Plan activity"
   },
   "scoreCards": {
     "businessFit": {
@@ -471,7 +475,9 @@
       "tooLarge": "Keep the amount under 100 million.",
       "date": "Pick a date.",
       "futureClose": "A closed deal can't close in the future."
-    }
+    },
+    "nextStep": "Next step",
+    "noNextStep": "Nothing planned"
   },
   "buyingRoles": {
     "decisionMaker": "Decision maker",
@@ -507,7 +513,9 @@
     "deals": "Open deals at {company}",
     "noDeals": "No open deals at this account.",
     "colleagues": "Also at {company}",
-    "noColleagues": "No one else at this account yet."
+    "noColleagues": "No one else at this account yet.",
+    "activity": "Activity",
+    "noActivity": "No activities with this person yet."
   },
   "contactDialog": {
     "newTitle": "New Contact",
@@ -533,6 +541,77 @@
       "emailRequired": "Enter an email.",
       "email": "Enter a valid email address.",
       "phone": "Use digits, spaces and + ( ) - only."
+    }
+  },
+  "activityTypes": {
+    "call": "Call",
+    "meeting": "Meeting",
+    "email": "Email",
+    "task": "Task"
+  },
+  "activities": {
+    "viewLabel": "Show",
+    "views": {
+      "todo": "To do",
+      "done": "Done"
+    },
+    "type": "Type",
+    "typeTitle": "Activity type",
+    "allTypes": "All types",
+    "new": "New Activity",
+    "groups": {
+      "overdue": "Overdue",
+      "today": "Today",
+      "upcoming": "Upcoming",
+      "done": "Done"
+    },
+    "emptyTodo": "Nothing to do with the current filters.",
+    "emptyDone": "Nothing done yet with the current filters.",
+    "today": "Today",
+    "overdueSince": "{date} · overdue",
+    "isDone": "Done",
+    "markDone": "Mark {subject} as done",
+    "markDoneShort": "Mark as done",
+    "actions": "Actions for {subject}",
+    "edit": "Edit activity",
+    "delete": "Delete activity",
+    "completed": "Done: {subject}",
+    "deleted": "{subject} was deleted",
+    "gapsTitle": "No next step",
+    "gapsHint": "{count, plural, one {# open deal closing this quarter has} other {# open deals closing this quarter have}} nothing planned ({amount}).",
+    "gapsNone": "Every deal closing this quarter has a next step.",
+    "gapsMore": "{count, plural, one {# more deal} other {# more deals}}",
+    "planNextStep": "Plan next step",
+    "planFor": "Plan next step for {deal}"
+  },
+  "activityDialog": {
+    "newTitle": "New Activity",
+    "editTitle": "Edit Activity",
+    "description": "A call, meeting, email or task with an account: something to do, or something that already happened.",
+    "type": "Type",
+    "subject": "Subject",
+    "subjectPlaceholder": "Pricing review with Priya",
+    "company": "Company",
+    "topic": "About",
+    "deal": "Deal",
+    "contact": "With",
+    "none": "None",
+    "date": "Date",
+    "owner": "Owner",
+    "done": "Already done",
+    "notes": "Notes",
+    "plan": "Plan Activity",
+    "log": "Log Activity",
+    "save": "Save Changes",
+    "planned": "Planned for {date}: {subject}",
+    "logged": "Logged: {subject}",
+    "saved": "{subject} was updated",
+    "errors": {
+      "subjectRequired": "Enter a subject.",
+      "subjectTooLong": "Keep the subject under 80 characters.",
+      "company": "Pick a company.",
+      "date": "Pick a date.",
+      "futureDone": "Something already done can't be in the future."
     }
   },
   "toasts": {

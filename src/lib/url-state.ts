@@ -1,6 +1,7 @@
 import { DEFAULT_DEAL_FILTERS, DEFAULT_FILTERS } from "./constants";
 import { slugify } from "./text";
 import {
+  ACTIVITY_TYPES,
   ACTIVITY_WINDOWS,
   BUYING_ROLES,
   CLOSE_WINDOWS,
@@ -8,6 +9,8 @@ import {
   SEGMENTS,
   STAGES,
   TEAMS,
+  type ActivityFilters,
+  type ActivityType,
   type ActivityWindow,
   type BuyingRole,
   type CloseWindow,
@@ -113,6 +116,24 @@ export function writeContactFilters(params: URLSearchParams, filters: ContactFil
   else next.delete("q");
   if (filters.role) next.set("role", filters.role);
   else next.delete("role");
+  return next;
+}
+
+// Activities show what's to do unless ?view=done.
+export function parseActivityFilters(params: URLSearchParams, owners: readonly string[]): ActivityFilters {
+  return {
+    view: params.get("view") === "done" ? "done" : "todo",
+    owner: ownerFromSlug(params.get("owner"), owners),
+    type: oneOf<ActivityType>(ACTIVITY_TYPES, params.get("type")),
+  };
+}
+
+export function writeActivityFilters(params: URLSearchParams, filters: ActivityFilters): URLSearchParams {
+  const next = new URLSearchParams(params);
+  const set = (key: string, value: string | null) => (value === null ? next.delete(key) : next.set(key, value));
+  set("view", filters.view === "done" ? "done" : null);
+  set("owner", filters.owner ? slugify(filters.owner) : null);
+  set("type", filters.type);
   return next;
 }
 
