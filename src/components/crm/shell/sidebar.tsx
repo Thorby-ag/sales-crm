@@ -79,6 +79,7 @@ function ItemIcon({ icon: Icon, dot }: { icon?: LucideIcon; dot?: string }) {
 function useActiveItem(): string {
   const pathname = usePathname();
   const params = useSearchParams();
+  if (pathname === "/forecast") return "forecast";
   if (pathname === "/deals") return params.get("close") ? `close:${params.get("close")}` : "deals";
   if (pathname === "/") {
     if (params.get("team")) return `team:${params.get("team")}`;
@@ -180,7 +181,7 @@ function SidebarContent() {
         <ul className="flex flex-col border-b border-sidebar-border p-3">
           <NavLink id="companies" active={active} href="/" label={t("nav.companies")} icon={Building2} count={companyCount} />
           <NavLink id="deals" active={active} href="/deals" label={t("nav.dealsBoard")} icon={SquareKanban} count={openDeals} />
-          <NavSoon label={t("nav.forecast")} icon={ChartColumn} />
+          <NavLink id="forecast" active={active} href="/forecast" label={t("nav.forecast")} icon={ChartColumn} />
           <NavSoon label={t("nav.activities")} icon={ListChecks} />
           <NavSoon label={t("nav.contacts")} icon={BookUser} />
           <NavSoon label={t("nav.emailSequences")} icon={Mail} />
@@ -195,7 +196,7 @@ function SidebarContent() {
             id="close:quarter"
             active={active}
             href={{ pathname: "/deals", query: { close: "quarter" } }}
-            label={t("nav.quarterForecast", { quarter })}
+            label={t("nav.closingQuarter", { quarter })}
             icon={ChartBar}
           />
           <NavLink

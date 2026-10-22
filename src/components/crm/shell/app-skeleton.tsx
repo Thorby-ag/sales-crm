@@ -45,7 +45,24 @@ export function HeaderSkeleton() {
   );
 }
 
-export function ContentSkeleton({ variant = "table" }: { variant?: "table" | "board" }) {
+function ForecastBody() {
+  return (
+    <div aria-hidden className="@container flex flex-1 flex-col gap-3 overflow-hidden px-4 pb-4">
+      <div className="grid grid-cols-2 gap-2 @2xl:grid-cols-3 @5xl:grid-cols-6">
+        {Array.from({ length: 6 }, (_, i) => (
+          <div key={i} className="flex h-[88px] flex-col gap-3 rounded-xl border border-border bg-[#181818] p-3.5">
+            <Bar className="h-2 w-16" />
+            <Bar className="h-4 w-24" />
+          </div>
+        ))}
+      </div>
+      <div className="h-[300px] shrink-0 animate-pulse rounded-xl border border-border bg-[#181818]" />
+      <div className="flex-1 rounded-xl border border-border bg-[#181818]" />
+    </div>
+  );
+}
+
+export function ContentSkeleton({ variant = "table" }: { variant?: "table" | "board" | "forecast" }) {
   const t = useTranslations("common");
   return (
     <div className="flex min-h-0 flex-1 flex-col" aria-busy="true">
@@ -63,7 +80,9 @@ export function ContentSkeleton({ variant = "table" }: { variant?: "table" | "bo
           <span key={i} className={cn("h-[30px] animate-pulse rounded-full bg-white/[0.05]", w, i > 1 && "max-md:hidden")} />
         ))}
       </div>
-      {variant === "table" ? (
+      {variant === "forecast" ? (
+        <ForecastBody />
+      ) : variant === "table" ? (
         <div aria-hidden className="flex-1 overflow-hidden">
           {Array.from({ length: 14 }, (_, i) => (
             <div key={i} className="flex h-[43px] items-center gap-6 border-b border-border px-4">

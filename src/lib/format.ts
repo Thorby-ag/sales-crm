@@ -64,6 +64,14 @@ export function formatShortDate(isoDate: string, locale: AppLocale): string {
   ).format(new Date(`${isoDate}T00:00:00Z`));
 }
 
+/** "2026-11-01" → "Nov" (en) · "nov" (es) */
+export function formatMonth(isoDate: string, locale: AppLocale): string {
+  return cached(
+    `month:${locale}`,
+    () => new Intl.DateTimeFormat(INTL_LOCALES[locale], { month: "short", timeZone: "UTC" }),
+  ).format(new Date(`${isoDate}T00:00:00Z`));
+}
+
 /** 2 → "2 min. ago" · 1440 → "yesterday" (en) / "ayer" (es) */
 export function formatMinutesAgo(minutes: number, locale: AppLocale): string {
   const rtf = cached(
@@ -84,15 +92,31 @@ export function addDays(isoDate: string, days: number): string {
   return new Date(Date.parse(isoDate) + days * DAY_MS).toISOString().slice(0, 10);
 }
 
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/** The same day `months` later (or earlier), kept within the month: Nov 30 + 3 months → Feb 28. */
+export function addMonths(isoDate: string, months: number): string {
+  const [year, month, day] = isoDate.split("-").map(Number) as [number, number, number];
+  const index = year * 12 + month - 1 + months;
+  const y = Math.floor(index / 12);
+  const m = index - y * 12;
+  const lastDay = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
+  return `${y}-${pad(m + 1)}-${pad(Math.min(day, lastDay))}`;
+}
+
 /** Today's date in the visitor's time zone, as YYYY-MM-DD. */
 export function localToday(now: Date = new Date()): string {
-  const pad = (n: number) => String(n).padStart(2, "0");
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 }
 
 /** 1–4 */
 export function quarterOf(isoDate: string): number {
   return Math.floor((Number(isoDate.slice(5, 7)) - 1) / 3) + 1;
+}
+
+/** First day of the quarter the date falls in: "2026-11-20" → "2026-10-01". */
+export function quarterStart(isoDate: string): string {
+  return `${isoDate.slice(0, 4)}-${pad((quarterOf(isoDate) - 1) * 3 + 1)}-01`;
 }
 
 export function isSameQuarter(a: string, b: string): boolean {

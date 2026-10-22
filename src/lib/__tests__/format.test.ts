@@ -1,16 +1,19 @@
 import { describe, expect, it } from "vitest";
 import {
   addDays,
+  addMonths,
   daysBetween,
   formatCompactMoney,
   formatMinutesAgo,
   formatMoney,
+  formatMonth,
   formatNumber,
   formatShortDate,
   isSameQuarter,
   localToday,
   moneyParts,
   quarterOf,
+  quarterStart,
 } from "../format";
 
 describe("locale-aware formatting", () => {
@@ -30,6 +33,8 @@ describe("locale-aware formatting", () => {
   it("formats short dates without the year or time zone drift", () => {
     expect(formatShortDate("2026-01-03", "en")).toBe("Jan 3");
     expect(formatShortDate("2026-10-13", "es")).toBe("13 oct");
+    expect(formatMonth("2026-11-01", "en")).toBe("Nov");
+    expect(formatMonth("2026-11-01", "es")).toBe("nov");
   });
 
   it("formats how long ago something happened", () => {
@@ -50,6 +55,15 @@ describe("dates", () => {
     expect(addDays("2026-03-01", -1)).toBe("2026-02-28");
   });
 
+  it("adds months, keeping the day within the month", () => {
+    expect(addMonths("2026-10-21", 3)).toBe("2027-01-21");
+    expect(addMonths("2026-11-30", 3)).toBe("2027-02-28");
+    expect(addMonths("2028-11-30", 3)).toBe("2029-02-28");
+    expect(addMonths("2027-12-31", 2)).toBe("2028-02-29");
+    expect(addMonths("2027-01-15", -3)).toBe("2026-10-15");
+    expect(addMonths("2026-05-31", -3)).toBe("2026-02-28");
+  });
+
   it("uses the local calendar date for today", () => {
     expect(localToday(new Date(2026, 9, 5, 23, 59))).toBe("2026-10-05");
   });
@@ -60,5 +74,8 @@ describe("dates", () => {
     expect(isSameQuarter("2026-11-30", "2026-10-01")).toBe(true);
     expect(isSameQuarter("2027-11-30", "2026-11-30")).toBe(false);
     expect(isSameQuarter("2026-09-30", "2026-10-01")).toBe(false);
+    expect(quarterStart("2026-11-20")).toBe("2026-10-01");
+    expect(quarterStart("2027-03-31")).toBe("2027-01-01");
+    expect(quarterStart("2026-07-01")).toBe("2026-07-01");
   });
 });

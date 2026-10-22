@@ -11,6 +11,7 @@ import {
   type CloseWindow,
   type CompanyFilters,
   type DealFilters,
+  type ForecastFilters,
   type Region,
   type SortKey,
   type Tag,
@@ -78,6 +79,24 @@ export function writeDealFilters(params: URLSearchParams, filters: DealFilters):
   else next.delete("owner");
   if (filters.close) next.set("close", filters.close);
   else next.delete("close");
+  return next;
+}
+
+// The forecast shows this quarter unless ?quarter=next.
+export function parseForecastFilters(params: URLSearchParams, owners: readonly string[]): ForecastFilters {
+  return {
+    period: params.get("quarter") === "next" ? "next" : "this",
+    owner: ownerFromSlug(params.get("owner"), owners),
+    team: oneOf<Team>(TEAMS, params.get("team")),
+  };
+}
+
+export function writeForecastFilters(params: URLSearchParams, filters: ForecastFilters): URLSearchParams {
+  const next = new URLSearchParams(params);
+  const set = (key: string, value: string | null) => (value === null ? next.delete(key) : next.set(key, value));
+  set("quarter", filters.period === "next" ? "next" : null);
+  set("owner", filters.owner ? slugify(filters.owner) : null);
+  set("team", filters.team);
   return next;
 }
 

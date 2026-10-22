@@ -18,8 +18,11 @@ export interface CompanySeed {
   /** Days before today, so the demo never looks stale. */
   lastInteraction: { daysAgo: number; type: InteractionType };
   logo: CompanyLogo;
-  /** Targets used to generate the company's deals (see seedDeals). */
-  deals: { open: number; pipeline: number; win: number; closed?: "won" | "lost" };
+  /**
+   * Targets used to generate the company's deals (see seedDealsFor): open deals, their total
+   * amount and weighted win probability, and whether the account recently lost a deal.
+   */
+  deals: { open: number; pipeline: number; win: number; lost?: boolean };
 }
 
 /** Fictional accounts. */
@@ -33,7 +36,7 @@ export const COMPANY_SEEDS: CompanySeed[] = [
     trend: RISING,
     lastInteraction: { daysAgo: 73, type: "exec" },
     logo: { kind: "mark", mark: "orbit", color: "#8b7bff" },
-    deals: { open: 4, pipeline: 548_200, win: 82, closed: "won" },
+    deals: { open: 4, pipeline: 548_200, win: 82 },
   },
   {
     id: "northpeak",
@@ -55,7 +58,7 @@ export const COMPANY_SEEDS: CompanySeed[] = [
     trend: BURSTY,
     lastInteraction: { daysAgo: 5, type: "demo" },
     logo: { kind: "mark", mark: "diamond", color: "#f472b6" },
-    deals: { open: 2, pipeline: 446_900, win: 44, closed: "lost" },
+    deals: { open: 2, pipeline: 446_900, win: 44, lost: true },
   },
   {
     id: "brightwave",
@@ -77,7 +80,7 @@ export const COMPANY_SEEDS: CompanySeed[] = [
     trend: STEADY,
     lastInteraction: { daysAgo: 84, type: "qbr" },
     logo: { kind: "mark", mark: "ring", color: "#facc15" },
-    deals: { open: 4, pipeline: 405_000, win: 70, closed: "won" },
+    deals: { open: 4, pipeline: 405_000, win: 70 },
   },
   {
     id: "cobaltix",
@@ -88,7 +91,7 @@ export const COMPANY_SEEDS: CompanySeed[] = [
     trend: FADING,
     lastInteraction: { daysAgo: 18, type: "discovery" },
     logo: { kind: "mark", mark: "hex", color: "#5eb1ff" },
-    deals: { open: 3, pipeline: 338_400, win: 23, closed: "lost" },
+    deals: { open: 3, pipeline: 338_400, win: 23, lost: true },
   },
   {
     id: "halcyon-air",
@@ -99,7 +102,7 @@ export const COMPANY_SEEDS: CompanySeed[] = [
     trend: RISING,
     lastInteraction: { daysAgo: 70, type: "pilot" },
     logo: { kind: "mark", mark: "spark", color: "#ffb547" },
-    deals: { open: 5, pipeline: 326_100, win: 86, closed: "won" },
+    deals: { open: 5, pipeline: 326_100, win: 86 },
   },
   {
     id: "orbitra",
@@ -121,7 +124,7 @@ export const COMPANY_SEEDS: CompanySeed[] = [
     trend: BURSTY,
     lastInteraction: { daysAgo: 22, type: "partner" },
     logo: { kind: "mark", mark: "split", color: "#ff7a7a" },
-    deals: { open: 4, pipeline: 284_300, win: 38, closed: "won" },
+    deals: { open: 4, pipeline: 284_300, win: 38 },
   },
   {
     id: "kestrel",
@@ -143,7 +146,7 @@ export const COMPANY_SEEDS: CompanySeed[] = [
     trend: FLAT,
     lastInteraction: { daysAgo: 67, type: "legal" },
     logo: { kind: "mark", mark: "peak", color: "#3dd68c" },
-    deals: { open: 2, pipeline: 224_000, win: 77, closed: "won" },
+    deals: { open: 2, pipeline: 224_000, win: 77 },
   },
   {
     id: "zephyra",
@@ -165,7 +168,7 @@ export const COMPANY_SEEDS: CompanySeed[] = [
     trend: SPIKY,
     lastInteraction: { daysAgo: 1, type: "qbr" },
     logo: { kind: "mark", mark: "grid", color: "#ffb547" },
-    deals: { open: 2, pipeline: 207_900, win: 52, closed: "lost" },
+    deals: { open: 2, pipeline: 207_900, win: 52, lost: true },
   },
   {
     id: "tidewell",
@@ -176,7 +179,7 @@ export const COMPANY_SEEDS: CompanySeed[] = [
     trend: STEADY,
     lastInteraction: { daysAgo: 34, type: "expansion" },
     logo: { kind: "mark", mark: "split", color: "#4fd1c5" },
-    deals: { open: 3, pipeline: 172_400, win: 55, closed: "won" },
+    deals: { open: 3, pipeline: 172_400, win: 55 },
   },
   {
     id: "arclight",
@@ -198,7 +201,7 @@ export const COMPANY_SEEDS: CompanySeed[] = [
     trend: FADING,
     lastInteraction: { daysAgo: 74, type: "security" },
     logo: { kind: "mark", mark: "diamond", color: "#3dd68c" },
-    deals: { open: 3, pipeline: 126_300, win: 22, closed: "lost" },
+    deals: { open: 3, pipeline: 126_300, win: 22, lost: true },
   },
   {
     id: "parcelo",

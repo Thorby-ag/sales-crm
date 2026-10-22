@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_DEAL_FILTERS, DEFAULT_FILTERS } from "../constants";
-import { parseCompanyFilters, parseDealFilters, toHref, writeCompanyFilters, writeDealFilters } from "../url-state";
+import { DEFAULT_DEAL_FILTERS, DEFAULT_FILTERS, DEFAULT_FORECAST_FILTERS } from "../constants";
+import {
+  parseCompanyFilters,
+  parseDealFilters,
+  parseForecastFilters,
+  toHref,
+  writeCompanyFilters,
+  writeDealFilters,
+  writeForecastFilters,
+} from "../url-state";
 
 const owners = ["Kenji Mori", "Lea Fontaine"];
 const params = (query: string) => new URLSearchParams(query);
@@ -38,6 +46,18 @@ describe("deal filters in the URL", () => {
     expect(parseDealFilters(params("owner=kenji-mori&close=overdue"), owners)).toEqual({ owner: "Kenji Mori", close: "overdue" });
     expect(parseDealFilters(params("close=someday"), owners)).toEqual(DEFAULT_DEAL_FILTERS);
     expect(writeDealFilters(params("company=x"), { owner: null, close: "quarter" }).toString()).toBe("company=x&close=quarter");
+  });
+});
+
+describe("forecast filters in the URL", () => {
+  it("parses the quarter, owner and team, and ignores unknown values", () => {
+    expect(parseForecastFilters(params("quarter=next&owner=lea-fontaine&team=sdr"), owners)).toEqual({ period: "next", owner: "Lea Fontaine", team: "sdr" });
+    expect(parseForecastFilters(params("quarter=last&team=ops"), owners)).toEqual(DEFAULT_FORECAST_FILTERS);
+  });
+
+  it("writes only what differs from this quarter's full view", () => {
+    expect(writeForecastFilters(params("deal=x&quarter=next"), DEFAULT_FORECAST_FILTERS).toString()).toBe("deal=x");
+    expect(writeForecastFilters(params(""), { period: "next", owner: "Kenji Mori", team: null }).toString()).toBe("quarter=next&owner=kenji-mori");
   });
 });
 

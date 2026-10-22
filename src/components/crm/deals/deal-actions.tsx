@@ -20,6 +20,7 @@ import { useCrm } from "@/lib/store";
 import { DEAL_STAGES, type Deal, type DealStage } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { withUndo } from "../undo";
+import { openDeal } from "../url-state";
 
 export function StageTag({ stage, className }: { stage: DealStage; className?: string }) {
   const t = useTranslations("dealStages");
@@ -79,11 +80,10 @@ export function DealActions({
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={() => openDeal(deal.id)}>{t("deals.edit")}</DropdownMenuItem>
         {onOpenCompany && companyName && (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={onOpenCompany}>{t("deals.openCompany", { name: companyName })}</DropdownMenuItem>
-          </>
+          <DropdownMenuItem onSelect={onOpenCompany}>{t("deals.openCompany", { name: companyName })}</DropdownMenuItem>
         )}
       </DropdownMenuContent>
     </DropdownMenu>

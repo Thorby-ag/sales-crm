@@ -5,7 +5,7 @@ import { company, deal, TODAY } from "./fixtures";
 
 const state: DemoState = {
   companies: [company({ id: "a", lastInteraction: { date: "2026-10-10", type: "demo" } })],
-  deals: [deal({ id: "d1", companyId: "a", closeDate: "2026-11-01" })],
+  deals: [deal({ id: "d1", companyId: "a", closeDate: "2026-11-01", forecast: "commit" })],
   scoreOverrides: { a: [5, 4, 3] },
   unreadIds: ["n1"],
 };
@@ -35,6 +35,9 @@ describe("persistence", () => {
     expect(restoreDemo(null, TODAY)).toBeNull();
     expect(restoreDemo("{not json", TODAY)).toBeNull();
     expect(restoreDemo(JSON.stringify({ version: 2, companies: [] }), TODAY)).toBeNull();
+    // Version 1 had no won deals for the forecast: start over with fresh data.
+    const v1 = JSON.parse(serializeDemo(state, TODAY)) as Record<string, unknown>;
+    expect(restoreDemo(JSON.stringify({ ...v1, version: 1 }), TODAY)).toBeNull();
   });
 
   it("shifts dates in both directions without touching the original", () => {

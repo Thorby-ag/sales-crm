@@ -2,13 +2,15 @@
 
 **English** · [Español](README.es.md)
 
-An account-based CRM for B2B sales teams: a companies pipeline, a deals board with drag and drop, saved views and search. It runs entirely in the browser, in English and Spanish.
+An account-based CRM for B2B sales teams: a companies pipeline, a deals board with drag and drop, a quarterly forecast, saved views and search. It runs entirely in the browser, in English and Spanish.
 
 **Live demo:** [salescrm.thomalabs.com](https://salescrm.thomalabs.com)
 
 ![Companies view](docs/screenshot.png)
 
 ![Deals board](docs/deals.png)
+
+![Quarterly forecast](docs/forecast.png)
 
 <p>
   <img src="docs/detail-es.png" alt="Company details in Spanish" width="66%" />
@@ -19,6 +21,8 @@ An account-based CRM for B2B sales teams: a companies pipeline, a deals board wi
 
 - **Companies table.** Sort by five criteria (from the menu or the column headers) and filter by owner, segment or stage, and days since the last interaction. Select rows to reassign or delete them with undo, export to CSV, and add live calculations to the footer.
 - **Deals board.** Drag deals between stages with a mouse, touch (long press) or the keyboard, with screen reader announcements. A "Move to" menu offers the same without dragging. Each company's open deals, pipeline value and win probability are derived from its deals, so moving a card updates the table.
+- **Forecast.** This quarter or the next, for the whole team, one team or one rep: quota, closed won, Commit, Best case, weighted pipeline and coverage, a chart of the quarter's progress (with its numbers as a table) and a breakdown by rep. From the deal list, a deal can change forecast category or move to the next quarter, with undo.
+- **Deal details.** Clicking a deal opens a sheet to edit its amount, close date, stage, probability and forecast category. It shows where the deal will count in the forecast before saving. Every view follows: board, companies table and forecast.
 - **Saved views.** Sidebar entries are real filters: team, region, deals closing this quarter, slipping deals.
 - **English and Spanish.** `/en` and `/es` routes, browser-language detection, currency, dates and plurals formatted per locale, translated metadata with `hreflang`, and type-checked translation keys.
 - **Shareable URLs.** Filters, sort order and the open company live in the query string (`/es/deals?owner=kenji-mori&company=quantora`).
@@ -43,16 +47,18 @@ src/
       shell/           layout, sidebar, header, search, notifications, skeletons
       companies/       table, toolbar, footer, bulk actions
       deals/           board, cards, stage menu
-      sheets/          company details, profiles, new company
+      forecast/        KPIs, quarter chart (SVG), reps, deals by category
+      sheets/          company and deal details, profiles, new company
   lib/                 domain logic as pure functions (+ __tests__)
 e2e/                   Playwright specs (desktop + mobile, a11y)
 ```
 
 A few decisions worth noting:
 
-- **Domain logic is pure and tested.** Filtering, sorting, metrics, search, validation, CSV, URL parsing and persistence live in `src/lib` without React, so 78 unit tests cover them directly.
+- **Domain logic is pure and tested.** Filtering, sorting, metrics, forecasting, search, validation, CSV, URL parsing and persistence live in `src/lib` without React, so 108 unit tests cover them directly.
 - **The URL is the state for anything shareable.** Filters and the open company are read with `useSearchParams` and written with `history.replaceState`, which Next.js keeps in sync without a navigation. Zustand holds the records and UI state such as selection and open dialogs.
 - **Dates are relative to the visitor's today.** Seed data is defined as "N days ago". Saved data stores the date it was saved and is shifted forward on load.
+- **The forecast holds up on any day.** Seeded wins follow the pace each account's open pipeline predicts. Early in the quarter most of the forecast is still open, late in the quarter most of it is won, and the totals land in about the same place. A unit test checks this across several dates.
 - **Static HTML, client data.** Pages are prerendered with skeletons, because the data lives in the browser. Pages still render on the server, so `notFound()` returns a real `404`.
 - **Translations are checked.** A unit test fails if Spanish is missing a key, uses different placeholders, has invalid ICU syntax or was left untranslated by accident.
 
@@ -90,7 +96,7 @@ The live demo runs on a VPS with [Dokploy](https://dokploy.com), which rebuilds 
 
 ## Credits
 
-- The interface is based on [Sales CRM by Kargul Studio](https://sales-crm-kargulstudio.vercel.app/). The code, data, logos and avatars in this repository are original, and the deals board, Spanish version, persistence, saved views and bulk actions are new.
+- The interface is based on [Sales CRM by Kargul Studio](https://sales-crm-kargulstudio.vercel.app/). The code, data, logos and avatars in this repository are original, and the deals board, forecast, Spanish version, persistence, saved views and bulk actions are new.
 - Avatars: "Adventurer" by Lisa Wischofsky ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)), generated with [DiceBear](https://www.dicebear.com/).
 - Icons: [Lucide](https://lucide.dev/) (ISC). Font: [Geist](https://vercel.com/font) (SIL OFL).
 - Companies, people, emails (`.example`) and phone numbers (555-01xx) are fictional.

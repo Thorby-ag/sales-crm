@@ -1,4 +1,4 @@
-import type { CompanyFilters, DealFilters, DealStage, OpenDealStage, SortKey, Tag } from "./types";
+import type { CompanyFilters, DealFilters, DealStage, ForecastCategory, ForecastFilters, OpenDealStage, SortKey, Tag } from "./types";
 
 export const DEFAULT_FILTERS: CompanyFilters = {
   sortBy: "pipelineValue",
@@ -10,6 +10,8 @@ export const DEFAULT_FILTERS: CompanyFilters = {
 };
 
 export const DEFAULT_DEAL_FILTERS: DealFilters = { owner: null, close: null };
+
+export const DEFAULT_FORECAST_FILTERS: ForecastFilters = { period: "this", owner: null, team: null };
 
 export const SORT_KEYS: SortKey[] = ["pipelineValue", "winProbability", "openDeals", "lastInteraction", "name"];
 
@@ -44,6 +46,13 @@ export const STAGE_PROBABILITY: Record<DealStage, number> = {
   procurement: 80,
   won: 100,
   lost: 0,
+};
+
+/** The forecast category an open deal counts in unless someone overrides it. */
+export const STAGE_CATEGORY: Record<OpenDealStage, ForecastCategory> = {
+  discovery: "pipeline",
+  evaluation: "bestCase",
+  procurement: "commit",
 };
 
 /** Which open stage a probability falls in, for seeded and newly created deals. */

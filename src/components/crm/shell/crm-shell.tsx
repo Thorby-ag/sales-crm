@@ -6,6 +6,7 @@ import { toast, Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { startPersistence, useCrm } from "@/lib/store";
 import { CompanyDetailSheet } from "../sheets/company-detail-sheet";
+import { DealSheet } from "../sheets/deal-sheet";
 import { NewCompanyDialog } from "../sheets/new-company-dialog";
 import { ProfileSheet } from "../sheets/profile-sheet";
 import { SidebarSkeleton } from "./app-skeleton";
@@ -77,6 +78,7 @@ export function CrmShell({ children }: { children: ReactNode }) {
         </main>
       </div>
       <CompanyDetailSheet />
+      <DealSheet />
       <ProfileSheet />
       <NewCompanyDialog />
       <SearchDialog />

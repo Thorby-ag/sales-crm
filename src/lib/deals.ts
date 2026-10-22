@@ -1,7 +1,7 @@
-import { STAGE_PROBABILITY, stageForProbability } from "./constants";
+import { STAGE_CATEGORY, STAGE_PROBABILITY, stageForProbability } from "./constants";
 import type { CompanySeed } from "./data/companies";
 import { DEAL_PRODUCTS } from "./data/companies";
-import { addDays, isSameQuarter } from "./format";
+import { addDays, addMonths, isSameQuarter } from "./format";
 import { hashString } from "./text";
 import {
   DEAL_STAGES,
@@ -11,6 +11,7 @@ import {
   type Deal,
   type DealFilters,
   type DealStage,
+  type ForecastCategory,
   type OpenDealStage,
 } from "./types";
 
@@ -114,19 +115,132 @@ export function dealsByStage(deals: readonly Deal[]): Record<DealStage, Deal[]> 
 }
 
 /**
- * Moves a deal to another stage. The probability resets to the stage default, and
- * closing a deal (won or lost) stamps today as its close date.
+ * Moves a deal to another stage. The probability and forecast category reset to the
+ * stage defaults, and closing a deal (won or lost) stamps today as its close date.
  */
 export function moveDeal(deals: readonly Deal[], dealId: string, stage: DealStage, today: string): Deal[] {
   return deals.map((deal) => {
     if (deal.id !== dealId || deal.stage === stage) return deal;
-    return {
+    const next: Deal = {
       ...deal,
       stage,
       probability: STAGE_PROBABILITY[stage],
       closeDate: isOpen({ stage }) ? deal.closeDate : today,
     };
+    delete next.forecast;
+    return next;
   });
+}
+
+export function updateDeal(deals: readonly Deal[], dealId: string, update: (deal: Deal) => Deal): Deal[] {
+  return deals.map((deal) => (deal.id === dealId ? update(deal) : deal));
+}
+
+// ---------------------------------------------------------------------------
+// Forecast category and close date
+// ---------------------------------------------------------------------------
+
+/** The category an open deal counts in: its override, or its stage's default. Closed deals have none. */
+export function forecastCategory(deal: Pick<Deal, "stage" | "forecast">): ForecastCategory | null {
+  return isOpen(deal) ? (deal.forecast ?? STAGE_CATEGORY[deal.stage as OpenDealStage]) : null;
+}
+
+/** Puts an open deal in a forecast category. Choosing its stage's default clears the override. */
+export function withForecastCategory(deal: Deal, category: ForecastCategory): Deal {
+  if (!isOpen(deal) || forecastCategory(deal) === category) return deal;
+  const next: Deal = { ...deal, forecast: category };
+  if (category === STAGE_CATEGORY[deal.stage as OpenDealStage]) delete next.forecast;
+  return next;
+}
+
+/**
+ * Moves an open deal's close date to the same point of the next quarter (1) or the previous
+ * one (-1), but never before today: a deal pulled in shouldn't turn overdue.
+ */
+export function shiftQuarter(deal: Deal, direction: 1 | -1, today: string): Deal {
+  if (!isOpen(deal)) return deal;
+  const closeDate = addMonths(deal.closeDate, 3 * direction);
+  return { ...deal, closeDate: closeDate < today ? today : closeDate };
+}
+
+// ---------------------------------------------------------------------------
+// Editing a deal
+// ---------------------------------------------------------------------------
+
+export interface DealForm {
+  /** Raw input value: may be empty. */
+  amount: string;
+  closeDate: string;
+  stage: DealStage;
+  probability: number;
+  /** Only used while the stage is open. */
+  category: ForecastCategory;
+}
+
+export type DealField = "amount" | "closeDate";
+/** Error codes, translated by the UI. */
+export type DealError = "amount" | "tooLarge" | "date" | "futureClose";
+export type DealErrors = Partial<Record<DealField, DealError>>;
+
+export interface ValidDealForm extends Omit<DealForm, "amount"> {
+  amount: number;
+}
+
+export const MAX_DEAL_AMOUNT = 100_000_000;
+
+export function dealForm(deal: Deal): DealForm {
+  return {
+    amount: String(deal.amount),
+    closeDate: deal.closeDate,
+    stage: deal.stage,
+    probability: deal.probability,
+    category: forecastCategory(deal) ?? STAGE_CATEGORY.discovery,
+  };
+}
+
+/**
+ * Picking another stage in the form: probability and category follow the stage, like on the
+ * board, and closing an open deal stamps today as its close date (it can still be edited).
+ */
+export function changeFormStage(form: DealForm, stage: DealStage, today: string): DealForm {
+  const open = isOpen({ stage });
+  return {
+    ...form,
+    stage,
+    probability: STAGE_PROBABILITY[stage],
+    category: open ? STAGE_CATEGORY[stage as OpenDealStage] : form.category,
+    closeDate: !open && isOpen(form) ? today : form.closeDate,
+  };
+}
+
+export function validateDealForm(
+  form: DealForm,
+  today: string,
+): { ok: true; value: ValidDealForm } | { ok: false; errors: DealErrors } {
+  const errors: DealErrors = {};
+  const amount = Number(form.amount);
+  if (form.amount.trim() === "" || !Number.isFinite(amount) || amount <= 0) errors.amount = "amount";
+  else if (amount > MAX_DEAL_AMOUNT) errors.amount = "tooLarge";
+
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(form.closeDate) || Number.isNaN(Date.parse(form.closeDate))) errors.closeDate = "date";
+  else if (!isOpen(form) && form.closeDate > today) errors.closeDate = "futureClose";
+
+  if (Object.keys(errors).length > 0) return { ok: false, errors };
+  return { ok: true, value: { ...form, amount: Math.round(amount), probability: clamp(Math.round(form.probability), 0, 100) } };
+}
+
+/** Applies a validated form. A closed deal takes its stage's probability and drops out of the forecast categories. */
+export function applyDealForm(deal: Deal, form: ValidDealForm): Deal {
+  const open = isOpen(form);
+  const next: Deal = {
+    ...deal,
+    amount: form.amount,
+    closeDate: form.closeDate,
+    stage: form.stage,
+    probability: open ? form.probability : STAGE_PROBABILITY[form.stage],
+  };
+  delete next.forecast;
+  return open ? withForecastCategory(next, form.category) : next;
 }
 
 // ---------------------------------------------------------------------------
@@ -134,8 +248,11 @@ export function moveDeal(deals: readonly Deal[], dealId: string, stage: DealStag
 // ---------------------------------------------------------------------------
 
 const PROBABILITY_JITTER = [-9, 7, -4, 11, -12, 5, 2, -6];
-/** Days from today for open deals; negative ones are already overdue (slipping). */
-const CLOSE_OFFSETS = [-11, 9, 23, 38, 52, 67, 81, 96, 14, 45, 6, 30];
+/** Open deals close in 15-day slots over the next six months; the first slot is already overdue (slipping). */
+const CLOSE_SLOT_DAYS = 15;
+const CLOSE_OFFSETS = Array.from({ length: 13 }, (_, i) => -11 + i * CLOSE_SLOT_DAYS);
+/** Days the open pipeline is spread over. */
+const PIPELINE_DAYS = CLOSE_OFFSETS.length * CLOSE_SLOT_DAYS;
 
 /** Splits `total` into parts proportional to `weights`, rounded to hundreds, summing exactly to `total`. */
 function splitAmount(total: number, weights: number[]): number[] {
@@ -190,18 +307,62 @@ export function generateOpenDeals({ companyId, owner, count, pipeline, win }: Op
   return deals;
 }
 
+/** Each account wins a deal about every six weeks. */
+const WIN_INTERVAL = 45;
+/** Seeded wins go back a full quarter, so the current quarter has its share whatever day it is. */
+const WIN_HISTORY = 92;
+
+/**
+ * Past wins at the pace the account's open pipeline predicts: its weighted value closes over
+ * PIPELINE_DAYS, and it booked at that same rate before. So whichever day of the quarter the
+ * demo is opened, won and open deals add up to about the same forecast: early on most of it
+ * is still open, late in the quarter most of it is won.
+ */
+function seedWonDeals(seed: CompanySeed, today: string): Deal[] {
+  const { open, pipeline, win } = seed.deals;
+  const h = hashString(seed.id);
+  const amount = Math.round((pipeline * (win / 100) * (WIN_INTERVAL / PIPELINE_DAYS)) / 100) * 100;
+  const deals: Deal[] = [];
+  for (let daysAgo = 1 + (h % WIN_INTERVAL), n = 1; amount > 0 && daysAgo <= WIN_HISTORY; daysAgo += WIN_INTERVAL, n++) {
+    deals.push({
+      id: `${seed.id}-won-${n}`,
+      companyId: seed.id,
+      name: DEAL_PRODUCTS[(h + open + n) % DEAL_PRODUCTS.length]!,
+      stage: "won",
+      amount,
+      probability: STAGE_PROBABILITY.won,
+      closeDate: addDays(today, -daysAgo),
+      owner: seed.owner,
+    });
+  }
+  return deals;
+}
+
+/**
+ * The reps' own calls on top of the stage defaults: likely deals still in evaluation are
+ * committed, and long shots in discovery are left out of the forecast.
+ */
+function repCall(deal: Deal): Deal {
+  if (deal.stage === "evaluation" && deal.probability >= 55) return { ...deal, forecast: "commit" };
+  if (deal.stage === "discovery" && deal.probability <= 12) return { ...deal, forecast: "omitted" };
+  return deal;
+}
+
 export function seedDealsFor(seed: CompanySeed, today: string): Deal[] {
-  const { open, pipeline, win, closed } = seed.deals;
-  const deals = generateOpenDeals({ companyId: seed.id, owner: seed.owner, count: open, pipeline, win }, today);
-  if (closed) {
+  const { open, pipeline, win, lost } = seed.deals;
+  const deals = [
+    ...generateOpenDeals({ companyId: seed.id, owner: seed.owner, count: open, pipeline, win }, today).map(repCall),
+    ...seedWonDeals(seed, today),
+  ];
+  if (lost) {
     const h = hashString(seed.id);
     deals.push({
       id: `${seed.id}-${open + 1}`,
       companyId: seed.id,
       name: DEAL_PRODUCTS[(h + open) % DEAL_PRODUCTS.length]!,
-      stage: closed,
+      stage: "lost",
       amount: Math.round((pipeline * 0.25) / 100) * 100,
-      probability: STAGE_PROBABILITY[closed],
+      probability: STAGE_PROBABILITY.lost,
       closeDate: addDays(today, -(8 + (h % 40))),
       owner: seed.owner,
     });

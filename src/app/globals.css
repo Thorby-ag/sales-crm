@@ -42,6 +42,8 @@
   --track: #3a3a3a;
   --status: #16c89e;
   --check: #fcd34d;
+  /* Forecast categories: won uses --status, best case --warning, pipeline --subtle. */
+  --commit: #8b7bff;
 
   --shadow-raised: 0 0 0 1px rgb(0 0 0 / 0.4), inset 0 1px 0 0 rgb(255 255 255 / 0.1),
     inset 0 0 0 1px rgb(255 255 255 / 0.06);
@@ -80,6 +82,7 @@
   --color-track: var(--track);
   --color-status: var(--status);
   --color-check: var(--check);
+  --color-commit: var(--commit);
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;

@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { assignOwner, deleteCompanies } from "./companies";
 import { NOTIFICATIONS } from "./data/notifications";
-import { moveDeal } from "./deals";
+import { moveDeal, updateDeal } from "./deals";
 import { localToday } from "./format";
-import { restoreDemo, serializeDemo, STORAGE_KEY, type DemoState } from "./persistence";
+import { LEGACY_STORAGE_KEYS, restoreDemo, serializeDemo, STORAGE_KEY, type DemoState } from "./persistence";
 import { seedDemo } from "./seed";
 import type { Company, Deal, DealStage } from "./types";
 
@@ -27,6 +27,8 @@ interface CrmActions {
   resetDemo: () => void;
   addCompany: (company: Company, deals: Deal[]) => void;
   moveDeal: (dealId: string, stage: DealStage) => void;
+  /** Replaces a deal with `update(deal)`; the change functions live in lib/deals. */
+  updateDeal: (dealId: string, update: (deal: Deal) => Deal) => void;
   assignOwner: (companyIds: string[], owner: string) => void;
   deleteCompanies: (companyIds: string[]) => void;
   setScoreOverride: (companyId: string, stars: number[]) => void;
@@ -49,6 +51,7 @@ const freshDemo = (today: string): DemoState => ({
 
 function readSaved(): string | null {
   try {
+    for (const key of LEGACY_STORAGE_KEYS) localStorage.removeItem(key);
     return localStorage.getItem(STORAGE_KEY);
   } catch {
     return null; // Storage can be unavailable (private mode, blocked site data).
@@ -85,6 +88,7 @@ export const useCrm = create<CrmState & CrmActions>()((set, get) => ({
   addCompany: (company, deals) =>
     set((s) => ({ companies: [company, ...s.companies], deals: [...deals, ...s.deals], newCompanyOpen: false })),
   moveDeal: (dealId, stage) => set((s) => ({ deals: moveDeal(s.deals, dealId, stage, s.today) })),
+  updateDeal: (dealId, update) => set((s) => ({ deals: updateDeal(s.deals, dealId, update) })),
   assignOwner: (companyIds, owner) => set((s) => assignOwner(s, companyIds, owner)),
   deleteCompanies: (companyIds) =>
     set((s) => ({
