@@ -2,7 +2,11 @@ import type { DemoRecords } from "./companies";
 import { addDays, daysBetween } from "./format";
 import type { Company, Deal } from "./types";
 
-export const STORAGE_KEY = "sales-crm:demo:v1";
+// Version 2 seeds a quarter of won deals for the forecast. Version 1 data had none,
+// so it's dropped rather than migrated: visitors start again from fresh demo data.
+const VERSION = 2;
+export const STORAGE_KEY = `sales-crm:demo:v${VERSION}`;
+export const LEGACY_STORAGE_KEYS = ["sales-crm:demo:v1"];
 
 export interface DemoState extends DemoRecords {
   scoreOverrides: Record<string, number[]>;
@@ -10,13 +14,13 @@ export interface DemoState extends DemoRecords {
 }
 
 interface PersistedDemo extends DemoState {
-  version: 1;
+  version: typeof VERSION;
   /** The day the data was last saved; used to move every date forward on the next visit. */
   asOf: string;
 }
 
 export function serializeDemo(state: DemoState, today: string): string {
-  const payload: PersistedDemo = { version: 1, asOf: today, ...state };
+  const payload: PersistedDemo = { version: VERSION, asOf: today, ...state };
   return JSON.stringify(payload);
 }
 
@@ -25,7 +29,7 @@ const isObject = (value: unknown): value is Record<string, unknown> => typeof va
 function isPersistedDemo(value: unknown): value is PersistedDemo {
   return (
     isObject(value) &&
-    value.version === 1 &&
+    value.version === VERSION &&
     typeof value.asOf === "string" &&
     Array.isArray(value.companies) &&
     Array.isArray(value.deals) &&

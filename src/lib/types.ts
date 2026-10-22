@@ -24,6 +24,9 @@ export const TEAMS = ["strategic", "mid-market", "sdr"] as const;
 export const DEAL_STAGES = ["discovery", "evaluation", "procurement", "won", "lost"] as const;
 export const OPEN_DEAL_STAGES = ["discovery", "evaluation", "procurement"] as const;
 export const CLOSE_WINDOWS = ["quarter", "overdue"] as const;
+/** How confident the team is that an open deal closes in its quarter, from most to least. */
+export const FORECAST_CATEGORIES = ["commit", "bestCase", "pipeline", "omitted"] as const;
+export const FORECAST_PERIODS = ["this", "next"] as const;
 
 /** Segment and stage tags are sales jargon: they stay in English in every locale. */
 export type Segment = (typeof SEGMENTS)[number];
@@ -37,6 +40,8 @@ export type Team = (typeof TEAMS)[number];
 export type DealStage = (typeof DEAL_STAGES)[number];
 export type OpenDealStage = (typeof OPEN_DEAL_STAGES)[number];
 export type CloseWindow = (typeof CLOSE_WINDOWS)[number];
+export type ForecastCategory = (typeof FORECAST_CATEGORIES)[number];
+export type ForecastPeriod = (typeof FORECAST_PERIODS)[number];
 export type SortKey = "pipelineValue" | "winProbability" | "openDeals" | "lastInteraction" | "name";
 
 export type LogoMark = "orbit" | "bars" | "diamond" | "split" | "grid" | "wave" | "peak" | "ring" | "spark" | "hex";
@@ -49,6 +54,8 @@ export interface Person {
   email: string;
   phone: string;
   avatar: string;
+  /** Quarterly bookings target. For the head of sales, the whole team's. */
+  quota: number;
 }
 
 /** A stored account. Deal metrics are derived from its deals (see CompanyRow). */
@@ -75,6 +82,8 @@ export interface Deal {
   /** Expected close date while open, actual close date once won or lost. */
   closeDate: string;
   owner: string;
+  /** Set when someone overrides the forecast category the stage implies (see forecastCategory). */
+  forecast?: ForecastCategory;
 }
 
 /** A company plus the metrics derived from its open deals. */
@@ -99,6 +108,12 @@ export interface CompanyFilters {
 export interface DealFilters {
   owner: string | null;
   close: CloseWindow | null;
+}
+
+export interface ForecastFilters {
+  period: ForecastPeriod;
+  owner: string | null;
+  team: Team | null;
 }
 
 export type NotificationKind = "mention" | "stage" | "winDrop" | "scoreUpdate" | "demoLogged" | "pipelineUp" | "invite";

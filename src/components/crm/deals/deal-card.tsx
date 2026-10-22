@@ -9,7 +9,7 @@ import { isOpen, isOverdue } from "@/lib/deals";
 import { useCrm } from "@/lib/store";
 import type { Company, Deal } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { openCompany } from "../url-state";
+import { openCompany, openDeal } from "../url-state";
 import { useFormat } from "../use-format";
 import { Avatar } from "../visuals/avatar";
 import { CompanyLogo } from "../visuals/company-logo";
@@ -46,7 +46,7 @@ function DealCardBody({ deal, company, today, controls }: { deal: Deal; company:
           type="button"
           onClick={(e: MouseEvent) => {
             e.stopPropagation();
-            openCompany(company.id);
+            openDeal(deal.id);
           }}
           className="type-lead block max-w-full truncate text-left outline-none decoration-white/40 underline-offset-4 hover:underline focus-visible:underline"
         >
@@ -90,7 +90,7 @@ export function DealCard({ deal }: { deal: Deal }) {
       onMouseDown={on?.onMouseDown}
       onTouchStart={on?.onTouchStart}
       onClick={() => {
-        if (Date.now() - lastDragEnd > 250) openCompany(company.id);
+        if (Date.now() - lastDragEnd > 250) openDeal(deal.id);
       }}
       className={cn(CARD, "cursor-grab transition-[border-color,opacity] hover:border-[#3a3a3a] active:cursor-grabbing", isDragging && "opacity-40")}
     >

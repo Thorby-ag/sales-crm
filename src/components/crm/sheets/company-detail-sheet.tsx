@@ -20,7 +20,7 @@ import { useCrm } from "@/lib/store";
 import { DEAL_STAGES, OPEN_DEAL_STAGES, TREND_WINDOWS, type Company, type Deal, type TrendWindow } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { DealActions, StageTag } from "../deals/deal-actions";
-import { closeCompany, useOpenCompanyId } from "../url-state";
+import { closeCompany, openDeal, useOpenCompanyId } from "../url-state";
 import { useFormat } from "../use-format";
 import { Avatar } from "../visuals/avatar";
 import { CompanyLogo } from "../visuals/company-logo";
@@ -68,7 +68,13 @@ function DealList({ deals, today }: { deals: Deal[]; today: string }) {
         return (
           <li key={deal.id} className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-white/[0.03]">
             <StageTag stage={deal.stage} className="w-[104px] justify-center" />
-            <span className="type-lead min-w-0 flex-1 truncate">{deal.name}</span>
+            <button
+              type="button"
+              onClick={() => openDeal(deal.id)}
+              className="type-lead min-w-0 flex-1 truncate text-left outline-none decoration-white/40 underline-offset-4 hover:underline focus-visible:underline"
+            >
+              {deal.name}
+            </button>
             <span className={cn("type-caption whitespace-nowrap", overdue ? "text-danger" : "text-muted-foreground")}>
               {overdue ? t("deals.overdue") : t(isOpen(deal) ? "deals.closes" : "deals.closed", { date: date(deal.closeDate) })}
             </span>

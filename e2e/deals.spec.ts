@@ -47,9 +47,15 @@ test("reporting views filter the board", async ({ page }) => {
   await expect(page.locator("article", { hasText: "Overdue" })).toHaveCount(total);
 });
 
-test("a card opens its company", async ({ page }) => {
+test("a card opens its deal, and the deal its company", async ({ page }) => {
   await page.goto("/en/deals");
-  await page.getByRole("region", { name: /^Procurement/ }).locator("article").first().click({ position: { x: 120, y: 80 } });
+  const card = page.getByRole("region", { name: /^Procurement/ }).locator("article").first();
+  const company = (await card.locator("p").first().textContent())!;
+  await card.click({ position: { x: 120, y: 80 } });
+  await expect(page).toHaveURL(/deal=/);
+
+  await page.getByRole("dialog", { name: "Deal Details" }).getByRole("button", { name: company, exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Company Details" })).toBeVisible();
   await expect(page).toHaveURL(/company=/);
-  await expect(page.getByRole("dialog")).toBeVisible();
+  await expect(page).not.toHaveURL(/deal=/);
 });

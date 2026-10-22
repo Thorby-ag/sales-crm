@@ -2,10 +2,18 @@
 
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { DEFAULT_DEAL_FILTERS, DEFAULT_FILTERS } from "@/lib/constants";
+import { DEFAULT_DEAL_FILTERS, DEFAULT_FILTERS, DEFAULT_FORECAST_FILTERS } from "@/lib/constants";
 import { OWNER_NAMES } from "@/lib/data/people";
-import type { CompanyFilters, DealFilters } from "@/lib/types";
-import { parseCompanyFilters, parseDealFilters, toHref, writeCompanyFilters, writeDealFilters } from "@/lib/url-state";
+import type { CompanyFilters, DealFilters, ForecastFilters } from "@/lib/types";
+import {
+  parseCompanyFilters,
+  parseDealFilters,
+  parseForecastFilters,
+  toHref,
+  writeCompanyFilters,
+  writeDealFilters,
+  writeForecastFilters,
+} from "@/lib/url-state";
 
 /**
  * Changes the query string without a navigation. Next.js keeps useSearchParams in sync
@@ -48,6 +56,27 @@ export function useDealFilters() {
   return { filters, setFilters, resetFilters };
 }
 
+export function useForecastFilters() {
+  const query = useSearchParams().toString();
+  const filters = useMemo(() => parseForecastFilters(new URLSearchParams(query), OWNER_NAMES), [query]);
+  const setFilters = useCallback(
+    (patch: Partial<ForecastFilters>) =>
+      replaceSearchParams((p) => writeForecastFilters(p, { ...parseForecastFilters(p, OWNER_NAMES), ...patch })),
+    [],
+  );
+  // The quarter is a view, not a filter: resetting keeps it.
+  const resetFilters = useCallback(
+    () =>
+      replaceSearchParams((p) =>
+        writeForecastFilters(p, { ...DEFAULT_FORECAST_FILTERS, period: parseForecastFilters(p, OWNER_NAMES).period }),
+      ),
+    [],
+  );
+  return { filters, setFilters, resetFilters };
+}
+
+// One sheet at a time: opening a company closes an open deal, and the other way round.
+
 /** The company whose detail sheet is open (?company=id), on any page. */
 export function useOpenCompanyId(): string | null {
   return useSearchParams().get("company");
@@ -55,6 +84,7 @@ export function useOpenCompanyId(): string | null {
 
 export function openCompany(id: string): void {
   replaceSearchParams((p) => {
+    p.delete("deal");
     p.set("company", id);
   });
 }
@@ -62,5 +92,23 @@ export function openCompany(id: string): void {
 export function closeCompany(): void {
   replaceSearchParams((p) => {
     p.delete("company");
+  });
+}
+
+/** The deal whose sheet is open (?deal=id), on any page. */
+export function useOpenDealId(): string | null {
+  return useSearchParams().get("deal");
+}
+
+export function openDeal(id: string): void {
+  replaceSearchParams((p) => {
+    p.delete("company");
+    p.set("deal", id);
+  });
+}
+
+export function closeDeal(): void {
+  replaceSearchParams((p) => {
+    p.delete("deal");
   });
 }

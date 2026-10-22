@@ -22,7 +22,21 @@ for (const locale of ["en", "es"]) {
     await expect(page.locator("article").first()).toBeVisible();
     await expectNoViolations(page);
   });
+
+  test(`forecast has no WCAG violations (${locale})`, async ({ page }) => {
+    await page.goto(`/${locale}/forecast`);
+    // Include the chart's data table, which starts collapsed.
+    await page.locator("details summary").click();
+    await expect(page.locator("details tbody tr").first()).toBeVisible();
+    await expectNoViolations(page);
+  });
 }
+
+test("deal sheet has no WCAG violations", async ({ page }) => {
+  await page.goto("/en/forecast?deal=lumenfold-1");
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await expectNoViolations(page);
+});
 
 test("company sheet and new company dialog have no WCAG violations", async ({ page }) => {
   await page.goto("/en?company=halcyon-air");

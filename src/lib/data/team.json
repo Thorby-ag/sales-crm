@@ -1,21 +1,21 @@
 {
   "currentUser": "Valeria Quiroga",
   "owners": [
-    { "name": "Sofia Marin", "team": "strategic" },
-    { "name": "Daniel Okafor", "team": "mid-market" },
-    { "name": "Lucas Ferreira", "team": "strategic" },
-    { "name": "Hana Sato", "team": "mid-market" },
-    { "name": "Mateo Alvarez", "team": "strategic" },
-    { "name": "Chloe Bennett", "team": "mid-market" },
-    { "name": "Omar Haddad", "team": "sdr" },
-    { "name": "Emma Lindqvist", "team": "mid-market" },
-    { "name": "Tomas Novak", "team": "sdr" },
-    { "name": "Aisha Bello", "team": "strategic" },
-    { "name": "Ryan Mitchell", "team": "mid-market" },
-    { "name": "Lea Fontaine", "team": "sdr" },
-    { "name": "Kenji Mori", "team": "strategic" },
-    { "name": "Grace Adeyemi", "team": "mid-market" },
-    { "name": "Nina Petrova", "team": "sdr" },
-    { "name": "Zoe Carter", "team": "sdr" }
+    { "name": "Sofia Marin", "team": "strategic", "quota": 170000 },
+    { "name": "Daniel Okafor", "team": "mid-market", "quota": 90000 },
+    { "name": "Lucas Ferreira", "team": "strategic", "quota": 230000 },
+    { "name": "Hana Sato", "team": "mid-market", "quota": 85000 },
+    { "name": "Mateo Alvarez", "team": "strategic", "quota": 145000 },
+    { "name": "Chloe Bennett", "team": "mid-market", "quota": 80000 },
+    { "name": "Omar Haddad", "team": "sdr", "quota": 80000 },
+    { "name": "Emma Lindqvist", "team": "mid-market", "quota": 35000 },
+    { "name": "Tomas Novak", "team": "sdr", "quota": 75000 },
+    { "name": "Aisha Bello", "team": "strategic", "quota": 80000 },
+    { "name": "Ryan Mitchell", "team": "mid-market", "quota": 60000 },
+    { "name": "Lea Fontaine", "team": "sdr", "quota": 40000 },
+    { "name": "Kenji Mori", "team": "strategic", "quota": 160000 },
+    { "name": "Grace Adeyemi", "team": "mid-market", "quota": 105000 },
+    { "name": "Nina Petrova", "team": "sdr", "quota": 50000 },
+    { "name": "Zoe Carter", "team": "sdr", "quota": 65000 }
   ]
 }
