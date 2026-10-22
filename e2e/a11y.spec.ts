@@ -60,6 +60,14 @@ for (const locale of ["en", "es"]) {
   });
 }
 
+for (const locale of ["en", "es"]) {
+  test(`guide has no WCAG violations (${locale})`, async ({ page }) => {
+    await page.goto(`/${locale}/guide`);
+    await expect(page.locator("article section").first()).toBeVisible();
+    await expectNoViolations(page);
+  });
+}
+
 test("step and enroll dialogs have no WCAG violations", async ({ page }) => {
   await page.goto("/en/sequences?sequence=new-logo-outreach");
   await page.getByRole("button", { name: "Add step" }).click();

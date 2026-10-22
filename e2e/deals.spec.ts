@@ -28,8 +28,11 @@ test("deals can be dragged between stages with the keyboard", async ({ page }) =
   await handle.focus();
   await page.keyboard.press("Space");
   await expect(live).toContainText("Picked up");
-  await page.keyboard.press("ArrowRight");
-  await expect(live).toContainText("is over Evaluation");
+  // dnd-kit starts listening for arrow keys a tick after the pickup: try again if it missed it.
+  await expect(async () => {
+    await page.keyboard.press("ArrowRight");
+    await expect(live).toContainText("is over Evaluation", { timeout: 1_000 });
+  }).toPass();
   await page.keyboard.press("Space");
   await expect(live).toContainText("moved to Evaluation");
 

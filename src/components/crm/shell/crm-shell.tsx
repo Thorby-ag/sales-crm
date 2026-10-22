@@ -56,9 +56,9 @@ export function CrmShell({ children }: { children: ReactNode }) {
 
   if (!hydrated) {
     return (
-      <div className="flex h-dvh max-w-full overflow-hidden">
+      <div className="flex h-dvh max-w-full overflow-hidden print:block print:h-auto print:overflow-visible">
         <SidebarSkeleton />
-        <main id="main" className="flex min-w-0 flex-1 flex-col">
+        <main id="main" className="flex min-w-0 flex-1 flex-col print:block">
           {children}
         </main>
       </div>
@@ -73,10 +73,10 @@ export function CrmShell({ children }: { children: ReactNode }) {
       >
         {t("common.skipToContent")}
       </a>
-      <div className="flex h-dvh max-w-full overflow-hidden">
+      <div className="flex h-dvh max-w-full overflow-hidden print:block print:h-auto print:overflow-visible">
         <DesktopSidebar />
         <MobileSidebar />
-        <main id="main" tabIndex={-1} className="flex min-w-0 flex-1 flex-col outline-none">
+        <main id="main" tabIndex={-1} className="flex min-w-0 flex-1 flex-col outline-none print:block">
           {children}
         </main>
       </div>

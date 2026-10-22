@@ -71,7 +71,8 @@
     "active": "Activo",
     "contacts": "Contactos",
     "activities": "Actividades",
-    "sequences": "Secuencias"
+    "sequences": "Secuencias",
+    "guide": "Guía"
   },
   "sort": {
     "pipelineValue": "Valor del pipeline",
@@ -737,13 +738,143 @@
     "enroll": "{count, plural, =0 {Inscribir contactos} one {Inscribir # contacto} other {Inscribir # contactos}}",
     "enrolled": "{count, plural, one {Se inscribió # contacto} other {Se inscribieron # contactos}} en {sequence}"
   },
+  "guide": {
+    "title": "Cómo usar Sales CRM",
+    "intro": "Un recorrido corto por para qué sirve cada parte del CRM y cómo se usa. Cada sección tiene links que abren la app en el lugar indicado.",
+    "liveDemo": "Demo en vivo:",
+    "download": "Descargar PDF",
+    "openApp": "Abrir la app",
+    "contents": "En esta página",
+    "tryIt": "Probarlo:",
+    "sections": {
+      "basics": {
+        "title": "Moverse por el CRM",
+        "lead": "El sidebar tiene todas las secciones y, debajo, las vistas guardadas. Lo que se filtra o se abre queda en la URL, así que cualquier vista se puede guardar o compartir.",
+        "steps": {
+          "1": "Pasar de <b>Empresas</b> a <b>Deals</b> o <b>Forecast</b> con las pestañas de arriba.",
+          "2": "Apretar <kbd>⌘K</kbd> o <kbd>/</kbd> para buscar empresas y personas desde cualquier lugar.",
+          "3": "Usar las vistas guardadas del sidebar: un equipo, una región, los deals que cierran este trimestre o los demorados.",
+          "4": "Cambiar el idioma con <b>EN</b> o <b>ES</b> en el header. La página y sus filtros se mantienen."
+        },
+        "alt": "La tabla de empresas con el buscador abierto, encontrando empresas y contactos",
+        "links": {
+          "a": "Cuentas de EMEA",
+          "b": "Deals demorados"
+        }
+      },
+      "companies": {
+        "title": "Priorizar las cuentas",
+        "lead": "La tabla de empresas muestra el pipeline, la probabilidad de cierre y la última interacción de cada cuenta, calculados a partir de sus deals y actividades.",
+        "steps": {
+          "1": "Ordenar con un clic en el encabezado de una columna, o desde <b>Orden</b>.",
+          "2": "Acotar la lista con los filtros de responsable, etapa y última actividad. <b>Restablecer</b> los limpia.",
+          "3": "Hacer clic en una empresa para abrir su ficha: contactos, actividades, salud del pipeline, deals y score cards.",
+          "4": "Seleccionar filas para reasignarlas o eliminarlas juntas, con opción de deshacer, o exportar la vista a CSV."
+        },
+        "alt": "La tabla de empresas con la ficha de Halcyon Air abierta",
+        "links": {
+          "a": "Cuentas de Kenji Mori",
+          "b": "Halcyon Air"
+        }
+      },
+      "deals": {
+        "title": "Mover los deals por el pipeline",
+        "lead": "El tablero tiene una columna por etapa. Las métricas de cada empresa salen de sus deals, así que mover una tarjeta actualiza la tabla y el forecast.",
+        "steps": {
+          "1": "Arrastrar una tarjeta a otra etapa. En el celular, primero mantenerla presionada.",
+          "2": "Con el teclado: enfocar la manija de una tarjeta, apretar <kbd>Espacio</kbd>, moverla con las flechas y apretar <kbd>Espacio</kbd> de nuevo.",
+          "3": "O abrir el menú <b>⋯</b> de la tarjeta y elegir una etapa en <b>Mover a</b>.",
+          "4": "Hacer clic en una tarjeta para editar el deal: monto, fecha de cierre, etapa, probabilidad y categoría de forecast."
+        },
+        "alt": "El tablero de deals, con una columna por etapa",
+        "links": {
+          "a": "Cierran este trimestre",
+          "b": "Deals de Kenji Mori"
+        }
+      },
+      "forecast": {
+        "title": "Revisar el forecast del trimestre",
+        "lead": "El forecast responde la pregunta de todo gerente de ventas: ¿vamos a llegar al número? Suma lo ganado y lo esperado para este trimestre o el próximo.",
+        "steps": {
+          "1": "Leer los totales: cuota, ganado, <b>Commit</b>, <b>Best case</b>, pipeline ponderado y lo que falta para la cuota.",
+          "2": "Seguir el gráfico: lo ganado hasta hoy y adónde llegan Commit y Best case al cierre del trimestre. <b>Ver los números</b> tiene los mismos datos en una tabla.",
+          "3": "Comparar vendedores en <b>Por vendedor</b>. Un clic en un nombre acota todo el forecast a esa persona.",
+          "4": "Desde el menú <b>⋯</b> de un deal, cambiar su categoría de forecast o pasarlo al próximo trimestre."
+        },
+        "alt": "El forecast: totales, el gráfico del avance del trimestre y el detalle por vendedor",
+        "links": {
+          "a": "Próximo trimestre",
+          "b": "Equipo SDR"
+        }
+      },
+      "contacts": {
+        "title": "Conocer a quién se le vende",
+        "lead": "Los contactos son las personas de cada cuenta y su rol en la compra: quién decide, quién impulsa la compra y quién la puede frenar.",
+        "steps": {
+          "1": "Buscar por nombre, cargo, email o empresa, y filtrar por rol en la compra.",
+          "2": "Abrir un contacto para ver sus datos, los deals abiertos de la cuenta y sus colegas.",
+          "3": "La ficha de cada empresa muestra quiénes participan en la compra, empezando por quien decide.",
+          "4": "Sumar personas con <b>Nuevo contacto</b>, o desde la ficha de una empresa con <b>Agregar contacto</b>."
+        },
+        "alt": "La lista de contactos con la ficha de Olivia Chen abierta",
+        "links": {
+          "a": "Champions",
+          "b": "Olivia Chen"
+        }
+      },
+      "activities": {
+        "title": "Agendar el próximo paso",
+        "lead": "Las actividades son las llamadas, reuniones, emails y tareas con cada cuenta. Todo deal abierto debería tener un próximo paso.",
+        "steps": {
+          "1": "Recorrer <b>Pendientes</b>: primero las vencidas, después las de hoy y las próximas. Tildarlas cuando se hacen.",
+          "2": "Una actividad completada pasa a ser la última interacción de la empresa en la tabla.",
+          "3": "<b>Sin próximo paso</b> muestra los deals que cierran este trimestre sin nada agendado. <b>Agendar próximo paso</b> lo resuelve en un solo paso.",
+          "4": "Registrar algo que ya pasó con <b>Nueva actividad</b> y <b>Ya se hizo</b>."
+        },
+        "alt": "Las actividades pendientes, divididas en vencidas, de hoy y próximas, junto a los deals sin próximo paso",
+        "links": {
+          "a": "Lo que ya se hizo",
+          "b": "Reuniones"
+        }
+      },
+      "sequences": {
+        "title": "Automatizar la prospección",
+        "lead": "Una secuencia es una serie de emails, llamadas y tareas en días fijos. Los contactos la recorren hasta que responden. En esta demo los emails no se envían de verdad.",
+        "steps": {
+          "1": "Abrir una secuencia para ver sus pasos, una vista previa y quiénes están inscriptos.",
+          "2": "Escribir los pasos con variables como <b>first_name</b> o <b>company</b>. La vista previa las completa con los datos de un contacto real.",
+          "3": "<b>Inscribir contactos</b> suma personas. Sus llamadas y tareas aparecen en Actividades.",
+          "4": "Cuando alguien responde, usar <b>Marcar que respondió</b> y la secuencia se detiene para esa persona."
+        },
+        "alt": "Los pasos de una secuencia, la vista previa del email y los contactos inscriptos",
+        "links": {
+          "a": "New logo outreach",
+          "b": "Todas las secuencias"
+        }
+      },
+      "demo": {
+        "title": "Sobre esta demo",
+        "lead": "Todo funciona en el navegador, con empresas y personas ficticias.",
+        "steps": {
+          "1": "Los cambios se guardan en este navegador. Las fechas avanzan cada día, así la demo nunca se ve vieja.",
+          "2": "<b>Restablecer la demo</b> en el sidebar vuelve todo al principio, con opción de deshacer.",
+          "3": "También funciona en el celular: los filtros pasan a un panel inferior y el tablero se desplaza de costado.",
+          "4": "Hecha con Next.js, React, TypeScript y Tailwind CSS. El código, y cómo está armada, están en GitHub."
+        },
+        "alt": "El tablero de deals en un celular",
+        "links": {
+          "a": "Código en GitHub",
+          "b": "Abrir la app"
+        }
+      }
+    }
+  },
   "toasts": {
     "comingSoon": "{feature} no está disponible en esta demo.",
     "storageError": "No se pudieron guardar los cambios en este navegador. Se mantienen hasta cerrar la pestaña.",
     "demoReset": "Se restablecieron los datos de la demo",
     "features": {
       "invite": "Invitar al equipo",
-      "help": "El centro de ayuda",
       "billing": "La facturación"
     }
   },
