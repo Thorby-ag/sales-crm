@@ -13,6 +13,11 @@ CRM de cuentas para equipos de ventas B2B: pipeline de empresas, contactos, acti
 ![Forecast trimestral](docs/forecast.png)
 
 <p>
+  <img src="docs/activities.png" alt="Actividades pendientes, junto a los deals sin próximo paso" width="49%" />
+  <img src="docs/sequences.png" alt="Una secuencia de email: pasos, vista previa y contactos inscriptos" width="49%" />
+</p>
+
+<p>
   <img src="docs/detail-es.png" alt="Detalle de una empresa en español" width="66%" />
   <img src="docs/mobile-es.png" alt="Tablero de deals en un celular" width="30%" />
 </p>
